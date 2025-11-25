@@ -1,41 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <title>ToMobs</title>
-</head>
-<body>
+<nav th:fragment="navbar" class="navbar fixed-top"
+     xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container">
 
-<nav class="navbar navbar-dark bg-dark">
+        <!-- Brand -->
+        <a class="navbar-brand text-white fw-bold" th:href="@{/}">ToMobs</a>
 
-    <div class="container-fluid d-flex align-items-center">
-        <a class="navbar-brand" href="index.html">ToMobs</a>
+        <!-- Search Bar -->
+        <form class="d-flex mx-auto" style="width: 60%;">
+            <div class="input-group">
 
-        <form class="d-flex align-items-center flex-grow-1 mx-3">
-            <input class="form-control" type="search" placeholder="What are you looking  for?">
+                <input class="form-control" type="search"
+                       placeholder="what are you looking for...">
+
+                <span class="input-group-text bg-white">
+                    <img th:src="@{/icons/search.png}" width="18" alt="search">
+                </span>
+
+            </div>
         </form>
 
-        <div class="d-flex align-items-center" style="gap:20px;">
+        <!-- Profile + Cart -->
+        <div class="d-flex align-items-center gap-4">
 
-            <a href="#" class="text-white fs-5">
-                <img src="icons/trolley.png" class="img-fluid" alt="Responsive Image">
+            <a th:href="@{/}" class="text-white">
+                <img th:src="@{/icons/profile.svg}"
+                     class="white-icon" width="30" alt="profile">
             </a>
-            <a href="#" class="text-white fs-5">
-                <i class="bi bi-cart3"></i>
+
+            <a th:href="@{/}" class="text-white">
+                <img th:src="@{/icons/trolley.png}"
+                     class="white-icon" width="30" alt="cart">
             </a>
 
         </div>
 
-        <div>
-
-        </div>
     </div>
-
-
-
 </nav>
-
-</body>
-</html>

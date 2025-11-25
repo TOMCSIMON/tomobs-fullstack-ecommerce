@@ -1,10 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+
+<footer th:fragment="footer" class="footer-section text-white"
+        xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="container py-5">
+
+        <div class="row">
+
+            <!-- Brand + Description -->
+            <div class="col-md-4 mb-4">
+                <h3 class="footer-brand">ToMobs</h3>
+                <p class="footer-desc">
+                    ToMobs brings together top mobile brands and great deals in one sleek e-commerce marketplace.
+                    We make phone shopping simple, fast, and worry-free.
+                </p>
+            </div>
+
+            <!-- INFO Section -->
+            <div class="col-md-2 mb-4">
+                <h6 class="footer-title">INFO</h6>
+                <ul class="footer-links">
+                    <li><a href="#">Company</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">Engineering</a></li>
+                    <li><a href="#">Services</a></li>
+                    <li><a href="#">Productions</a></li>
+                </ul>
+            </div>
+
+            <!-- ABOUT US -->
+            <div class="col-md-2 mb-4">
+                <h6 class="footer-title">ABOUT US</h6>
+                <ul class="footer-links">
+                    <li><a href="#">Gallery</a></li>
+                    <li><a href="#">Technologies</a></li>
+                    <li><a href="#">Contacts</a></li>
+                    <li><a href="#">Team</a></li>
+                    <li><a href="#">Career</a></li>
+                </ul>
+            </div>
+
+            <!-- CONTACT US -->
+            <div class="col-md-3 mb-4">
+                <h6 class="footer-title">CONTACT US</h6>
+                <p class="footer-contact">+91 8590069604</p>
+                <p class="footer-contact">help@ToMobs.com</p>
+                <p class="footer-contact">Cochin, KL, INDIA</p>
+            </div>
+
+        </div>
+
+        <!-- Divider Line -->
+        <hr class="footer-divider">
+
+        <!-- Bottom Section -->
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+
+            <!-- Policies -->
+            <div class="d-flex gap-5 small">
+                <a href="#" class="footer-policy">Privacy Policy</a>
+                <a href="#" class="footer-policy">Terms & Conditions</a>
+            </div>
+
+            <!-- Social Icons -->
+            <div class="footer-social d-flex gap-3 mt-3 mt-md-0">
+                <img th:src="@{/icons/facebook.png}" class="social-icon" alt="facebook">
+                <img th:src="@{/icons/instagram.png}" class="social-icon" alt="instagram">
+                <img th:src="@{/icons/linkedin.png}" class="social-icon" alt="linkedin">
+                <img th:src="@{/icons/youtube.png}" class="social-icon" alt="youtube">
+                <img th:src="@{/icons/whatsapp.png}" class="social-icon" alt="whatsapp">
+            </div>
+
+        </div>
+
+        <!-- Copyright -->
+        <p class="text-center small mt-3 mb-0">
+            © Copyright 2025 ToMobs. All rights reserved.
+        </p>
+
+    </div>
+</footer>

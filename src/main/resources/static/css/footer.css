@@ -1,0 +1,93 @@
+/* Brand font */
+@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Footer base */
+.footer-section {
+    background: #000;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    padding-top: 40px;
+}
+
+/* Brand text */
+.footer-brand {
+    font-family: 'Michroma', sans-serif;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+/* Description */
+.footer-desc {
+    color: #bdbdbd;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+/* Section title */
+.footer-title {
+    font-weight: 600;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+/* Links */
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 7px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #bdbdbd;
+    font-size: 14px;
+}
+
+.footer-links a:hover {
+    color: #0dcaf0; /* light blue hover */
+}
+
+/* Contact text */
+.footer-contact {
+    color: #bdbdbd;
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* Divider */
+.footer-divider {
+    border-color: rgba(255, 255, 255, 0.4);
+    margin: 25px 0;
+}
+
+/* Bottom policy */
+.footer-policy {
+    color: #bdbdbd;
+    text-decoration: none;
+}
+
+.footer-policy:hover {
+    color: #0dcaf0;
+}
+
+/* Social icons */
+.social-icon {
+    width: 22px;
+    filter: invert(1);
+    cursor: pointer;
+    transition: .3s;
+}
+
+.social-icon:hover {
+    filter: invert(65%) sepia(54%) saturate(750%) hue-rotate(170deg); /* Light blue */
+}
+
+/* Responsive spacing */
+@media (max-width: 768px) {
+    .footer-section {
+        text-align: center;
+    }
+}
