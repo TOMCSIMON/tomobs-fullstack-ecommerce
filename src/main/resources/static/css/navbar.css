@@ -4,8 +4,8 @@
 /* Navbar Background */
 .navbar {
     background-color: #000 !important;
-    padding-top: 18px;
-    padding-bottom: 18px;
+    padding-top: 20px; !important;
+    padding-bottom: 20px; !important;
 }
 
 /* Brand Name - ToMobs now Michroma */

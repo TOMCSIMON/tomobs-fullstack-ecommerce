@@ -1,0 +1,11 @@
+body {
+    margin:0;
+    height:100%;
+}
+
+.hero {
+    margin-top:0;
+    height: 300px;
+    width:100%;
+    background-color: #5C5C5C;
+}
