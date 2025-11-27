@@ -1,3 +1,9 @@
 package com.tomobs.ecommerce.service;
 
-public class UserService {}
+// INTERFACE (ABSTRACTION) DEFINES THE CONTRACT FOR HANDLING USER SIGNUP LOGIC
+import com.tomobs.ecommerce.dto.UserRegistrationDTO;
+
+public interface UserService {
+
+    void registerUser(UserRegistrationDTO userDTO);
+}

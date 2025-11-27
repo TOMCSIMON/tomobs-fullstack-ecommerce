@@ -1,27 +1,31 @@
 package com.tomobs.ecommerce.controller;
 
-
+import com.tomobs.ecommerce.dto.UserRegistrationDTO;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class HomeController {
 
-    @GetMapping("/home")
-    public String homePage() {
+  @GetMapping("/home")
+  public String homePage() {
 
-        return  "index";
-    }
+    return "index";
+  }
 
-    @GetMapping("/signup")
-    public String signupPage() {
+  @GetMapping("/signup")
+  public String signupPage(
+          Model model)
+  {
+      model.addAttribute("user", new UserRegistrationDTO());
 
-        return  "signup";
-    }
+    return "signup";
+  }
 
-    @GetMapping("/login")
-    public String loginPage() {
+  @GetMapping("/login")
+  public String loginPage() {
 
-        return  "login";
-    }
+    return "login";
+  }
 }
