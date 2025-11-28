@@ -6,4 +6,6 @@ import com.tomobs.ecommerce.dto.UserRegistrationDTO;
 public interface UserService {
 
     void registerUser(UserRegistrationDTO userDTO);
+
+    boolean isEmailExists(String email);
 }

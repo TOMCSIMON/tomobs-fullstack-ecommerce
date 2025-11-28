@@ -15,7 +15,7 @@
 
 <body style="background-color:#E4E4E4;">
 
-<div th:replace="fragments/navbar :: navbar"></div>
+<div th:insert="~{fragments/navbar :: navbar}"></div>
 
 
     <div class="container d-flex justify-content-center">
@@ -25,14 +25,14 @@
 
             <!-- Username -->
             <div class="input-groups">
-                <label for="username">Username</label>
+                <label for="username">Full name</label>
                 <div class="icon-input">
                     <img th:src="@{/icons/user.png}" class="field-icon" alt="user-icon">
                     <input type="text" id="userName" th:field="*{userName}" placeholder="Enter your full name" required>
                 </div>
-                <span class="error-msg" id="usernameError"
-                      th:if = "${#fields.hasErrors('userName')}"
+                <span class="error-msg" th:if = "${#fields.hasErrors('userName')}"
                       th:text = "${#fields.errors('userName')}"></span>
+                <span class="error-msg" id="usernameError"></span>
             </div>
 
             <!-- Email -->
@@ -42,9 +42,10 @@
                     <img th:src="@{/icons/email.png}" class="field-icon" alt="">
                     <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address" required>
                 </div>
-                <span class="error-msg" id="emailError"
-                      th:if="${#fields.hasErrors('email')}"
+                <span class="error-msg" th:if="${#fields.hasErrors('email')}"
                       th:text="${#fields.errors('email')}"></span>
+
+                <span class="error-msg" id="emailError" ></span>
             </div>
 
 
@@ -55,9 +56,10 @@
                     <img th:src="@{/icons/telephone.png}" class="field-icon" alt="">
                     <input type="text" id="phoneNumber" th:field="*{phoneNumber}" placeholder="Enter your phone number">
                 </div>
-                <span class="error-msg" id="phoneError"
-                      th:if="${#fields.hasErrors('phoneNumber')}"
+                <span class="error-msg" th:if="${#fields.hasErrors('phoneNumber')}"
                       th:text="${#fields.errors('phoneNumber')}"></span>
+
+                <span class="error-msg" id="phoneError"></span>
             </div>
 
             <!-- Password -->
@@ -68,9 +70,10 @@
                     <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" required>
                     <img th:src="@{/icons/hide.png}" class="toggle-eye" id="togglePassword" alt="">
                 </div>
-                <span class="error-msg" id="passwordError"
-                      th:if="${#fields.hasErrors('password')}"
+                <span class="error-msg" th:if="${#fields.hasErrors('password')}"
                       th:text="${#fields.errors('password')}"></span>
+
+                <span class="error-msg" id="passwordError"></span>
             </div>
 
             <!-- Confirm Password -->
@@ -81,9 +84,9 @@
                     <input type="password" id="confirmPassword" th:field="*{confirmPassword}" placeholder="Re-enter your password" required>
                     <img th:src="@{/icons/hide.png}" class="toggle-eye" id="toggleConfirmPassword" alt="">
                 </div>
-                <span class="error-msg" id="confirmPasswordError"
-                      th:if="${#fields.hasErrors('confirmPassword')}"
+                <span class="error-msg" th:if="${#fields.hasErrors('confirmPassword')}"
                       th:text="${#fields.errors('confirmPassword')}"></span>
+                <span  class="error-msg" id="confirmPasswordError"></span>
             </div>
 
             <!-- Signup Button -->
@@ -105,7 +108,7 @@
         </form>
     </div>
 
-<div th:replace="fragments/footer :: footer"></div>
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 <script th:src="@{/js/signup-validation.js}"></script>
 

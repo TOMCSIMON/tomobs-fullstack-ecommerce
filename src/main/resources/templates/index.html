@@ -15,28 +15,35 @@
 
 <body style="background-color:#E4E4E4;">
 
-<!-- Include navbar fragment -->
-<div th:replace="fragments/navbar :: navbar"></div>
 
-<div class="hero d-flex flex-column  container-fluid">
+<div th:insert="~{fragments/navbar :: navbar}"></div>
 
-    <p>
-        Discover Most Affordable Smartphones
-    </p>
+<div class="hero container-fluid d-flex align-items-center justify-content-between">
 
-    <p>
-        Find the best, reliable and affordable smartphones here.
-        We focus on the product quality.So why you are
-        waiting? Just order now!
-    </p>
+    <div class="hero-content">
+        <h2>Discover Most <br> Affordable <br> Smart phones</h2>
 
-    <button><a th:href="@{/login}">Login</a></button>
-    <button><a th:href="@{/signup}">Signup</a></button>
+        <p class="hero-text">
+            Find the best,reliable and affordable smartphones.
+            We focus on the product quality.
+            Just order now!
+        </p>
+
+        <div class="hero-buttons">
+            <a th:href="@{/login}" class="btn btn-dark px-4 py-2 me-3">Login</a>
+            <a th:href="@{/signup}" class="btn btn-dark px-4 py-2">Signup</a>
+        </div>
+    </div>
+
+    <div class="hero-image">
+        <img th:src="@{/images/Phone-img-1.jpg}" alt="phone-img">
+    </div>
 
 </div>
 
 
-<div th:replace="fragments/footer :: footer"></div>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>
 </html>
