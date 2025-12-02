@@ -1,8 +1,6 @@
 package com.tomobs.ecommerce.controller;
 
-// HANDLES HTTP REQUESTS FOR USER AUTHENTICATION,RECEIVING SIGNUP FORM DATA AND DELEGATING USER
-// REGISTRATION TO THE SERVICE
-
+// HANDLES HTTP REQUESTS FOR USER AUTHENTICATION,RECEIVING SIGNUP FORM DATA
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
 import com.tomobs.ecommerce.service.UserService;
 import jakarta.validation.Valid;

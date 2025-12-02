@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void registerUser(UserRegistrationDTO userRegistrationDTO) {
 
-        // CONFIRMS BOTH PASSWORD ENTRIES SAME
+        // CONFIRMS BOTH PASSWORD ENTRIES ARE SAME
         if(!userRegistrationDTO.getPassword().equals(userRegistrationDTO.getConfirmPassword())) {
             throw new RuntimeException("Passwords do not match!");
         }

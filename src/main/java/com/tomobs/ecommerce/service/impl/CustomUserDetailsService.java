@@ -27,9 +27,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("LOAD USER DETAILS → Login attempt for email: {}", email);
 
 
-        if (userRepository.findByEmail(email).isEmpty()) {
-            log.warn("❗ USER NOT FOUND IN DB → {}", email);
-        }
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Email not found!"));
 
