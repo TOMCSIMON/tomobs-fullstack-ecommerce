@@ -1,6 +1,6 @@
 package com.tomobs.ecommerce.service.impl;
 
-import com.tomobs.ecommerce.entity.User;
+import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

@@ -1,4 +1,4 @@
-package com.tomobs.ecommerce.controller;
+package com.tomobs.ecommerce.controller.User;
 
 // HANDLES HTTP REQUESTS FOR USER AUTHENTICATION,RECEIVING SIGNUP FORM DATA
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class AuthController {
+public class UserAuthController {
 
   private final UserService userService;
 
-  public AuthController(UserService userService) {
+  public UserAuthController(UserService userService) {
 
     this.userService = userService;
   }

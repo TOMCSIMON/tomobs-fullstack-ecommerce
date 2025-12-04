@@ -1,6 +1,6 @@
 package com.tomobs.ecommerce.config;
 
-import com.tomobs.ecommerce.entity.Role;
+import com.tomobs.ecommerce.model.Role;
 import com.tomobs.ecommerce.enums.RoleEnum;
 import com.tomobs.ecommerce.repository.RoleRepository;
 import jakarta.annotation.PostConstruct;

@@ -1,4 +1,4 @@
-package com.tomobs.ecommerce.entity;
+package com.tomobs.ecommerce.model;
 
 // THIS IS THE DATABASE MODEL(Table = users) FOR STORING USER DETAILS FROM THE SIGNUP PAGE.
 import jakarta.persistence.*;

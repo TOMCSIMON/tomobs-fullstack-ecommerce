@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<body>
+    <div th:fragment="adminSidebar" class="admin-sidebar">
+
+        <ul class="sidebar-menu">
+            <li>
+                <a th:href="@{/admin/dashboard}" class="sidebar-link">
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/categories}" class="sidebar-link">
+                    Categories
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/dashboard}" class="sidebar-link">
+                    Brands
+                </a>
+            </li>
+            <li>
+                <a th:href="@{/admin/dashboard}" class="sidebar-link">
+                    Products
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</body>
+</html>

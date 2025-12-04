@@ -1,7 +1,7 @@
 package com.tomobs.ecommerce.repository;
 
 // MAIN INTERFACE FOR SAVING AND FETCHING USER OBJECTS FROM THE DATABASE.
-import com.tomobs.ecommerce.entity.User;
+import com.tomobs.ecommerce.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

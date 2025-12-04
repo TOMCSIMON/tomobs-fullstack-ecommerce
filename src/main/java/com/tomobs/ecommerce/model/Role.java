@@ -1,4 +1,4 @@
-package com.tomobs.ecommerce.entity;
+package com.tomobs.ecommerce.model;
 
 import com.tomobs.ecommerce.enums.RoleEnum;
 import jakarta.persistence.*;

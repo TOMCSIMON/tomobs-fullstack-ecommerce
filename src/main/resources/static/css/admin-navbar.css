@@ -1,0 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Michroma&family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Navbar background */
+.admin-navbar {
+    background-color: #ffffff !important;
+    padding: 18px 0;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+/* Brand */
+.admin-brand {
+    font-family: 'Michroma', sans-serif;
+    font-size: 20px;
+    font-weight: 500;
+    color: #000 !important;
+    text-decoration: none;
+}
+
+/* Font family for text */
+body, input, button {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Avatar circle */
+.admin-avatar {
+    width: 42px;
+    height: 42px;
+    background-color: #e2e2e2;
+    border-radius: 50%;
+}
+
+/* Admin name + role */
+.admin-info .admin-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: #000;
+}
+
+.admin-info .admin-role {
+    font-size: 12px;
+    color: #555;
+}

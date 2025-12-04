@@ -1,4 +1,4 @@
-package com.tomobs.ecommerce.controller;
+package com.tomobs.ecommerce.controller.User;
 
 import com.tomobs.ecommerce.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,16 +8,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-// ALL USER ENDPOINTS CAME HERE
-
-
-
+// ALL USER REST ENDPOINTS CAME HERE
 @RestController
-public class UserController {
+public class UserRestController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserRestController(UserService userService) {
 
         this.userService = userService;
     }

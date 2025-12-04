@@ -1,8 +1,8 @@
 package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
-import com.tomobs.ecommerce.entity.Role;
-import com.tomobs.ecommerce.entity.User;
+import com.tomobs.ecommerce.model.Role;
+import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.enums.RoleEnum;
 import com.tomobs.ecommerce.repository.RoleRepository;
 import com.tomobs.ecommerce.repository.UserRepository;

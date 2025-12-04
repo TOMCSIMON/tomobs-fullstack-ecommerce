@@ -1,4 +1,4 @@
-package com.tomobs.ecommerce.controller;
+package com.tomobs.ecommerce.controller.User;
 
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
 import org.springframework.stereotype.Controller;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.security.Principal;
 
 @Controller
-public class HomeController {
+public class UserPageController {
 
   @GetMapping("/")
   public String homePage() {
@@ -37,11 +37,5 @@ public class HomeController {
           return "redirect:/";
       }
     return "login";
-  }
-
-  @GetMapping("/admin/dashboard")
-    public String adminDashboard() {
-
-      return "admin/dashboard";
   }
 }

@@ -1,0 +1,11 @@
+.btn {
+    margin-inline-start: 900px;
+    margin-top: 40px;
+    background-color: #000; !important
+    border: none; !important
+    cursor-pointer;
+}
+
+.btn:hover {
+    background-color: #002
+}
