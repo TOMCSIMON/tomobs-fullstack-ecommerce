@@ -8,22 +8,22 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-
 @Entity
-@Table(name = "categories")
+@Table(name = "brands")
 @Getter
 @Setter
-public class Category {
+public class Brand {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100,nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
-    @Column(length = 200,nullable = false)
-    private String description;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
+    private Category category;
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;

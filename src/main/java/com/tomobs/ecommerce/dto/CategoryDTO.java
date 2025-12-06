@@ -9,6 +9,8 @@ import lombok.Setter;
 @Setter
 public class CategoryDTO {
 
+    private Long id;
+
     @NotBlank(message = "categoryName cannot be empty!")
     @Size(max = 100, message = "Category name cannot exceed 100 characters.")
     private String name;
@@ -16,4 +18,6 @@ public class CategoryDTO {
     @NotBlank(message = "Category description cannot be empty!")
     @Size(max = 200, message = "Category description cannot exceed 200 characters.")
     private String description;
+
+    private boolean isActive = true;
 }

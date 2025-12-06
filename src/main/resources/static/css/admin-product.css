@@ -1,0 +1,12 @@
+.addProduct {
+
+    margin-left: 900px;
+    background-color: #000;
+    color: #fff;
+    border-radius: 20px;
+}
+
+.addProduct.a {
+    text-decoration: none;
+    color:#fff;
+}

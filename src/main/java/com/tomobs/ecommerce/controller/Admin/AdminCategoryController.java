@@ -3,37 +3,49 @@ package com.tomobs.ecommerce.controller.Admin;
 import com.tomobs.ecommerce.dto.CategoryDTO;
 import com.tomobs.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin/categories")
 public class AdminCategoryController {
 
-    private final CategoryService categoryService;
+  private final CategoryService categoryService;
 
-    public AdminCategoryController(CategoryService categoryService) {
+  public AdminCategoryController(CategoryService categoryService) {
 
-        this.categoryService = categoryService;
-    }
+    this.categoryService = categoryService;
+  }
 
-    @GetMapping
-    public String showNewCategory(){
+  @GetMapping
+  public String showCategories(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "5") int size,
+      @RequestParam(defaultValue = "createdAt") String sortField,
+      @RequestParam(defaultValue = "desc") String sortDir,
+      Model model) {
 
-        return "admin/category";
-    }
+    Page<CategoryDTO> categoryPage =
+        categoryService.getAllCategoriesPaginated(page, size, sortField, sortDir);
 
 
+    model.addAttribute("categories", categoryPage.getContent());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("totalPage", size);
+    model.addAttribute("sortField", sortField);
+    model.addAttribute("sortDir", sortDir);
+    model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
 
-    @PostMapping("/new")
-    public String saveCategory(
-           @Valid @ModelAttribute("categoryDTO") CategoryDTO categoryDTO){
+    return "admin/category";
+  }
 
-        categoryService.addCategory(categoryDTO);
+  @PostMapping("/new")
+  public String saveCategory(@Valid @ModelAttribute("categoryDTO") CategoryDTO categoryDTO) {
 
-        return "redirect:/admin/categories";
-    }
+    categoryService.addCategory(categoryDTO);
+
+    return "redirect:/admin/categories";
+  }
 }

@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body>
-    <div th:fragment="adminSidebar" class="admin-sidebar">
+
+<div th:fragment="adminSidebar" class="admin-sidebar">
 
         <ul class="sidebar-menu">
             <li>
@@ -15,17 +16,18 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{/admin/dashboard}" class="sidebar-link">
+                <a th:href="@{/admin/brands}" class="sidebar-link">
                     Brands
                 </a>
             </li>
             <li>
-                <a th:href="@{/admin/dashboard}" class="sidebar-link">
+                <a th:href="@{/admin/products}" class="sidebar-link">
                     Products
                 </a>
             </li>
 
         </ul>
     </div>
+
 </body>
 </html>
