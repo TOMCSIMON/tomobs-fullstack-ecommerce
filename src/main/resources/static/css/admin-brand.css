@@ -1,13 +1,24 @@
-.btn {
-    margin-inline-start: 900px;
-    margin-top: 40px;
-    background-color: #000; !important
-    border: none; !important
-    cursor-pointer;
+.addButton {
+    background-color: #000;
+    color: #fff;
+    border-radius: 20px;
+    border: none;
+    height: 50px;
+    width: 15%;
+    margin-top: 150px;
+    margin-bottom: 20px;
+    margin-right: 100px;
 }
 
-.btn:hover {
-    background-color: #002
+.addButton:hover {
+    color: #000;
+    border: 2px solid;
+    background-color: #E4E4E4;
+}
+
+.page-header {
+    margin-top: 150px;
+    margin-inline-start: 300px;
 }
 
 .brand-table{

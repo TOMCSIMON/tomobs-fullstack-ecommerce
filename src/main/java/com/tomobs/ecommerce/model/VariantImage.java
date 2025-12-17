@@ -1,36 +1,39 @@
 package com.tomobs.ecommerce.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "brands")
+@Table(name = "variant_image")
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
-@EnableJpaAuditing
-public class Brand {
+@AllArgsConstructor
+@NoArgsConstructor
+public class VariantImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id", referencedColumnName = "id", nullable = false)
-    private Category category;
+    @Column(name = "file_path", nullable = false)
+    private String filePath;
 
-    @Column(name = "is_active", nullable = false)
-    private boolean isActive = true;
+    @Column(name = "is_primary")
+    private boolean isPrimary;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "variant_id", nullable = false)
+    private ProductVariant productVariant;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")

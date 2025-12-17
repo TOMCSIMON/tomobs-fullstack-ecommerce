@@ -52,23 +52,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     Pageable pageable = PageRequest.of(page, size, sort);
 
-     Page<Category> categoryPage =  categoryRepository.findAll(pageable);
+    Page<Category> categoryPage = categoryRepository.findAll(pageable);
 
-     return mapToDTO(categoryPage);
-
-
+    return mapToDTO(categoryPage);
   }
 
   private Page<CategoryDTO> mapToDTO(Page<Category> categoryPage) {
 
-      return categoryPage.map(category -> {
+    return categoryPage.map(
+        category -> {
           CategoryDTO dto = new CategoryDTO();
 
           dto.setId(category.getId());
           dto.setName(category.getName());
           dto.setDescription(category.getDescription());
+          dto.setActive(category.isActive());
 
           return dto;
-      });
+        });
   }
 }

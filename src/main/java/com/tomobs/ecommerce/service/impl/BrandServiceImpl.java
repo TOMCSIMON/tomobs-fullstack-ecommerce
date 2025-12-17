@@ -77,6 +77,7 @@ public class BrandServiceImpl implements BrandService {
 
             dto.setId(brand.getId());
             dto.setName(brand.getName());
+            dto.setActive(brand.isActive());
 
             return dto;
         });

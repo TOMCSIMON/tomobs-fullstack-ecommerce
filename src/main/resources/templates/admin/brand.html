@@ -17,20 +17,24 @@
 
 <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
 
-
-<div style="margin-top: 100px; margin-inline-start: 35px; color: #249AB2;">
-    <h5>Brands</h5>
-</div>
-
 <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
 
-<button class="addButton btn" data-bs-toggle="modal" data-bs-target="#addBrandModal">
-    Add Brand
-</button>
+
+<div class="d-flex justify-content-between">
+
+    <div class="page-header">
+        <h4>Brands</h4>
+    </div>
+
+    <button class="addButton " data-bs-toggle="modal" data-bs-target="#addBrandModal">
+        Add Brand
+    </button>
+
+</div>
 
 <!--pageable-->
 <div class="brand-table  justify-content-between">
-    <table>
+    <table class="table">
         <thead>
         <tr>
             <th>ID</th>
@@ -47,8 +51,7 @@
         <tr th:each="brand : ${brands}">
             <td th:text="${brand.id}"></td>
             <td th:text="${brand.name}"></td>
-            <td th:if="${brand.isActive}">Active</td>
-            <td th:unless="${brand.isActive}">Blocked</td>
+            <td th:text="${brand.isActive} ? 'Active' : 'Blocked'"></td>
 
 
             <td>
@@ -65,37 +68,47 @@
         </tbody>
     </table>
 
-    <div style="margin-top: 20px;">
-    <span th:if="${currentPage > 0}">
-        <a th:href="@{/admin/brand(
-            page=${currentPage - 1},
-            size=5,
-            sortField=${sortField},
-            sortDir=${sortDir}
-        )}">Previous</a>
-    </span>
+    <nav aria-label="Page navigation" class="mt-2">
+        <ul class="pagination justify-content-center">
 
-        <span th:each="i : ${#numbers.sequence(0, totalPage - 1)}">
-        <a th:href="@{/admin/brand(
-            page=${i},
-            size=5,
-            sortField=${sortField},
-            sortDir=${sortDir}
-        )}"
-           th:text="${i + 1}"
-           th:style="${i == currentPage} ? 'font-weight:bold' : ''">
-        </a>
-    </span>
+            <!-- Previous Button -->
+            <li class="page-item" th:classappend="${currentPage == 0} ? ' disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/brands(
+                    page=${currentPage - 1},
+                    size=5,
+                    sortField=${sortField},
+                    sortDir=${sortDir}
+               )}"> < </a>
+            </li>
 
-        <span th:if="${currentPage < totalPage - 1}">
-        <a th:href="@{/admin/brand(
-            page=${currentPage + 1},
-            size=5,
-            sortField=${sortField},
-            sortDir=${sortDir}
-        )}">Next</a>
-    </span>
-    </div>
+            <!-- Page Numbers -->
+            <li class="page-item"
+                th:each="i : ${#numbers.sequence(0, totalPage - 1)}"
+                th:classappend="${i == currentPage} ? ' active'">
+                <a class="page-link"
+                   th:text="${i + 1}"
+                   th:href="@{/admin/brands(
+                    page=${i},
+                    size=5,
+                    sortField=${sortField},
+                    sortDir=${sortDir}
+               )}"></a>
+            </li>
+
+            <!-- Next Button -->
+            <li class="page-item" th:classappend="${currentPage == totalPage - 1} ? ' disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/brands(
+                    page=${currentPage + 1},
+                    size=5,
+                    sortField=${sortField},
+                    sortDir=${sortDir}
+               )}"> > </a>
+            </li>
+
+        </ul>
+    </nav>
 </div>
 <!--pageable-->
 
@@ -118,9 +131,9 @@
                     <select name="categoryId" class="form-select" required>
                         <option value="">Select Category</option>
 
-                        <option th:each="cat : ${categories}"
-                                th:value="${cat.id}"
-                                th:text="${cat.name}">
+                        <option th:each="category : ${categories}"
+                                th:value="${category.id}"
+                                th:text="${category.name}">
                         </option>
                     </select>
 
@@ -130,10 +143,6 @@
                         <input type="text" name="name" class="form-control" required>
                     </div>
 
-                    <div class="mb-3">
-                        <label>Image URL/ File Path</label>
-                        <textarea name="logo" class="form-control"></textarea>
-                    </div>
 
                 </div>
 

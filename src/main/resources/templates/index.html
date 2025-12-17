@@ -18,9 +18,9 @@
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
-<div class="hero container-fluid d-flex align-items-center justify-content-between">
+<div class="hero container-fluid d-flex align-items-center justify-content-between ">
 
-    <div class="hero-content">
+    <div class="hero-content ms-5 gap-2">
         <h2>Discover Most <br> Affordable <br> Smart phones</h2>
 
         <p class="hero-text">
@@ -29,19 +29,29 @@
             Just order now!
         </p>
 
-        <div class="hero-buttons">
-            <a th:href="@{/login}" class="btn btn-dark px-4 py-2 me-3">Login</a>
-            <a th:href="@{/signup}" class="btn btn-dark px-4 py-2">Signup</a>
-        </div>
+        <a th:href="@{/products}" class="btn btn-dark">Shop now</a>
     </div>
 
-    <div class="hero-image">
+    <div class="hero-image me-5">
         <img th:src="@{/images/Phone-img-1.jpg}" alt="phone-img">
     </div>
 
 </div>
 
+<div class="text-center mt-4"><h5>Pick Your Favorite Brand</h5></div>
 
+<div class="d-flex m-4  align-items-center justify-content-between" style="height: 100px; ">
+
+    <button class="btn "> < </button>
+    <button class="brandButton btn bg-white text-dark">Apple</button>
+    <button class="brandButton btn bg-white text-dark">Motorola</button>
+    <button class="brandButton btn bg-white text-dark">Samsung</button>
+    <button class="brandButton btn bg-white text-dark">Lenovo</button>
+    <button class="brandButton btn bg-white text-dark">Dell</button>
+    <button class="btn "> > </button>
+
+
+</div>
 
 <div th:insert="~{fragments/footer :: footer}"></div>
 

@@ -2,11 +2,15 @@ package com.tomobs.ecommerce.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CategoryDTO {
 
     private Long id;
@@ -19,5 +23,5 @@ public class CategoryDTO {
     @Size(max = 200, message = "Category description cannot exceed 200 characters.")
     private String description;
 
-    private boolean isActive = true;
+    private boolean isActive;
 }

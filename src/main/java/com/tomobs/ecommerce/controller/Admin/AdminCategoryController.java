@@ -24,16 +24,15 @@ public class AdminCategoryController {
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "5") int size,
       @RequestParam(defaultValue = "createdAt") String sortField,
-      @RequestParam(defaultValue = "desc") String sortDir,
+      @RequestParam(defaultValue = "asc") String sortDir,
       Model model) {
 
     Page<CategoryDTO> categoryPage =
         categoryService.getAllCategoriesPaginated(page, size, sortField, sortDir);
 
-
     model.addAttribute("categories", categoryPage.getContent());
     model.addAttribute("currentPage", page);
-    model.addAttribute("totalPage", size);
+    model.addAttribute("totalPage", categoryPage.getTotalPages());
     model.addAttribute("sortField", sortField);
     model.addAttribute("sortDir", sortDir);
     model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");

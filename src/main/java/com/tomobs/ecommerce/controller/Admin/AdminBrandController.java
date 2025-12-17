@@ -34,7 +34,7 @@ public class AdminBrandController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "createdAt") String sortField,
-            @RequestParam(defaultValue = "desc") String sortDir,
+            @RequestParam(defaultValue = "asc") String sortDir,
             Model model) {
 
         model.addAttribute("categories", categoryService.getAllCategories());
@@ -46,7 +46,7 @@ public class AdminBrandController {
 
         model.addAttribute("brands", brandPage.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPage", size);
+        model.addAttribute("totalPage", brandPage.getTotalPages());
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");

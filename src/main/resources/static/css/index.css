@@ -32,6 +32,13 @@
     border-radius: 15px;
 }
 
+.brandButton {
+    width: 160px;
+    height: 60px;
+    border-radius:15px;
+}
+
+
 /* Responsive fix */
 @media (max-width: 992px) {
     .hero {

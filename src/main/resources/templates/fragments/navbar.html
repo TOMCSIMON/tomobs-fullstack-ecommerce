@@ -23,14 +23,32 @@
         <!-- Profile + Cart -->
         <div class="d-flex align-items-center gap-4">
 
-            <a th:href="@{/}" class="text-white">
+            <!-- Profile Menu Wrapper -->
+            <div class="profile-menu">
+
+                <!-- Profile Icon -->
                 <img th:src="@{/icons/profile.svg}"
-                     class="white-icon" width="30" alt="profile">
-            </a>
+                     class="white-icon profile-icon"
+                     width="40"
+                     alt="profile">
+
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown">
+
+                    <a th:href="@{/#}">My Profile</a>
+                    <a th:href="@{/#}">My Address</a>
+                    <a th:href="@{/#}">My Wishlist</a>
+                    <a th:href="@{/login}">Login</a>
+                    <a th:href="@{/signup}">Signup</a>
+                    <a th:href="@{/logout}">Logout</a>
+
+                </div>
+            </div>
+
 
             <a th:href="@{/}" class="text-white">
                 <img th:src="@{/icons/trolley.png}"
-                     class="white-icon" width="30" alt="cart">
+                     class="white-icon" width="40" alt="cart">
             </a>
 
         </div>

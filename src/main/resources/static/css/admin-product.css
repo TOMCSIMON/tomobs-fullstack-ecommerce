@@ -1,12 +1,46 @@
-.addProduct {
-
-    margin-left: 900px;
+.addButton {
     background-color: #000;
     color: #fff;
     border-radius: 20px;
+    border: none;
+    height: 50px;
+    width: 15%;
+    margin-top: 150px;
+    margin-bottom: 20px;
+    margin-right: 100px;
 }
 
-.addProduct.a {
-    text-decoration: none;
-    color:#fff;
+.addButton:hover {
+    color: #000;
+    border: 2px solid;
+    background-color: #E4E4E4;
 }
+
+.page-header {
+    margin-top: 150px;
+    margin-inline-start: 300px;
+}
+
+.addButton a {
+    text-decoration: none;
+    color: #fff;
+}
+.addButton a:hover {
+    color:#000;
+}
+
+
+.productTableContainer{
+    margin-left: 300px;
+    margin-top: 15px;
+    width: 70%;
+}
+
+
+.paginationBox {
+    border-color: #000 3px;
+    width: 20px;
+    height: 30px;
+    color: #000;
+}
+
