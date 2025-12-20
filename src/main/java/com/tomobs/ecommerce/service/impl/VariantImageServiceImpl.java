@@ -69,7 +69,7 @@ public class VariantImageServiceImpl implements VariantImageService {
         file.transferTo(filePath.toFile());
         System.out.println("File saved to: " + filePath.toAbsolutePath());
 
-        // Check if this is the first image (make it primary)
+        // Check if this is the first image
         long existingImageCount = variantImageRepository.countByProductVariant(variant);
         boolean isPrimary = (existingImageCount == 0);
 

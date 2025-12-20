@@ -7,7 +7,7 @@ import com.tomobs.ecommerce.model.Category;
 import com.tomobs.ecommerce.model.Product;
 import com.tomobs.ecommerce.repository.BrandRepository;
 import com.tomobs.ecommerce.repository.CategoryRepository;
-import com.tomobs.ecommerce.repository.ProductRepositroy;
+import com.tomobs.ecommerce.repository.ProductRepository;
 import com.tomobs.ecommerce.service.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,11 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepositroy productRepository;
+    private final ProductRepository productRepository;
     private final BrandRepository brandRepository;
     private final CategoryRepository categoryRepository;
 
-    public ProductServiceImpl(ProductRepositroy productRepository,
+    public ProductServiceImpl(ProductRepository productRepository,
                               BrandRepository brandRepository,
                               CategoryRepository categoryRepository) {
 

@@ -3,7 +3,7 @@ package com.tomobs.ecommerce.service.impl;
 import com.tomobs.ecommerce.dto.ProductVariantAddDTO;
 import com.tomobs.ecommerce.model.Product;
 import com.tomobs.ecommerce.model.ProductVariant;
-import com.tomobs.ecommerce.repository.ProductRepositroy;
+import com.tomobs.ecommerce.repository.ProductRepository;
 import com.tomobs.ecommerce.repository.ProductVariantRepository;
 import com.tomobs.ecommerce.service.ProductVariantService;
 import org.springframework.stereotype.Service;
@@ -12,11 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductVariantServiceImpl implements ProductVariantService {
 
-  private final ProductRepositroy productRepositroy;
+  private final ProductRepository productRepositroy;
   private final ProductVariantRepository productVariantRepository;
 
   public ProductVariantServiceImpl(
-      ProductRepositroy productRepositroy, ProductVariantRepository productVariantRepository) {
+          ProductRepository productRepositroy, ProductVariantRepository productVariantRepository) {
 
     this.productRepositroy = productRepositroy;
     this.productVariantRepository = productVariantRepository;

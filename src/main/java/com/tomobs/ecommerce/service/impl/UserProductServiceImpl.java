@@ -4,7 +4,7 @@ import com.tomobs.ecommerce.dto.UserProductListDTO;
 import com.tomobs.ecommerce.model.Product;
 import com.tomobs.ecommerce.model.ProductVariant;
 import com.tomobs.ecommerce.model.VariantImage;
-import com.tomobs.ecommerce.repository.ProductRepositroy;
+import com.tomobs.ecommerce.repository.ProductRepository;
 import com.tomobs.ecommerce.service.UserProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,9 +18,9 @@ import java.nio.file.Paths;
 @Transactional(readOnly = true)
 public class UserProductServiceImpl implements UserProductService {
 
-  private final ProductRepositroy productRepositroy;
+  private final ProductRepository productRepositroy;
 
-  public UserProductServiceImpl(ProductRepositroy productRepositroy) {
+  public UserProductServiceImpl(ProductRepository productRepositroy) {
 
     this.productRepositroy = productRepositroy;
   }
@@ -52,7 +52,6 @@ public class UserProductServiceImpl implements UserProductService {
         if(primaryImage != null) {
           String fileName = Paths.get(primaryImage.getFilePath()).getFileName().toString();
           dto.setImageUrl("/uploads/products/" + fileName);
-
         }
     }
 
