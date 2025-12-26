@@ -18,18 +18,26 @@ import java.nio.file.Paths;
 @Transactional(readOnly = true)
 public class UserProductServiceImpl implements UserProductService {
 
-  private final ProductRepository productRepositroy;
+  private final ProductRepository productRepository;
 
-  public UserProductServiceImpl(ProductRepository productRepositroy) {
+  public UserProductServiceImpl(ProductRepository productRepository) {
 
-    this.productRepositroy = productRepositroy;
+    this.productRepository = productRepository;
   }
 
-  public Page<UserProductListDTO> getProductForListing(int page, int size) {
+  public Page<UserProductListDTO> getProductForListing(Long categoryId,Long brandId,int page, int size) {
 
     Pageable pageable = PageRequest.of(page, size);
+    Page<Product> products;
 
-    Page<Product> products = productRepositroy.findAllByOrderByCreatedAtDesc(pageable);
+    if(categoryId != null && categoryId > 0) {
+       products = productRepository.findByCategoryId(categoryId, pageable);
+    }else if(brandId != null && brandId > 0){
+      products = productRepository.findByBrandId(brandId, pageable);
+    }
+    else {
+       products = productRepository.findAllByOrderByCreatedAtDesc(pageable);
+    }
 
     return products.map(this::convertToDTO);
   }
@@ -57,4 +65,5 @@ public class UserProductServiceImpl implements UserProductService {
 
     return dto;
   }
+
 }

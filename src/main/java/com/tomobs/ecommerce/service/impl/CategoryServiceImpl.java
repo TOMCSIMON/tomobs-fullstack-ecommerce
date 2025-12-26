@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -38,6 +39,19 @@ public class CategoryServiceImpl implements CategoryService {
   public List<Category> getAllCategories() {
 
     return categoryRepository.findAll();
+  }
+
+  @Override
+  public List<CategoryDTO> findCategories(){
+
+      List<Category> categories = categoryRepository.findAll();
+
+      return categories.stream().map(category -> {
+          CategoryDTO categoryDTO = new CategoryDTO();
+          categoryDTO.setId(category.getId());
+          categoryDTO.setName(category.getName());
+          return categoryDTO;
+      }).collect(Collectors.toList());
   }
 
   // FOR PAGINATION

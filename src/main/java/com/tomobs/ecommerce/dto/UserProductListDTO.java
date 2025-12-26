@@ -1,11 +1,14 @@
 package com.tomobs.ecommerce.dto;
 
+import com.tomobs.ecommerce.model.Brand;
+import com.tomobs.ecommerce.model.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,4 +24,7 @@ public class UserProductListDTO {
 
     private BigDecimal price;
     private String imageUrl;
+
+    private List<Category> categories;
+    private List<Brand> brands;
 }

@@ -11,6 +11,8 @@ public interface CategoryService {
 
   void addCategory(CategoryDTO categoryDTO);
 
+  List<CategoryDTO> findCategories();
+
   List<Category> getAllCategories();
 
   Page<CategoryDTO> getAllCategoriesPaginated(int page, int size, String sortField, String sortDirection);

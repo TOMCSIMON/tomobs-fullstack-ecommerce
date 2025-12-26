@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.service.impl;
 
+import com.tomobs.ecommerce.config.CustomUserDetails;
 import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -30,15 +31,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Email not found!"));
 
-
-
-
         log.info("LOADED USER → Email: {}, Roles: {}", user.getEmail(), user.getRole());
 
-    return org.springframework.security.core.userdetails.User.builder()
-        .username(user.getEmail())
-        .password(user.getPassword())
-        .authorities(new SimpleGrantedAuthority(user.getRole().getRoleName().name()))
-        .build();
+    return new CustomUserDetails(user);
     }
 }

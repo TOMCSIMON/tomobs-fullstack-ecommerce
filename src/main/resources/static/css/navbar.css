@@ -70,9 +70,7 @@ body, input, button {
 }
 
 
-/* ===========================
-   Profile Hover Dropdown
-   =========================== */
+/* Profile Hover Dropdown */
 
 .profile-menu {
     position: relative;
@@ -91,7 +89,7 @@ body, input, button {
     left: 0;
 
     background-color: #000;
-    min-width: 150px;
+    min-width: 200px;
     border-radius: 5px;
 
     box-shadow: 0 6px 15px rgba(0,0,0,0.15);

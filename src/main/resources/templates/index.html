@@ -13,46 +13,100 @@
           rel="stylesheet">
 </head>
 
-<body style="background-color:#E4E4E4;">
+<body class="d-flex flex-column min-vh-100" style="background-color:#E4E4E4;">
 
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
-<div class="hero container-fluid d-flex align-items-center justify-content-between ">
+<main class="flex-grow-1 ">
 
-    <div class="hero-content ms-5 gap-2">
-        <h2>Discover Most <br> Affordable <br> Smart phones</h2>
+    <div class="hero container-fluid d-flex align-items-center justify-content-between ">
 
-        <p class="hero-text">
-            Find the best,reliable and affordable smartphones.
-            We focus on the product quality.
-            Just order now!
-        </p>
+        <div class="hero-content ms-5 gap-2">
+            <h2>Discover Most <br> Affordable <br> Smart phones</h2>
 
-        <a th:href="@{/products}" class="btn btn-dark">Shop now</a>
+            <p class="hero-text">
+                Find the best,reliable and affordable smartphones.
+                We focus on the product quality.
+                Just order now!
+            </p>
+
+            <a th:href="@{/products}" class="btn btn-dark">Shop now</a>
+        </div>
+
+        <div class="hero-image me-5">
+            <img th:src="@{/images/Phone-img-1.jpg}" alt="phone-img">
+        </div>
+
     </div>
 
-    <div class="hero-image me-5">
-        <img th:src="@{/images/Phone-img-1.jpg}" alt="phone-img">
+    <div class="text-center mt-4"><h5>Pick Your Favorite Brand</h5></div>
+
+    <div class="d-flex m-4  align-items-center justify-content-between" style="height: 100px; ">
+
+        <button class="btn "> <</button>
+        <button class="brandButton btn bg-white text-dark">Apple</button>
+        <button class="brandButton btn bg-white text-dark">Motorola</button>
+        <button class="brandButton btn bg-white text-dark">Samsung</button>
+        <button class="brandButton btn bg-white text-dark">Lenovo</button>
+        <button class="brandButton btn bg-white text-dark">Dell</button>
+        <button class="btn "> ></button>
+
     </div>
 
-</div>
 
-<div class="text-center mt-4"><h5>Pick Your Favorite Brand</h5></div>
+    <div class="container my-4">
+        <h4 class="mb-3">Latest Releases</h4>
 
-<div class="d-flex m-4  align-items-center justify-content-between" style="height: 100px; ">
+        <div class="row g-3">
 
-    <button class="btn "> < </button>
-    <button class="brandButton btn bg-white text-dark">Apple</button>
-    <button class="brandButton btn bg-white text-dark">Motorola</button>
-    <button class="brandButton btn bg-white text-dark">Samsung</button>
-    <button class="brandButton btn bg-white text-dark">Lenovo</button>
-    <button class="brandButton btn bg-white text-dark">Dell</button>
-    <button class="btn "> > </button>
+            <!-- Product Card -->
+            <div class="col-md-3">
+                <div class="card border-0 shadow-sm position-relative">
 
+                    <!-- NEW Badge -->
+                    <span class="badge bg-danger position-absolute top-0 start-0 m-2">
+                    NEW
+                </span>
 
-</div>
+                    <!-- Wishlist Icon -->
+                    <span class="position-absolute top-0 end-0 m-2">
+                    <i class="bi bi-heart"></i>
+                </span>
 
+                    <!-- Product Image -->
+                    <div class="p-3 text-center">
+                        <img src="#"
+                             class="img-fluid"
+                             alt="Product">
+                    </div>
+
+                    <!-- Product Info -->
+                    <div class="card-body text-center">
+                        <h6 class="card-title mb-1">Oppo Reno 13</h6>
+
+                        <small class="text-muted text-decoration-line-through">
+                            ₹41,999
+                        </small>
+
+                        <div class="fw-bold text-dark">
+                            ₹33,999
+                        </div>
+
+                        <small class="text-muted">
+                            Inclusive of all offers
+                        </small>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Repeat card for other products -->
+
+        </div>
+    </div>
+
+</main>
 <div th:insert="~{fragments/footer :: footer}"></div>
 
 </body>

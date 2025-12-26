@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 
 public interface UserProductService {
 
-    Page<UserProductListDTO> getProductForListing(int page, int size);
+    Page<UserProductListDTO> getProductForListing(Long categoryId,Long brandId,int page, int size);
 }

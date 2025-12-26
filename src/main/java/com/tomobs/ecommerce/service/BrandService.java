@@ -13,6 +13,7 @@ public interface BrandService {
 
   Page<BrandListDTO> getAllBrandsPaginated(int page, int size, String sortField, String sortDirection);
 
-
     List<Brand> getAllBrands();
+
+    List<BrandDTO> findBrands();
 }

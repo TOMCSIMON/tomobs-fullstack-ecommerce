@@ -43,7 +43,6 @@ public class UserProductDetailServiceImpl implements UserProductDetailService {
     dto.setId(product.getId());
     dto.setProductName(product.getProductName());
 
-    // Convert variants
     List<UserProductVariantDTO> variantDTOs =
         product.getVariants().stream().map(this::convertToVariantDTO).collect(Collectors.toList());
     dto.setVariants(variantDTOs);

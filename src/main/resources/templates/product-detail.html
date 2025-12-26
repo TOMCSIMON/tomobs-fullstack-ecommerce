@@ -119,7 +119,10 @@
                     <!-- Actions -->
                     <div class="d-flex gap-3">
                         <button class="btn buy-btn">Buy Now</button>
-                        <button class="btn btn-outline-dark cart-btn">Add to Cart</button>
+                        <form th:action="@{/cart/add}" method="post">
+                        <input type="hidden" name="variantId" th:value="${productDetail.variants[0].id}">
+                        <button   class="btn btn-outline-dark cart-btn">Add to Cart</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -141,7 +144,7 @@
 
             <div class="col">
                 <div class="card similar-card p-2">
-                    <img src="https://via.placeholder.com/200" class="card-img-top">
+                    <img src="#" class="card-img-top">
                     <div class="card-body p-2">
                         <p class="small mb-1">Samsung Galaxy S24</p>
                         <strong>₹71,999</strong>
@@ -151,7 +154,7 @@
 
             <div class="col">
                 <div class="card similar-card p-2">
-                    <img src="https://via.placeholder.com/200" class="card-img-top">
+                    <img src="#" class="card-img-top">
                     <div class="card-body p-2">
                         <p class="small mb-1">Nothing Phone (2)</p>
                         <strong>₹44,999</strong>
@@ -161,7 +164,7 @@
 
             <div class="col">
                 <div class="card similar-card p-2">
-                    <img src="https://via.placeholder.com/200" alt="similar image" class="card-img-top">
+                    <img src="#" alt="similar image" class="card-img-top">
                     <div class="card-body p-2">
                         <p class="small mb-1">Motorola Edge 50</p>
                         <strong>₹39,999</strong>
@@ -171,7 +174,7 @@
 
             <div class="col">
                 <div class="card similar-card p-2">
-                    <img src="https://via.placeholder.com/200" class="card-img-top">
+                    <img src="#" class="card-img-top">
                     <div class="card-body p-2">
                         <p class="small mb-1">iQOO Neo 9</p>
                         <strong>₹35,999</strong>

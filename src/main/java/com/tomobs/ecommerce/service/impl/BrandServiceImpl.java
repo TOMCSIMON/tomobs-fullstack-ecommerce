@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.dto.BrandDTO;
 import com.tomobs.ecommerce.dto.BrandListDTO;
+import com.tomobs.ecommerce.dto.CategoryDTO;
 import com.tomobs.ecommerce.model.Brand;
 import com.tomobs.ecommerce.model.Category;
 import com.tomobs.ecommerce.repository.BrandRepository;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BrandServiceImpl implements BrandService {
@@ -49,6 +51,20 @@ public class BrandServiceImpl implements BrandService {
 
       return brandRepository.findAll();
   }
+
+
+    @Override
+    public List<BrandDTO> findBrands(){
+
+        List<Brand> brands = brandRepository.findAll();
+
+        return brands.stream().map(brand -> {
+            BrandDTO brandDTO = new BrandDTO();
+            brandDTO.setId(brand.getId());
+            brandDTO.setName(brand.getName());
+            return brandDTO;
+        }).collect(Collectors.toList());
+    }
 
 
     // FOR PAGINATION

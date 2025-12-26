@@ -69,6 +69,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isEmailExists(String email) {
-       return userRepository.existsByEmail(email);
+
+        return userRepository.existsByEmail(email);
     }
+
+    @Override
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("user not found!"));
+        return user;
+    }
+
 }

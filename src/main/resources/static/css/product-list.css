@@ -1,0 +1,42 @@
+
+/* Profile Hover Dropdown */
+
+.category {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+
+/* Dropdown box */
+.category-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+
+    background-color: #000;
+    min-width: 150px;
+    border-radius: 5px;
+
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    padding: 8px 0;
+
+    display: none;
+    z-index: 1000;
+}
+
+/* Show on hover */
+.category:hover .category-dropdown {
+    display: block;
+}
+
+/* Dropdown items */
+.category-dropdown a {
+    display: block;
+    padding: 8px 14px;
+
+    text-decoration: none;
+    font-size: 14px;
+    color: #fff;
+}
+
