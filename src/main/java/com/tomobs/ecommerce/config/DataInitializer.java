@@ -7,17 +7,17 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DataIntializer {
+public class DataInitializer {
 
     private final RoleRepository roleRepository;
 
-    public DataIntializer(RoleRepository roleRepository) {
+    public DataInitializer(RoleRepository roleRepository) {
 
         this.roleRepository = roleRepository;
     }
 
     @PostConstruct
-    public void initilizeRoles() {
+    public void initializeRoles() {
 
         if(roleRepository.count() == 0) {
 

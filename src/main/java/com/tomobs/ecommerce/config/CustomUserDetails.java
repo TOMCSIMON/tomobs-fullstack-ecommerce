@@ -1,9 +1,7 @@
 package com.tomobs.ecommerce.config;
 
 import com.tomobs.ecommerce.model.User;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,11 +20,19 @@ public class CustomUserDetails implements UserDetails {
         this.id = user.getId();
         this.username = user.getEmail();
         this.password = user.getPassword();
-        this.authorities = List.of(new SimpleGrantedAuthority(user.getRole().toString()));
+        this.authorities = List.of(new SimpleGrantedAuthority(user.getRole().getRoleName().name()));
     }
 
     @Override public String getUsername() { return username; }
     @Override public String getPassword() { return password; }
-    @Override public Collection<? extends GrantedAuthority> getAuthorities() { return authorities; }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return authorities;
+    }
+
+    @Override public boolean isAccountNonExpired() { return true; }
+    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isCredentialsNonExpired() { return true; }
+    @Override public boolean isEnabled() { return true; }
 
 }

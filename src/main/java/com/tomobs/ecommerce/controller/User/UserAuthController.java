@@ -23,8 +23,7 @@ public class UserAuthController {
   @PostMapping("/signup")
   public String registerUser(
       @ModelAttribute("user") @Valid UserRegistrationDTO userRegistrationDTO,
-      BindingResult bindingResult,
-      Model model) {
+      BindingResult bindingResult) {
 
     // SHOW FORM AGAIN WITH VALIDATION ERRORS
     if (bindingResult.hasErrors()) {

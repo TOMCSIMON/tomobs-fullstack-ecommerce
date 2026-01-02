@@ -1,6 +1,5 @@
 package com.tomobs.ecommerce.config;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +19,9 @@ public class CustomAuthenticationSuccessHandler  implements AuthenticationSucces
             HttpServletRequest request,
             HttpServletResponse response,
             Authentication authentication
-    ) throws IOException, ServletException {
+    ) throws IOException {
 
+        log.info("LOGIN SUCCESS | Roles = {}", authentication.getAuthorities());
 
         // Get the role of the logged-in user
         boolean isAdmin = authentication.getAuthorities()

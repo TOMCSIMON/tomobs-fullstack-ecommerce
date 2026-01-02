@@ -27,7 +27,7 @@ public class UserRestController {
         response.put("exists", emailExists);
 
         if(emailExists) {
-            response.put("message", "Email already in use please enter another");// do not hardcode in java properties file needed
+            response.put("message", "Email already in use please enter another");
         }
         else {
             response.put("message", "Email available");
