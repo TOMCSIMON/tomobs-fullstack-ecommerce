@@ -1,0 +1,38 @@
+/* Sidebar container */
+.user-sidebar {
+    width: 240px;
+    height: 100vh;
+    background-color: #fff;
+    color: #000;
+    margin-top: 67px;
+    margin-left: 0px;
+}
+
+
+/* Menu List */
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.sidebar-menu li {
+    margin: 10px 0;
+}
+
+/* Links */
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px;
+    color: #000;
+    text-decoration: none;
+    font-size: 16px;
+    transition: 0.2s ease;
+}
+
+
+/* Hover effect */
+.sidebar-link:hover {
+    color: #249AB2;
+}
