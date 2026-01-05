@@ -1,0 +1,17 @@
+.add-button {
+    background-color: #000;
+    border-radius: 20px;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.add-button:hover{
+
+    background-color: #383737;
+}
+.user-layout {
+    display: flex;
+    min-height: calc(100vh - 60px);
+}
