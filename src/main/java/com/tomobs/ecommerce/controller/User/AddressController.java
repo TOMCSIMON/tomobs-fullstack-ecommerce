@@ -1,16 +1,18 @@
 package com.tomobs.ecommerce.controller.User;
 
 import com.tomobs.ecommerce.dto.UserAddressAddDTO;
+import com.tomobs.ecommerce.dto.UserAddressListDTO;
+import com.tomobs.ecommerce.dto.UserProductListDTO;
 import com.tomobs.ecommerce.service.UserAddressService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 // FOR HANDLING USER ADDRESS
 @Controller
@@ -24,15 +26,18 @@ public class AddressController {
         this.userAddressService = userAddressService;
     }
 
-
+    // FOR LOADING LOGGED USER ADDRESSES
     @GetMapping()
     public String viewAddress(Model model){
 
+        List<UserAddressListDTO> addressList = userAddressService.getAddress();
+
         model.addAttribute("userAddressAddDTO", new UserAddressAddDTO());
+        model.addAttribute("addressList", addressList);
         return "user-address";
     }
 
-    // FOR SAVING USER ADDRESS
+    // FOR SAVING LOGGED USER ADDRESS
     @PostMapping("/add")
     public String addAddress(
             @ModelAttribute("userAddressAddDTO") @Valid UserAddressAddDTO userAddressAddDTO,
@@ -44,6 +49,14 @@ public class AddressController {
         }
 
         userAddressService.addAddress(userAddressAddDTO);
-        return "redirect:/user-address";
+        return "redirect:/address";
+    }
+
+    // FOR DELETING ADDRESS
+    @GetMapping("/delete/{id}")
+    public String deleteAddress(@PathVariable Long id) {
+
+        userAddressService.deleteAddress(id);
+        return "redirect:/address";
     }
 }
