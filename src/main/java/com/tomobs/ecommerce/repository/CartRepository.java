@@ -1,6 +1,7 @@
 package com.tomobs.ecommerce.repository;
 
 import com.tomobs.ecommerce.model.Cart;
+import com.tomobs.ecommerce.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

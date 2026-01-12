@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/navbar.css}">
+    <link rel="stylesheet" th:href="@{/css/footer.css}">
+    <link rel="stylesheet" th:href="@{/css/order-success.css}">
+</head>
+
+<body class="d-flex flex-column min-vh-100" style="background-color:#E4E4E4;">
+
+<div th:insert="~{fragments/navbar :: navbar}"></div>
+
+<main class="container flex-grow-1 my-5">
+
+    <div class="order-success d-flex row">
+        <h2>Thank you for the Order</h2>
+        <img th:src="@{/images/order-success-img.png}">
+    </div>
+
+</main>
+
+<div th:insert="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>
