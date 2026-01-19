@@ -12,7 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/checkout.css}">
 </head>
 
-<body class="d-flex flex-column min-vh-100" style="background-color:#E4E4E4;">
+<body class="d-flex flex-column min-vh-100" style="background-color:#f1f3f6;">
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
@@ -152,10 +152,10 @@
                     <label class="d-block">
                         <input type="radio"
                                name="paymentMethod"
-                               value="RAZORPAY"
+                               value="ONLINE_PAYMENT"
                                class="form-check-input me-2"
                                required>
-                        Razorpay
+                        Online Payment
                     </label>
 
                     <label class="d-block">

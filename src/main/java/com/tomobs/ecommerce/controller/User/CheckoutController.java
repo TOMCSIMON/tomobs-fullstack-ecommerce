@@ -67,8 +67,12 @@ public class CheckoutController {
           Principal principal,
           RedirectAttributes redirectAttributes) {
     String email = principal.getName();
+
     Long orderId = orderService.placeOrder(email, addressId, paymentMethod);
-    redirectAttributes.addAttribute("orderId", orderId);
+    if (paymentMethod.equalsIgnoreCase("ONLINE_PAYMENT")) {
+      redirectAttributes.addAttribute("orderId", orderId);
+      return "redirect:/razorpay-checkout";
+    }
     return "order-success.html";
   }
 }

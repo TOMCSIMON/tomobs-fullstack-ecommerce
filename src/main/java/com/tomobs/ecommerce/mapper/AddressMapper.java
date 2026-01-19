@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AddressMapper {
 
+  // MAPPING DTO -> ENTITY
   public Address toEntity(UserAddressAddDTO dto, User user) {
 
     Address address = new Address();
@@ -26,6 +27,7 @@ public class AddressMapper {
     return address;
   }
 
+  // MAPPING ENTITY -> DTO
   public UserAddressListDTO toDTO(Address address) {
 
     UserAddressListDTO dto = new UserAddressListDTO();

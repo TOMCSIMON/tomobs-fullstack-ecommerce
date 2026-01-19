@@ -28,7 +28,7 @@
                 <label for="username">Full name</label>
                 <div class="icon-input">
                     <img th:src="@{/icons/user.png}" class="field-icon" alt="user-icon">
-                    <input type="text" id="userName" th:field="*{userName}" placeholder="Enter your full name" required>
+                    <input type="text" id="userName" th:field="*{userName}" placeholder="Enter your full name">
                 </div>
                 <span class="error-msg" th:if = "${#fields.hasErrors('userName')}"
                       th:text = "${#fields.errors('userName')}"></span>
@@ -40,7 +40,7 @@
                 <label for="email">Email</label>
                 <div class="icon-input">
                     <img th:src="@{/icons/email.png}" class="field-icon" alt="">
-                    <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address" required>
+                    <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address" >
                 </div>
                 <span class="error-msg" th:if="${#fields.hasErrors('email')}"
                       th:text="${#fields.errors('email')}"></span>
@@ -67,7 +67,7 @@
                 <label for="password">Password</label>
                 <div class="icon-input">
                     <img th:src="@{/icons/padlock.png}" class="field-icon" alt="">
-                    <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" required>
+                    <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" >
                     <img th:src="@{/icons/hide.png}" class="toggle-eye" id="togglePassword" alt="">
                 </div>
                 <span class="error-msg" th:if="${#fields.hasErrors('password')}"
@@ -81,7 +81,7 @@
                 <label for="confirmPassword">Confirm Password</label>
                 <div class="icon-input">
                     <img th:src="@{/icons/padlock.png}" class="field-icon" alt="">
-                    <input type="password" id="confirmPassword" th:field="*{confirmPassword}" placeholder="Re-enter your password" required>
+                    <input type="password" id="confirmPassword" th:field="*{confirmPassword}" placeholder="Re-enter your password" >
                     <img th:src="@{/icons/hide.png}" class="toggle-eye" id="toggleConfirmPassword" alt="">
                 </div>
                 <span class="error-msg" th:if="${#fields.hasErrors('confirmPassword')}"

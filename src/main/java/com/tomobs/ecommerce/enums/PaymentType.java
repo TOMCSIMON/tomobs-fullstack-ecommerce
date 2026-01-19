@@ -3,8 +3,6 @@ package com.tomobs.ecommerce.enums;
 public enum PaymentType {
 
     WALLET,
-    CARD,
-    UPI,
-    NET_BANKING,
+    ONLINE_PAYMENT,
     CASH_ON_DELIVERY
 }

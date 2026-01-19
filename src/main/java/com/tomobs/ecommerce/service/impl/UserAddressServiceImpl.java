@@ -57,7 +57,7 @@ public class UserAddressServiceImpl implements UserAddressService {
             userAddressAddDTO.setIsDefault(true);
         }
 
-        // CASE 2: User explicitly set this as default
+        // USER EXPLICITLY SET THIS AS DEFAULT
         else if (userAddressAddDTO.getIsDefault()) {
 
             userAddressRepository
@@ -87,6 +87,8 @@ public class UserAddressServiceImpl implements UserAddressService {
                 .toList();
 
     }
+
+
 
     @Override
     public void deleteAddress(Long id) {

@@ -1,11 +1,19 @@
 package com.tomobs.ecommerce.service.impl;
 
+import com.tomobs.ecommerce.config.CustomUserDetails;
+import com.tomobs.ecommerce.dto.OrderDetailsDTO;
+import com.tomobs.ecommerce.dto.OrderListDTO;
 import com.tomobs.ecommerce.enums.OrderStatus;
 import com.tomobs.ecommerce.exception.CartNotFoundException;
 import com.tomobs.ecommerce.model.*;
 import com.tomobs.ecommerce.enums.*;
 import com.tomobs.ecommerce.repository.*;
 import com.tomobs.ecommerce.service.OrderService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -23,19 +31,38 @@ public class OrderServiceImpl implements OrderService {
   private final CartItemsRepository cartItemsRepository;
 
   public OrderServiceImpl(
-          OrdersRepository ordersRepository, OrderItemsRepository orderItemsRepository, ProductVariantRepository productVariantRepository,
-          UserRepository userRepository,
-          UserAddressRepository userAddressRepository, CartRepository cartRepository,
-          CartItemsRepository cartItemsRepository) {
-      this.ordersRepository = ordersRepository;
-      this.orderItemsRepository = orderItemsRepository;
-      this.productVariantRepository = productVariantRepository;
-      this.userRepository = userRepository;
-      this.userAddressRepository = userAddressRepository;
-      this.cartRepository = cartRepository;
-      this.cartItemsRepository = cartItemsRepository;
+      OrdersRepository ordersRepository,
+      OrderItemsRepository orderItemsRepository,
+      ProductVariantRepository productVariantRepository,
+      UserRepository userRepository,
+      UserAddressRepository userAddressRepository,
+      CartRepository cartRepository,
+      CartItemsRepository cartItemsRepository) {
+    this.ordersRepository = ordersRepository;
+    this.orderItemsRepository = orderItemsRepository;
+    this.productVariantRepository = productVariantRepository;
+    this.userRepository = userRepository;
+    this.userAddressRepository = userAddressRepository;
+    this.cartRepository = cartRepository;
+    this.cartItemsRepository = cartItemsRepository;
   }
 
+  // METHOD FOR GET CURRENT USER FROM SESSION
+  private Long getCurrentUserId() {
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+    if (authentication == null) {
+      throw new IllegalStateException("No user details found");
+    }
+    CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+    if (userDetails == null) {
+      throw new IllegalStateException("No user details found");
+    }
+    return userDetails.getId();
+  }
+
+  // METHOD FOR PLACE ORDER
   @Override
   @Transactional
   public Long placeOrder(String email, Long addressId, String paymentMethod) {
@@ -51,8 +78,10 @@ public class OrderServiceImpl implements OrderService {
             .findById(addressId)
             .orElseThrow(() -> new RuntimeException("address not found"));
 
-    //EXTRACTING CART BY USER ID
-    Cart cart = cartRepository.findByUserId(user.getId())
+    // EXTRACTING CART BY USER ID
+    Cart cart =
+        cartRepository
+            .findByUserId(user.getId())
             .orElseThrow(() -> new RuntimeException("Cart not found"));
 
     // CHECKING SESSION USER AND DB USER BY ID
@@ -84,15 +113,16 @@ public class OrderServiceImpl implements OrderService {
 
     // CONVERTING STRING TO ENUM
     PaymentType paymentType;
-    try{
+    try {
       paymentType = PaymentType.valueOf(paymentMethod.toUpperCase());
-    }catch (IllegalArgumentException e) {
+    } catch (IllegalArgumentException e) {
       throw new RuntimeException("Invalid Payment method:" + paymentMethod);
     }
     orders.setPaymentType(paymentType);
     orders.setPaymentStatus(
-            paymentType == PaymentType.CASH_ON_DELIVERY ? PaymentStatus.PENDING : PaymentStatus.INITIATED
-    );
+        paymentType == PaymentType.CASH_ON_DELIVERY
+            ? PaymentStatus.PENDING
+            : PaymentStatus.INITIATED);
     orders.setStatus(OrderStatus.PLACED);
     Orders savedOrder = ordersRepository.save(orders);
 
@@ -116,4 +146,20 @@ public class OrderServiceImpl implements OrderService {
     cartItemsRepository.deleteByCart(cart);
     return savedOrder.getId();
   }
+
+  // METHOD FOR FETCHING ORDER HISTORY
+  @Override
+  public Page<OrderListDTO> findOrders(int page, int size) {
+
+    User user =
+        userRepository
+            .findById(getCurrentUserId())
+            .orElseThrow(() -> new RuntimeException("User not found!"));
+
+    Pageable pageable = PageRequest.of(page, size);
+
+      return ordersRepository.findByUser(user, pageable);
+  }
+
+
 }

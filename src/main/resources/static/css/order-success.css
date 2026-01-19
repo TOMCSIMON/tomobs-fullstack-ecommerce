@@ -1,7 +1,14 @@
-.order-success{
-    width: 200px;
-    height: 400px;
-    border-radius: 10px;
+.order-success-card {
     background-color: #fff;
+    border-radius: 15px;
+    padding: 40px 30px;
+    max-width: 600px;
+    width: 100%;
+    border: 2px solid black;
+    margin-block: 70px;
+}
 
+.order-success-img {
+    max-width: 250px;
+    width: 100%;
 }
