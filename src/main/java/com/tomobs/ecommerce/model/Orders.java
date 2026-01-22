@@ -55,6 +55,12 @@ public class Orders {
   @Column(name = "payment_status", nullable = false)
   private PaymentStatus paymentStatus;
 
+  @Column(name = "razorpay_order_id")
+  private String razorpayOrderId;
+
+  @Column(name = "razorpay_payment_id")
+  private String razorpayPaymentId;
+
   @CreationTimestamp
   @Column(name = "created_at", updatable = false)
   private LocalDateTime createdAt;

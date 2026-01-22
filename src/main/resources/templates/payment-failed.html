@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Payment Failed</title>
+</head>
+<body>
+<div style="text-align: center; margin-top: 50px;">
+  <h2>Payment Failed!</h2>
+  <p th:text="${error}">Something went wrong with your payment.</p>
+  <a th:href="@{/checkout}">Try Again</a>
+</div>
+</body>
+</html>

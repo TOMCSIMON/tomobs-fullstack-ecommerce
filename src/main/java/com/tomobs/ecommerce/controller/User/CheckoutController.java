@@ -2,12 +2,17 @@ package com.tomobs.ecommerce.controller.User;
 
 import com.tomobs.ecommerce.dto.CartDTO;
 import com.tomobs.ecommerce.dto.UserAddressListDTO;
+import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.service.CartService;
 import com.tomobs.ecommerce.service.OrderService;
 import com.tomobs.ecommerce.service.UserAddressService;
 import com.tomobs.ecommerce.service.UserService;
+import com.tomobs.ecommerce.service.impl.RazorpayService;
 import lombok.extern.slf4j.Slf4j;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +28,8 @@ import java.util.List;
 @Controller
 @RequestMapping("/checkout")
 public class CheckoutController {
+
+  @Autowired private RazorpayService razorpayService;
 
   private final UserAddressService userAddressService;
   private final UserService userService;
@@ -42,9 +49,7 @@ public class CheckoutController {
   }
 
   @GetMapping()
-  public String viewCheckoutPage(
-          Principal principal,
-          Model model) {
+  public String viewCheckoutPage(Principal principal, Model model) {
 
     List<UserAddressListDTO> addressList = userAddressService.getAddress();
 
@@ -60,19 +65,69 @@ public class CheckoutController {
     return "checkout";
   }
 
+  @Value("${razorpay.key.id}")
+  private String razorpayKeyId;
+
   @PostMapping("/placeOrder")
   public String placeOrder(
-          @RequestParam Long addressId,
-          @RequestParam String paymentMethod,
-          Principal principal,
-          RedirectAttributes redirectAttributes) {
-    String email = principal.getName();
+      @RequestParam Long addressId,
+      @RequestParam String paymentMethod,
+      Principal principal,
+      RedirectAttributes redirectAttributes,
+      Model model) {
 
+    String email = principal.getName();
     Long orderId = orderService.placeOrder(email, addressId, paymentMethod);
-    if (paymentMethod.equalsIgnoreCase("ONLINE_PAYMENT")) {
+
+    if ("ONLINE_PAYMENT".equals(paymentMethod)) {
+      try {
+        Orders order = orderService.getOrderById(orderId);
+        JSONObject razorpayOrder = razorpayService.createRazorpayOrder(order);
+
+        model.addAttribute("orderId", orderId);
+        model.addAttribute("razorpayOrderId", razorpayOrder.get("id"));
+        model.addAttribute("razorpayKey", razorpayKeyId);
+        model.addAttribute("amount", order.getTotalAmount());
+        model.addAttribute("customerName", order.getUser().getUserName());
+        model.addAttribute("customerEmail", order.getUser().getEmail());
+
+        return "razorpay-checkout";
+      } catch (Exception e) {
+        redirectAttributes.addFlashAttribute("error", "Payment initialization failed");
+        return "redirect:/checkout";
+      }
+    } else {
       redirectAttributes.addAttribute("orderId", orderId);
-      return "redirect:/razorpay-checkout";
+      return "redirect:/order-success";
     }
-    return "order-success.html";
+  }
+
+  @PostMapping("/payment/verify")
+  public String verifyPayment(
+      @RequestParam String razorpay_payment_id,
+      @RequestParam String razorpay_order_id,
+      @RequestParam String razorpay_signature,
+      @RequestParam Long orderId,
+      RedirectAttributes redirectAttributes) {
+    System.out.println("Reached Payment verification:");
+    System.out.println();
+    System.out.println();
+    try {
+      boolean isValid =
+          razorpayService.verifySignature(
+              razorpay_payment_id, razorpay_order_id, razorpay_signature);
+
+      if (isValid) {
+        orderService.confirmPayment(orderId, razorpay_payment_id);
+        redirectAttributes.addAttribute("orderId", orderId);
+        return "redirect:/order-success";
+      } else {
+        redirectAttributes.addAttribute("error", "Payment Verification failed!");
+        return "redirect:/payment-failed";
+      }
+    } catch (Exception e) {
+      redirectAttributes.addAttribute("error", "Payment Verification error!");
+      return "redirect:/payment-failed";
+    }
   }
 }

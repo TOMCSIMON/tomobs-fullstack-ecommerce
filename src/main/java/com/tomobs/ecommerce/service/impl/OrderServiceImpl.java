@@ -9,6 +9,7 @@ import com.tomobs.ecommerce.model.*;
 import com.tomobs.ecommerce.enums.*;
 import com.tomobs.ecommerce.repository.*;
 import com.tomobs.ecommerce.service.OrderService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -137,13 +138,17 @@ public class OrderServiceImpl implements OrderService {
 
       orderItemsRepository.save(orderItem);
 
-      // REDUCING STOCK FROM PRODUCT VARIANT
-      variant.setStock(variant.getStock() - item.getQuantity());
-      productVariantRepository.save(variant);
+      if(paymentType == PaymentType.CASH_ON_DELIVERY) {
+        // REDUCING STOCK FROM PRODUCT VARIANT
+        variant.setStock(variant.getStock() - item.getQuantity());
+        productVariantRepository.save(variant);
+      }
+    }
+    if(paymentType == PaymentType.CASH_ON_DELIVERY) {
+      // CLEARING THE CART FOR THE USER
+      cartItemsRepository.deleteByCart(cart);
     }
 
-    // CLEARING THE CART FOR THE USER
-    cartItemsRepository.deleteByCart(cart);
     return savedOrder.getId();
   }
 
@@ -158,8 +163,39 @@ public class OrderServiceImpl implements OrderService {
 
     Pageable pageable = PageRequest.of(page, size);
 
-      return ordersRepository.findByUser(user, pageable);
+    return ordersRepository.findByUser(user, pageable);
   }
 
+  @Override
+  public Orders getOrderById(Long orderId) {
 
+    return ordersRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found!"));
+  }
+
+  // METHOD TO CONFIRM PAYMENT
+  @Override
+  @Transactional
+  public void confirmPayment(Long orderId, String paymentId) {
+    Orders order = ordersRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+    // UPDATING PAYMENT DETAILS
+    order.setPaymentStatus(PaymentStatus.SUCCESS);
+    order.setRazorpayPaymentId(paymentId);
+    ordersRepository.save(order);
+
+    // REDUCING STOCK & CLEAR CART
+    List<OrderItems> orderItems = orderItemsRepository.findByOrders(order);
+    for(OrderItems item : orderItems) {
+      ProductVariant variant = item.getProductVariant();
+      variant.setStock(variant.getStock() - item.getQuantity());
+      productVariantRepository.save(variant);
+    }
+
+    // CLEAR CART
+    Cart cart = cartRepository.findByUserId(order.getUser().getId())
+            .orElseThrow(() -> new RuntimeException("Cart not found"));
+    cartItemsRepository.deleteByCart(cart);
+  }
 }
