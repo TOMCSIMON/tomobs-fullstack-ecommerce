@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface BrandRepository extends JpaRepository<Brand, Long> {
 
     Page<Brand> findAllByIsDeleted(boolean isDeleted, Pageable pageable);
+
+    Page<Brand> findAllByIsDeletedAndNameContainingIgnoreCase(boolean isDeleted, String name, Pageable pageable);
 }

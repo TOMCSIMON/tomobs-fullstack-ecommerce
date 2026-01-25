@@ -70,7 +70,7 @@ public class BrandServiceImpl implements BrandService {
     // FOR PAGINATION
     @Override
     public Page<BrandListDTO> getAllBrandsPaginated(
-            int page, int size, String sortField, String sortDirection) {
+            int page, int size, String sortField, String sortDirection, String keyword) {
 
         Sort sort =
                 sortDirection.equalsIgnoreCase("asc")
@@ -79,11 +79,13 @@ public class BrandServiceImpl implements BrandService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Brand> brandPage =  brandRepository.findAllByIsDeleted(false, pageable);
-
+        Page<Brand> brandPage;
+        if(keyword == null){
+            brandPage =  brandRepository.findAllByIsDeleted(false, pageable);
+        }else {
+            brandPage = brandRepository.findAllByIsDeletedAndNameContainingIgnoreCase(false, keyword, pageable);
+        }
         return mapToDTO(brandPage);
-
-
     }
 
     private Page<BrandListDTO> mapToDTO(Page<Brand> brandPage) {

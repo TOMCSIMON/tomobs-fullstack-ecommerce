@@ -35,13 +35,14 @@ public class AdminBrandController {
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "createdAt") String sortField,
             @RequestParam(defaultValue = "desc") String sortDir,
+            @RequestParam(value = "keyword", required = false) String keyword,
             Model model) {
 
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("brandDTO", new BrandDTO());
 
         Page<BrandListDTO> brandPage =
-                brandService.getAllBrandsPaginated(page, size, sortField, sortDir);
+                brandService.getAllBrandsPaginated(page, size, sortField, sortDir, keyword);
 
         model.addAttribute("brands", brandPage.getContent());
         model.addAttribute("currentPage", page);

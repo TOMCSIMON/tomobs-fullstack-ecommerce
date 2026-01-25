@@ -11,7 +11,7 @@ public interface BrandService {
 
   void addBrand(BrandDTO brandDTO);
 
-  Page<BrandListDTO> getAllBrandsPaginated(int page, int size, String sortField, String sortDirection);
+  Page<BrandListDTO> getAllBrandsPaginated(int page, int size, String sortField, String sortDirection, String keyword);
 
   List<Brand> getAllBrands();
 
