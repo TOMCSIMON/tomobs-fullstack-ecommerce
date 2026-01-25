@@ -24,7 +24,6 @@
     display: none;
     z-index: 1000;
 }
-
 /* Show on hover */
 .category:hover .category-dropdown {
     display: block;
@@ -39,4 +38,5 @@
     font-size: 14px;
     color: #fff;
 }
+
 

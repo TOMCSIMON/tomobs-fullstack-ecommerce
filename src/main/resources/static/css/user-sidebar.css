@@ -6,6 +6,7 @@
     color: #000;
     margin-top: 67px;
     margin-left: 0px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
 
 
@@ -17,7 +18,7 @@
 }
 
 .sidebar-menu li {
-    margin: 10px 0;
+    margin: 10px;
 }
 
 /* Links */

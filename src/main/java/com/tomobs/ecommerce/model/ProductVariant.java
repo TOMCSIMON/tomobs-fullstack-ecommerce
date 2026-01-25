@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "product_variants")
-public class ProductVariant {
+public class    ProductVariant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +32,9 @@ public class ProductVariant {
     @Column(name = "price", precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
 
+//    @Column(name = "label", nullable = false)
+//    private String label;
+//
     @Column(name = "stock", nullable = false)
     private Integer stock;
 
@@ -47,12 +50,9 @@ public class ProductVariant {
     @Column(name = "key_features", nullable = false)
     private String keyFeatures;
 
-
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
-
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")
