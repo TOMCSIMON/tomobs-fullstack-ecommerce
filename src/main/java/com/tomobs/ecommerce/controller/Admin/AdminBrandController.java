@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/brands")
@@ -34,7 +35,7 @@ public class AdminBrandController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(defaultValue = "createdAt") String sortField,
-            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(defaultValue = "desc") String sortDir,
             Model model) {
 
         model.addAttribute("categories", categoryService.getAllCategories());
@@ -70,6 +71,23 @@ public class AdminBrandController {
         }
         brandService.addBrand(brandDTO);
 
+        return "redirect:/admin/brands";
+    }
+
+    // FETCH DETAIL FOR EDIT METHOD
+    @GetMapping("/getBrand/{id}")
+    @ResponseBody
+    public BrandDTO viewBrandForEdit(@PathVariable Long id) {
+        return brandService.getBrandForEdit(id);
+    }
+
+    // UPDATE BRAND
+    @PostMapping("/edit/{id}")
+    public String updateBrand(
+            @PathVariable Long id,
+            @ModelAttribute BrandDTO brandDTO
+    ){
+        brandService.updateBrand(id, brandDTO);
         return "redirect:/admin/brands";
     }
 }

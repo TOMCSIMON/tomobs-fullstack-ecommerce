@@ -98,4 +98,30 @@ public class BrandServiceImpl implements BrandService {
             return dto;
         });
     }
+
+    // METHOD FOR GET BRAND FOR EDIT
+    public BrandDTO getBrandForEdit(Long id) {
+
+      Brand brand = brandRepository.findById(id)
+              .orElseThrow(() -> new RuntimeException("Brand not found!"));
+
+      BrandDTO dto = new BrandDTO();
+      dto.setId(brand.getId());
+      dto.setName(brand.getName());
+      dto.setActive(brand.isActive());
+      return dto;
+    }
+
+    // METHOD TO UPDATE BRAND
+    @Override
+    public void updateBrand(Long id, BrandDTO brandDTO) {
+
+        Brand brand = brandRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Brand not found!"));
+
+        brand.setName(brandDTO.getName());
+        brand.setActive(brandDTO.isActive());
+
+        brandRepository.save(brand);
+    }
 }

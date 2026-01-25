@@ -12,7 +12,7 @@
           rel="stylesheet">
 
 </head>
-<body style="background-color:#E4E4E4;">
+<body style="background-color:#f1f3f6;">
 
 
 <div th:replace="~{fragments/admin-navbar :: adminNavbar}"></div>
@@ -55,14 +55,21 @@
 
 
             <td>
-                <a th:href="@{/admin/brands/edit/{id}(id=${brand.id})}">
-                    Edit
-                </a>
-                |
-                <a th:href="@{/admin/brands/delete/{id}(id=${brand.id})}"
-                   onclick="return confirm('Are you sure you want to delete this brand?')">
-                    Delete
-                </a>
+                <!-- Edit (opens edit modal) -->
+                <img th:src="@{/icons/edit.png}"
+                     alt="Edit"
+                     style="width:25px; height:25px; cursor:pointer;"
+                     data-bs-toggle="modal"
+                     data-bs-target="#editBrandModal"
+                     th:attr="data-id=${brand.id},data-name=${brand.name}, data-status=${brand.isActive ? 'true' : 'false'}">
+
+                <!-- Delete (opens delete modal) -->
+                <img th:src="@{/icons/bin.png}"
+                     alt="Delete"
+                     style="width:25px; height:25px; cursor:pointer; margin-left:10px;"
+                     data-bs-toggle="modal"
+                     data-bs-target="#deleteBrandModal"
+                     th:attr="data-id=${brand.id},data-name=${brand.name}">
             </td>
         </tr>
         </tbody>
@@ -156,13 +163,55 @@
         </div>
     </div>
 </div>
+<!--Add modal end-->
 
+<!--Edit Brand modal start-->
+<div class="modal fade" id="editBrandModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal header -->
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Brand <span id="editBrandName"></span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form th:action="@{/admin/brand/edit/__id__}" method="post" id="editBrandForm">
+                <div class="modal-body">
+
+                    <div class="mb-3">
+                        <label>Brand Name</label>
+                        <input type="text" name="name" class="form-control" id="editBrandNameInput">
+                    </div>
+
+                    <div class="mb-3 form-check">
+                        <!-- Hidden input that will hold the actual value to be submitted -->
+                        <input type="hidden" name="active" id="editBrandStatusHidden" value="false">
+                        <input type="checkbox" class="form-check-input" id="editBrandStatusInput">
+                        <label class="form-check-label" for="editBrandStatusInput">Active</label>
+                    </div>
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Save Changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+<!--Edit Brand modal end-->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous">
 </script>
 
+<script th:src="@{/js/admin-brand.js}"></script>
 
 </body>
 </html>
