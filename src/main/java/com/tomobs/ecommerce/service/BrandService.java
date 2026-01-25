@@ -11,9 +11,15 @@ public interface BrandService {
 
   void addBrand(BrandDTO brandDTO);
 
-  Page<BrandListDTO> getAllBrandsPaginated(int page, int size, String sortField, String sortDirection);
+  Page<BrandListDTO> getAllBrandsPaginated(int page, int size, String sortField, String sortDirection, String keyword);
 
-    List<Brand> getAllBrands();
+  List<Brand> getAllBrands();
 
-    List<BrandDTO> findBrands();
+  List<BrandDTO> findBrands();
+
+  BrandDTO getBrandForEdit(Long id);
+
+  void updateBrand(Long id, BrandDTO brandDTO);
+
+  void deleteBrand(Long id);
 }

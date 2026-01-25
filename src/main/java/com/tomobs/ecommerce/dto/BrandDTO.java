@@ -16,7 +16,8 @@ public class BrandDTO {
     @Size(max = 100, message = "Brand name cannot exceed 100 characters.")
     private String name;
 
-
     @NotNull(message = "Category is required")
     private Long categoryId;
+
+    private boolean isActive;
 }

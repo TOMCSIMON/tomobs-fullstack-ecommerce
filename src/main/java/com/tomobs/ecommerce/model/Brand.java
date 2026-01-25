@@ -14,8 +14,6 @@ import java.time.LocalDateTime;
 @Table(name = "brands")
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
-@EnableJpaAuditing
 public class Brand {
 
     @Id
@@ -31,6 +29,9 @@ public class Brand {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 
     @CreationTimestamp
     @Column(updatable = false, name = "created_at")

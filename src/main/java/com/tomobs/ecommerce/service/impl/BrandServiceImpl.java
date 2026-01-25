@@ -70,7 +70,7 @@ public class BrandServiceImpl implements BrandService {
     // FOR PAGINATION
     @Override
     public Page<BrandListDTO> getAllBrandsPaginated(
-            int page, int size, String sortField, String sortDirection) {
+            int page, int size, String sortField, String sortDirection, String keyword) {
 
         Sort sort =
                 sortDirection.equalsIgnoreCase("asc")
@@ -79,11 +79,13 @@ public class BrandServiceImpl implements BrandService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Brand> brandPage =  brandRepository.findAll(pageable);
-
+        Page<Brand> brandPage;
+        if(keyword == null){
+            brandPage =  brandRepository.findAllByIsDeleted(false, pageable);
+        }else {
+            brandPage = brandRepository.findAllByIsDeletedAndNameContainingIgnoreCase(false, keyword, pageable);
+        }
         return mapToDTO(brandPage);
-
-
     }
 
     private Page<BrandListDTO> mapToDTO(Page<Brand> brandPage) {
@@ -97,5 +99,43 @@ public class BrandServiceImpl implements BrandService {
 
             return dto;
         });
+    }
+
+    // METHOD FOR GET BRAND FOR EDIT
+    public BrandDTO getBrandForEdit(Long id) {
+
+      Brand brand = brandRepository.findById(id)
+              .orElseThrow(() -> new RuntimeException("Brand not found!"));
+
+      BrandDTO dto = new BrandDTO();
+      dto.setId(brand.getId());
+      dto.setName(brand.getName());
+      dto.setActive(brand.isActive());
+      return dto;
+    }
+
+    // METHOD TO UPDATE BRAND
+    @Override
+    public void updateBrand(Long id, BrandDTO brandDTO) {
+
+        Brand brand = brandRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Brand not found!"));
+
+        brand.setName(brandDTO.getName());
+        brand.setActive(brandDTO.isActive());
+
+        brandRepository.save(brand);
+    }
+
+    // METHOD TO DELETE BRAND
+    @Override
+    public void deleteBrand(Long id) {
+
+        Brand brand = brandRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Brand not found!"));
+
+        brand.setDeleted(true);
+
+        brandRepository.save(brand);
     }
 }
