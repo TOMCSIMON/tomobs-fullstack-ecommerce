@@ -41,10 +41,9 @@ document.getElementById('confirmDeleteBtn').addEventListener('click', function (
             // HIDE AFTER 5 SECONDS AND RELOAD
             setTimeout(() => {
                 toast.style.display = 'none';
-            }, 3000);
-
-            // Reload page to reflect changes
-            window.location.reload();
+                 // Reload page to reflect changes
+                 window.location.reload();
+            }, 5000);
         }
     });
 });
