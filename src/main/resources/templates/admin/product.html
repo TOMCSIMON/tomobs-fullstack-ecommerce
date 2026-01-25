@@ -75,13 +75,13 @@
                 <
             </a>
 
-            <!-- Page Numbers -->
-            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-        <a class="btn btn-outline-dark mx-1"
-           th:href="@{/admin/products(page=${i}, size=5)}"
-           th:text="${i + 1}"
-           th:classappend="${i == currentPage} ? ' active'">
-        </a>
+        <!-- Page Numbers -->
+        <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a class="btn btn-outline-dark mx-1"
+               th:href="@{/admin/products(page=${i}, size=5)}"
+               th:text="${i + 1}"
+               th:classappend="${i == currentPage} ? ' active'">
+            </a>
          </span>
 
             <!-- Next -->

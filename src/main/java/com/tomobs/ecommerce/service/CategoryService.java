@@ -15,5 +15,11 @@ public interface CategoryService {
 
   List<Category> getAllCategories();
 
-  Page<CategoryDTO> getAllCategoriesPaginated(int page, int size, String sortField, String sortDirection);
+  Page<CategoryDTO> getAllCategoriesPaginated(int page, int size, String sortField, String sortDirection, String keyword);
+
+  void deleteCategory(Long id);
+
+  CategoryDTO getCategoryForEdit(Long id);
+
+  void updateCategory(Long id, CategoryDTO categoryDTO);
 }

@@ -3,11 +3,14 @@ package com.tomobs.ecommerce.controller.Admin;
 import com.tomobs.ecommerce.dto.CategoryDTO;
 import com.tomobs.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/categories")
 public class AdminCategoryController {
@@ -24,11 +27,11 @@ public class AdminCategoryController {
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "5") int size,
       @RequestParam(defaultValue = "createdAt") String sortField,
-      @RequestParam(defaultValue = "asc") String sortDir,
+      @RequestParam(defaultValue = "desc") String sortDir,
+      @RequestParam(value = "keyword", required = false) String keyword,
       Model model) {
-
     Page<CategoryDTO> categoryPage =
-        categoryService.getAllCategoriesPaginated(page, size, sortField, sortDir);
+        categoryService.getAllCategoriesPaginated(page, size, sortField, sortDir, keyword);
 
     model.addAttribute("categories", categoryPage.getContent());
     model.addAttribute("currentPage", page);
@@ -45,6 +48,33 @@ public class AdminCategoryController {
 
     categoryService.addCategory(categoryDTO);
 
+    return "redirect:/admin/categories";
+  }
+
+  // DELETE CATEGORY
+  @PostMapping("/delete/{id}")
+  @ResponseBody
+  public String deleteCategory(@PathVariable Long id) {
+    categoryService.deleteCategory(id);
+    return "redirect:/admin/categories";
+  }
+
+  // GET CATEGORY FOR EDIT
+  @GetMapping("/getCategory/{id}")
+  @ResponseBody
+  public CategoryDTO viewCategoryForEdit(@PathVariable Long id) {
+
+    return categoryService.getCategoryForEdit(id);
+  }
+
+  // UPDATE CATEGORY
+  @PostMapping("/edit/{id}")
+  public String updateCategory(
+          @PathVariable Long id,
+          @ModelAttribute CategoryDTO categoryDTO
+  ) {
+    log.info("catgorydto: {}", categoryDTO);
+    categoryService.updateCategory(id, categoryDTO);
     return "redirect:/admin/categories";
   }
 }

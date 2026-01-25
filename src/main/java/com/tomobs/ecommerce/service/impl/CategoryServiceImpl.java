@@ -57,7 +57,7 @@ public class CategoryServiceImpl implements CategoryService {
   // FOR PAGINATION
   @Override
   public Page<CategoryDTO> getAllCategoriesPaginated(
-      int page, int size, String sortField, String sortDirection) {
+      int page, int size, String sortField, String sortDirection, String keyword) {
 
     Sort sort =
         sortDirection.equalsIgnoreCase("asc")
@@ -65,9 +65,12 @@ public class CategoryServiceImpl implements CategoryService {
             : Sort.by(sortField).descending();
 
     Pageable pageable = PageRequest.of(page, size, sort);
-
-    Page<Category> categoryPage = categoryRepository.findAll(pageable);
-
+    Page<Category> categoryPage;
+    if(keyword == null) {
+        categoryPage = categoryRepository.findAllByIsDeleted(false, pageable);
+    }else{
+        categoryPage = categoryRepository.findAllByIsDeletedAndNameContainingIgnoreCase(false, keyword, pageable);
+    }
     return mapToDTO(categoryPage);
   }
 
@@ -84,5 +87,44 @@ public class CategoryServiceImpl implements CategoryService {
 
           return dto;
         });
+  }
+
+  // METHOD FOR SOFT DELETE
+  public void deleteCategory(Long id) {
+
+      Category category = categoryRepository.findById(id)
+              .orElseThrow(() -> new RuntimeException("Category not found!"));
+
+      category.setDeleted(true);
+      categoryRepository.save(category);
+  }
+
+  // METHOD FOR FETCHING CATEGORY FOR EDIT
+  @Override
+  public CategoryDTO getCategoryForEdit(Long id){
+
+      Category category = categoryRepository.findById(id)
+              .orElseThrow(() -> new RuntimeException("Category not found!"));
+
+      CategoryDTO dto = new CategoryDTO();
+      dto.setId(category.getId());
+      dto.setName(category.getName());
+      dto.setDescription(category.getDescription());
+      dto.setActive(category.isActive());
+
+      return dto;
+  }
+
+  //METHOD TO UPDATE CATEGORY
+  public void updateCategory(Long id, CategoryDTO categoryDTO) {
+
+      Category category = categoryRepository.findById(id)
+              .orElseThrow(() -> new RuntimeException("Category not found!"));
+
+      category.setName(categoryDTO.getName());
+      category.setDescription(categoryDTO.getDescription());
+      category.setActive(categoryDTO.isActive());
+
+      categoryRepository.save(category);
   }
 }
