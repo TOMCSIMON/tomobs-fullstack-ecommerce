@@ -79,7 +79,7 @@ public class BrandServiceImpl implements BrandService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        Page<Brand> brandPage =  brandRepository.findAll(pageable);
+        Page<Brand> brandPage =  brandRepository.findAllByIsDeleted(false, pageable);
 
         return mapToDTO(brandPage);
 
@@ -121,6 +121,18 @@ public class BrandServiceImpl implements BrandService {
 
         brand.setName(brandDTO.getName());
         brand.setActive(brandDTO.isActive());
+
+        brandRepository.save(brand);
+    }
+
+    // METHOD TO DELETE BRAND
+    @Override
+    public void deleteBrand(Long id) {
+
+        Brand brand = brandRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Brand not found!"));
+
+        brand.setDeleted(true);
 
         brandRepository.save(brand);
     }

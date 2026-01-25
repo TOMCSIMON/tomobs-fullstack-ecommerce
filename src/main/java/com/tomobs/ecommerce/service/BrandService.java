@@ -20,4 +20,6 @@ public interface BrandService {
   BrandDTO getBrandForEdit(Long id);
 
   void updateBrand(Long id, BrandDTO brandDTO);
+
+  void deleteBrand(Long id);
 }

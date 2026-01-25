@@ -29,7 +29,6 @@ public class AdminBrandController {
         this.categoryService = categoryService;
     }
 
-
     @GetMapping
     public String showBrands(
             @RequestParam(defaultValue = "0") int page,
@@ -44,7 +43,6 @@ public class AdminBrandController {
         Page<BrandListDTO> brandPage =
                 brandService.getAllBrandsPaginated(page, size, sortField, sortDir);
 
-
         model.addAttribute("brands", brandPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPage", brandPage.getTotalPages());
@@ -54,8 +52,6 @@ public class AdminBrandController {
 
         return "admin/brand";
     }
-
-
 
     @PostMapping("/new")
     public String addBrand(
@@ -88,6 +84,15 @@ public class AdminBrandController {
             @ModelAttribute BrandDTO brandDTO
     ){
         brandService.updateBrand(id, brandDTO);
+        return "redirect:/admin/brands";
+    }
+
+    // DELETE BRAND
+    @PostMapping("/delete/{id}")
+    @ResponseBody
+    public String deleteBrand(@PathVariable Long id) {
+
+        brandService.deleteBrand(id);
         return "redirect:/admin/brands";
     }
 }

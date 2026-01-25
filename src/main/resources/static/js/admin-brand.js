@@ -44,3 +44,56 @@ statusCheckbox.addEventListener('change', function() {
     // Update hidden input value based on checkbox state
     statusHiddenInput.value = this.checked ? 'true' : 'false';
 });
+
+// DELETE SECTION START
+// Get the delete modal element
+const deleteModal = document.getElementById('deleteBrandModal');
+
+// Store selected category id
+let deleteCategoryId;
+
+// When modal opens, read the category id
+deleteModal.addEventListener('show.bs.modal', function (event) {
+
+    const triggerElement = event.relatedTarget;
+
+    // Read category id
+    deleteBrandId = triggerElement.getAttribute('data-id');
+
+    // Read category name
+    const BrandName = triggerElement.getAttribute('data-name');
+
+    // Set name in modal
+    document.getElementById('deleteBrandName').textContent = BrandName;
+});
+
+// When user confirms delete
+document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
+
+    fetch(`/admin/brands/delete/${deleteBrandId}`, {
+        method: 'POST'
+    })
+    .then(response => {
+        if (response.ok) {
+
+             // CLOSE MODAL
+            const modalElement = document.getElementById('deleteBrandModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalElement);
+            modalInstance.hide();
+
+            // SHOW SUCCESS MESSAGE ONLY AFTER DELETE
+            const toast = document.getElementById('toastMessage');
+            toast.style.display = 'block';
+
+            // HIDE AFTER 5 SECONDS AND RELOAD
+            setTimeout(() => {
+                toast.style.display = 'none';
+                // Reload page to reflect changes
+                window.location.reload();
+            }, 5000);
+
+
+        }
+    });
+});
+// DELETE SECTION END
