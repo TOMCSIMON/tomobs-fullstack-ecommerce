@@ -79,7 +79,10 @@ main, .content-wrapper {
     margin-top: 20px;
     transition: 0.2s ease;
 }
-
+.google-signin a{
+text-decoration:none;
+color: #fff;
+}
 .login-btn:hover, .google-signin:hover {
     background: #333333;
 }

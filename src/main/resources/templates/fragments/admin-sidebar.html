@@ -26,9 +26,12 @@
                 </a>
             </li>
             <li>
-                <a th:href="@{/logout}" class="sidebar-link">
-                    Logout
-                </a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="sidebar-link logout-btn">
+                        Logout
+                    </button>
+                </form>
+
             </li>
 
         </ul>

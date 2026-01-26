@@ -111,7 +111,10 @@ main, .content-wrapper {
 .signup:hover, .google-signup:hover {
     background: #333333;
 }
-
+.google-signup a{
+    text-decoration:none;
+    color: #fff;
+}
 .google-icon {
     width: 20px;
     height: 20px;
