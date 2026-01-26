@@ -50,11 +50,12 @@
         <div class="text-center mt-1">OR</div>
 
         <!-- Google Button -->
-        <button type="button" class="google-signin">
+        <button  type="button" class="google-signin">
+        <a th:href="@{/oauth2/authorization/google}">
             <img class="google-icon" th:src="@{/icons/google.png}">
             Continue with Google
+        </a>
         </button>
-
         <p class="signup-link text-center my-3">
             Don’t have an account?
             <a th:href="@{/signup}">Signup now</a>

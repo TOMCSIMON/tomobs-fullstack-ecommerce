@@ -18,13 +18,13 @@ public class User {
     @Column(nullable = false, name = "user_name")
     private String userName;
 
-    @Column(nullable = false, name = "phone_number")
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @Column(unique = true, name = "email")
     private String email;
 
-    @Column(nullable = false, name = "password")
+    @Column(name = "password")
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)

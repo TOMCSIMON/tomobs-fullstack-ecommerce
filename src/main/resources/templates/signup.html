@@ -96,9 +96,11 @@
 
             <!-- Google Button -->
             <button type="button" class="google-signup">
-                <img class="google-icon" th:src="@{/icons/google.png}">
-                Continue with Google</button>
-
+                <a th:href="@{/oauth2/authorization/google}">
+                    <img class="google-icon" th:src="@{/icons/google.png}">
+                    Continue with Google
+                </a>
+            </button>
 
             <p class="login-link text-center my-3">
                 Already have an account?
