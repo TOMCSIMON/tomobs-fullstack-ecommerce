@@ -1,58 +1,68 @@
-<nav th:fragment="navbar" class="navbar fixed-top"
+
+<nav th:fragment="navbar" class="custom-navbar"
      xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="nav-container">
+        <div class="logo">
+            <a th:href="@{/}">
+                <h1>ToMobs</h1>
+            </a>
+        </div>
 
-    <div class="container">
-
-        <!-- Brand -->
-        <a class="navbar-brand text-white fw-bold" th:href="@{/}">ToMobs</a>
-
-        <!-- Search Bar -->
-        <form class="d-flex mx-auto" style="width: 60%;">
-            <div class="input-group">
-
-                <input class="form-control" type="search"
-                       placeholder="what are you looking for...">
-
-                <span class="input-group-text bg-white">
-                    <img th:src="@{/icons/search.png}" width="18" alt="search">
-                </span>
-
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="search-input" placeholder="What are looking for?">
+                <span id="clear-search" class="clear-btn">&times;</span>
+                <img th:src="@{/icons/search.png}" alt="search" class="search-img-icon">
             </div>
-        </form>
+        </div>
 
-        <!-- Profile + Cart -->
-        <div class="d-flex align-items-center gap-4">
+        <div class="nav-icons">
+            <div class="profile-dropdown">
+                <div class="icon-item" id="profile-trigger">
+                    <img th:src="@{/icons/user-profile.png}" alt="User" class="nav-img">
+                </div>
 
-            <!-- Profile Menu Wrapper -->
-            <div class="profile-menu">
-
-                <!-- Profile Icon -->
-                <img th:src="@{/icons/profile.svg}"
-                     class="white-icon profile-icon"
-                     width="40"
-                     alt="profile">
-
-                <!-- Profile Dropdown -->
-                <div class="profile-dropdown">
-
-                    <a th:href="@{/#}">My Profile</a>
-                    <a th:href="@{/address}">My Address</a>
-                    <a th:href="@{/orders}">My Orders</a>
-                    <a th:href="@{/#}">My Wishlist</a>
-                    <a th:href="@{/login}">Login</a>
-                    <a th:href="@{/signup}">Signup</a>
-                    <a th:href="@{/logout}">Logout</a>
-
+                <div class="dropdown-content" id="profile-menu">
+                    <a href="#" class="menu-item">
+                        <img th:src="@{/icons/main-user.png}" alt="icon">
+                        <div class="menu-text"><strong>My Profile</strong><span>Edit your basic details</span></div>
+                    </a>
+                    <a th:href="@{/address}" class="menu-item">
+                        <img th:src="@{/icons/home-address.png}" alt="icon">
+                        <div class="menu-text"><strong>My Address</strong><span>Manage your saved addresses</span></div>
+                    </a>
+                    <a th:href="@{/orders}" class="menu-item">
+                        <img th:src="@{/icons/order.png}" alt="icon">
+                        <div class="menu-text"><strong>My Orders</strong><span>View, track, cancel orders</span></div>
+                    </a>
+                    <a th:href="@{#}" class="menu-item">
+                        <img th:src="@{/icons/wishlist.png}" alt="icon">
+                        <div class="menu-text"><strong>My
+                            Wishlist</strong><span>Have a look at your favourite products</span></div>
+                    </a>
+                    <a th:href="@{/cart}" class="menu-item">
+                        <img th:src="@{/icons/shopping-cart.png}" alt="icon">
+                        <div class="menu-text"><strong>My Cart</strong><span>Have a look at your Added products</span>
+                        </div>
+                    </a>
+                    <hr>
+                    <a th:href="@{/login}" class="menu-item login-btn">
+                        <img th:src="@{/icons/login.png}" alt="icon">
+                        <div class="menu-text"><strong>Login</strong></div>
+                    </a>
+                    <a th:href="@{/logout}" class="menu-item login-btn">
+                        <img th:src="@{/icons/log-out   .png}" alt="icon">
+                        <div class="menu-text"><strong>Logout</strong></div>
+                    </a>
                 </div>
             </div>
 
-
-            <a th:href="@{/cart}" class="text-white">
-                <img th:src="@{/icons/trolley.png}"
-                     class="white-icon" width="40" alt="cart">
-            </a>
-
+            <div class="icon-item cart">
+                <a th:href="@{/cart}">
+                    <img th:src="@{/icons/trolley.png}" alt="Cart" class="nav-img">
+                </a>
+            </div>
         </div>
-
     </div>
 </nav>
+
