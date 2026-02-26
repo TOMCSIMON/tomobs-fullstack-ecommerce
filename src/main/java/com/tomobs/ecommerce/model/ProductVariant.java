@@ -32,9 +32,6 @@ public class    ProductVariant {
     @Column(name = "price", precision = 10, scale = 2, nullable = false)
     private BigDecimal price;
 
-//    @Column(name = "label", nullable = false)
-//    private String label;
-//
     @Column(name = "stock", nullable = false)
     private Integer stock;
 

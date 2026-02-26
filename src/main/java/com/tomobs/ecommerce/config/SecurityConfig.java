@@ -39,10 +39,9 @@ public class    SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                // ❌ Disable CSRF only if you really need it
+                //  Disable CSRF only if you really need it
                 .csrf(AbstractHttpConfigurer::disable)
 
-                // ✅ VERY IMPORTANT: Disable browser caching
                 .headers(headers -> headers
                         .cacheControl(cache -> {})
                 )
