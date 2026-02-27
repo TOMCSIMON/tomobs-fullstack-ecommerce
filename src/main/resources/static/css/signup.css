@@ -1,4 +1,8 @@
-/* Make page take full height */
+@import url('https://fonts.googleapis.com');
+
+* {
+    font-family: 'Poppins', Sans-serif;
+}
 html, body {
     height: 100vh;
     margin: 0;
@@ -8,28 +12,32 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
-    }
-
-/* Main content grows, pushing footer down */
-main, .content-wrapper {
-    flex: 1;
+    min-height: 100vh;
 }
 
+/* Main content grows, pushing footer down */
+.content-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
 
 /* ===== Signup Form Wrapper ===== */
 .signup-form {
     width: 100%;
-    max-width: 420px;
+    max-width: 460px;
     margin: 60px auto;
     padding: 40px 30px;
-    background-color:#E4E4E4;
-
+    border: 1px #000 solid;
+    border-radius: 10px;
 }
 
 /* ===== Headings ===== */
 .signup-form h3 {
-    font-weight: 600;
-    color: #333;
+    font-weight: 500;
+    color: #000;
 }
 
 /* ===== Input Groups ===== */
@@ -138,6 +146,12 @@ main, .content-wrapper {
 /* ===== Responsive ===== */
 @media (max-width: 576px) {
     .signup-form {
-        padding: 20px;
+        padding: 25px 20px;
+        margin: 20px auto;
+    }
+
+    .signup-form h3 {
+        font-size: 1.5rem;
+        margin-bottom: 30px !important;
     }
 }
