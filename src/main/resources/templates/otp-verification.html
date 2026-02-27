@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify OTP - ToMobs</title>
+    <link rel="stylesheet" th:href="@{/css/otp-verification.css}">
+</head>
+<body>
+
+<main class="content-wrapper">
+    <div class="verification-container">
+        <h1 class="title">Enter verification code</h1>
+
+        <p class="description">
+            For your security, we have sent the code to your email
+            <span class="email-highlight" th:text="${email}"></span>
+        </p>
+
+        <form th:action="@{/verify-otp}" method="post" id="otp-form">
+            <input type="hidden" name="email" th:value="${email}"/>
+            <input type="hidden" name="otp" id="final-otp"/>
+
+            <label class="input-label">Enter your OTP here</label>
+
+            <div class="otp-input-group">
+                <input type="text" class="otp-field" maxlength="1" pattern="\d*" inputmode="numeric">
+                <input type="text" class="otp-field" maxlength="1" pattern="\d*" inputmode="numeric">
+                <input type="text" class="otp-field" maxlength="1" pattern="\d*" inputmode="numeric">
+                <input type="text" class="otp-field" maxlength="1" pattern="\d*" inputmode="numeric">
+                <input type="text" class="otp-field" maxlength="1" pattern="\d*" inputmode="numeric">
+                <input type="text" class="otp-field" maxlength="1" pattern="\d*" inputmode="numeric">
+            </div>
+
+            <p class="expiry-text">the otp will expire in 5 mins</p>
+
+            <a th:href="@{/resend-otp(email=${email})}" class="resend-link">Resend OTP</a>
+
+            <p th:if="${otpError}" th:text="${otpError}" class="error-msg"></p>
+
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+</main>
+
+<script th:src="@{/js/otp-verification.js}"></script>
+</body>
+</html>

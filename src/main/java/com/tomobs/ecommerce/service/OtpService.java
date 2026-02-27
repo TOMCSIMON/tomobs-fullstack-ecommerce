@@ -1,0 +1,10 @@
+package com.tomobs.ecommerce.service;
+
+import com.tomobs.ecommerce.dto.UserRegistrationDTO;
+
+public interface OtpService {
+
+    void generateAndSendOtpForSignup(UserRegistrationDTO registrationDTO);
+
+    void verifyOtpAndCreateUser(String email, String otp);
+}

@@ -1,0 +1,103 @@
+/* Layout consistency for ToMobs Sticky Footer */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Poppins', sans-serif;
+}
+
+.content-wrapper {
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+/* Card Container */
+.verification-container {
+    width: 100%;
+    max-width: 500px;
+    border: 1.5px solid #000;
+    border-radius: 12px;
+    padding: 40px;
+    background: #fff;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.description {
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 25px;
+    line-height: 1.4;
+}
+
+.input-label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+/* 6-Digit Group */
+.otp-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.otp-field {
+    width: 100%;
+    height: 55px;
+    border: 1.5px solid #000;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 600;
+    outline: none;
+}
+
+.otp-field:focus {
+    background-color: #f8f8f8;
+}
+
+.expiry-text {
+    color: #d93025;
+    font-size: 13px;
+    margin-bottom: 15px;
+}
+
+.resend-link {
+    display: inline-block;
+    color: #1a73e8;
+    text-decoration: none;
+    font-size: 14px;
+    margin-bottom: 25px;
+}
+
+.error-msg {
+    color: #d93025;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.submit-btn {
+    width: 100%;
+    background-color: #000;
+    color: #fff;
+    padding: 14px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
