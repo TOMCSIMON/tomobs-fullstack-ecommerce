@@ -142,6 +142,21 @@ body {
 .login-link a:hover {
     text-decoration: underline;
 }
+/* Add to signup.css */
+#otpModal .modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+#otpModal h4 {
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+#otpModal .spinner-border {
+    color: #000 !important; /* Matches your black button theme */
+}
 
 /* ===== Responsive ===== */
 @media (max-width: 576px) {

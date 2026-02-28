@@ -46,11 +46,14 @@ emailInput.addEventListener('input', function () {
         .catch(err => console.error('AJAX error:', err));
 });
 
-
 // FORM SUBMIT
 signupForm.addEventListener('submit', function(event) {
     if (!validateRegistrationForm()) {
         event.preventDefault();
+    }else{
+        const modalElement = document.getElementById('otpModal');
+        const otpModal = new bootstrap.Modal(modalElement);
+        otpModal.show();
     }
 });
 

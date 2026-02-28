@@ -1,119 +1,3 @@
-<!--
-=======================================================
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Signup page</title>
-
-    <link rel="stylesheet" th:href="@{/css/navbar.css}">
-    <link rel="stylesheet" th:href="@{/css/footer.css}">
-
-    <link rel="stylesheet" th:href="@{/css/signup.css}">
-
-    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css}"
-          rel="stylesheet">
-</head>
-
-<body style="background-color:#E4E4E4;">
-
-<div th:insert="~{fragments/navbar :: navbar}"></div>
-
-
-    <div class="container d-flex justify-content-center">
-        <form id="signup-form" class="signup-form" th:action = "@{/signup}" th:object="${user}" method="post">
-
-            <h3 class="text-center mb-5">Create Your Account</h3>
-
-            <div class="input-groups">
-                <label for="username">Full name</label>
-                <div class="icon-input">
-                    <img th:src="@{/icons/user.png}" class="field-icon" alt="user-icon">
-                    <input type="text" id="userName" th:field="*{userName}" placeholder="Enter your full name">
-                </div>
-                <span class="error-msg" th:if = "${#fields.hasErrors('userName')}"
-                      th:text = "${#fields.errors('userName')}"></span>
-                <span class="error-msg" id="usernameError"></span>
-            </div>
-
-            <div class="input-groups">
-                <label for="email">Email</label>
-                <div class="icon-input">
-                    <img th:src="@{/icons/email.png}" class="field-icon" alt="">
-                    <input type="email" id="email" th:field="*{email}" placeholder="Enter your email address" >
-                </div>
-                <span class="error-msg" th:if="${#fields.hasErrors('email')}"
-                      th:text="${#fields.errors('email')}"></span>
-
-                <span class="error-msg" id="emailError" ></span>
-            </div>
-
-
-            <div class="input-groups">
-                <label for="phoneNumber">Phone Number</label>
-                <div class="icon-input">
-                    <img th:src="@{/icons/telephone.png}" class="field-icon" alt="">
-                    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" placeholder="Enter your phone number">
-                </div>
-                <span class="error-msg" th:if="${#fields.hasErrors('phoneNumber')}"
-                      th:text="${#fields.errors('phoneNumber')}"></span>
-
-                <span class="error-msg" id="phoneError"></span>
-            </div>
-
-            <div class="input-groups">
-                <label for="password">Password</label>
-                <div class="icon-input">
-                    <img th:src="@{/icons/padlock.png}" class="field-icon" alt="">
-                    <input type="password" id="password" th:field="*{password}" placeholder="Enter your password" >
-                    <img th:src="@{/icons/hide.png}" class="toggle-eye" id="togglePassword" alt="">
-                </div>
-                <span class="error-msg" th:if="${#fields.hasErrors('password')}"
-                      th:text="${#fields.errors('password')}"></span>
-
-                <span class="error-msg" id="passwordError"></span>
-            </div>
-
-            <div class="input-groups">
-                <label for="confirmPassword">Confirm Password</label>
-                <div class="icon-input">
-                    <img th:src="@{/icons/padlock.png}" class="field-icon" alt="">
-                    <input type="password" id="confirmPassword" th:field="*{confirmPassword}" placeholder="Re-enter your password" >
-                    <img th:src="@{/icons/hide.png}" class="toggle-eye" id="toggleConfirmPassword" alt="">
-                </div>
-                <span class="error-msg" th:if="${#fields.hasErrors('confirmPassword')}"
-                      th:text="${#fields.errors('confirmPassword')}"></span>
-                <span  class="error-msg" id="confirmPasswordError"></span>
-            </div>
-
-            <button type="submit" class="signup">Sign Up</button>
-
-            <div class="text-center mt-1">OR</div>
-
-            <button type="button" class="google-signup">
-                <a th:href="@{/oauth2/authorization/google}">
-                    <img class="google-icon" th:src="@{/icons/google.png}">
-                    Continue with Google
-                </a>
-            </button>
-
-            <p class="login-link text-center my-3">
-                Already have an account?
-                <a th:href="@{/login}">Login now</a>
-            </p>
-
-        </form>
-    </div>
-
-<div th:insert="~{fragments/footer :: footer}"></div>
-
-<script th:src="@{/js/signup-validation.js}"></script>
-
-</body>
-</html>
-
-====================================================
--->
 
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
@@ -223,8 +107,23 @@
 </main>
 <div th:insert="~{fragments/footer :: footer}"></div>
 
-<script th:src="@{/js/signup-validation.js}"></script>
+<div class="modal fade" id="otpModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center p-4">
+            <div class="modal-body">
+                <div class="spinner-border text-primary mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <h4>Sending OTP...</h4>
+                <p class="text-muted">Please wait while we secure your account.</p>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script th:src="@{/js/signup-validation.js}"></script>
 </body>
 </html>
 
