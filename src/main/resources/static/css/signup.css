@@ -60,8 +60,6 @@ body {
     display: block;
 }
 
-
-
 /* ===== Icon Input Wrapper ===== */
 .icon-input {
     position: relative;
@@ -155,7 +153,7 @@ body {
 }
 
 #otpModal .spinner-border {
-    color: #000 !important; /* Matches your black button theme */
+    color: #000 !important;
 }
 
 /* ===== Responsive ===== */
