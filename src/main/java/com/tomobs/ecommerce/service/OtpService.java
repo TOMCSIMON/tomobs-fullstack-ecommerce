@@ -7,4 +7,6 @@ public interface OtpService {
     void generateAndSendOtpForSignup(UserRegistrationDTO registrationDTO);
 
     void verifyOtpAndCreateUser(String email, String otp);
+
+    void resendOtp(String email);
 }

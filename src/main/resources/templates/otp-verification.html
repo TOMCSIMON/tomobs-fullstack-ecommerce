@@ -33,11 +33,11 @@
             </div>
 
             <p class="expiry-text">
-                The OTP will expire in <span id="timer">05:00</span>
+                The OTP will expire in <span id="timer">02:00</span>
             </p>
 
             <a th:href="@{/resend-otp(email=${email})}" id="resend-btn" class="resend-link disabled">Resend OTP</a>
-            
+
             <p th:if="${otpError}" th:text="${otpError}" class="error-msg"></p>
 
             <button type="submit" class="submit-btn">Submit</button>

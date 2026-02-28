@@ -1,21 +1,20 @@
 package com.tomobs.ecommerce.controller.User;
 
+import com.tomobs.ecommerce.service.OtpService;
 import com.tomobs.ecommerce.service.UserService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-// ALL USER REST ENDPOINTS CAME HERE
 @RestController
+@RequiredArgsConstructor
 public class UserRestController {
 
     private final UserService userService;
-
-    public UserRestController(UserService userService) {
-
-        this.userService = userService;
-    }
+    private final OtpService otpService;
 
     @GetMapping("/ajax/check-email")
     public Map<String, Object> checkEmailExists(@RequestParam String email) {
@@ -34,6 +33,20 @@ public class UserRestController {
         }
 
         return response;
+
+    }
+
+    @GetMapping("/resend-otp")
+    public ResponseEntity<?> resendOtp(@RequestParam String email){
+
+        try{
+            otpService.resendOtp(email);
+            return ResponseEntity.ok().body(
+                    Map.of("message", "OTP Send successfully")
+            );
+        }catch(RuntimeException e){
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        }
 
     }
 
