@@ -13,5 +13,5 @@ public interface UserService {
 
     User findByEmail(String email);
 
-    Page<UserListDTO> listUsers(int page, int size);
+    Page<UserListDTO> listUsers(String keyword,int page, int size);
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,7 +16,7 @@
 
   <h1>Users</h1>
 
-  <form action="/admin/users" method="get" id="searchForm">
+  <form th:action="@{/admin/users}" method="get" id="searchForm">
     <div class="search-wrapper">
       <input type="text" id="searchInput" name="keyword" th:value="${keyword}" placeholder="Search users....">
       <button type="button" id="clearSearch" class="clear-btn">

@@ -24,15 +24,16 @@ public class UserController {
     public String getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "8") int size,
+            @RequestParam(required = false) String keyword,
             Model model
     ) {
-        Page<UserListDTO> userPage = userService.listUsers(page, size);
+        Page<UserListDTO> userPage = userService.listUsers(keyword, page, size);
 
         model.addAttribute("users", userPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPage", userPage.getTotalPages());
         model.addAttribute("totalItems", userPage.getTotalElements());
-
+        model.addAttribute("keyword", keyword);
         return "admin/user-list";
     }
 }

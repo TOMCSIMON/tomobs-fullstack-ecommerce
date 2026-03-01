@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
 //        user.setEmail(userRegistrationDTO.getEmail().trim());
 //        user.setPhoneNumber(userRegistrationDTO.getPhoneNumber().trim());
 //
-//        // ENCODING THE PASSWORD FROM THE DTO AND SAVES TO THE USER ENTITY
+//        // ENCODING THfindByUserNameContainsIgnoreCaseOrEmailContainsIgnoreCaseE PASSWORD FROM THE DTO AND SAVES TO THE USER ENTITY
 //        String encodedPassword = passwordEncoder.encode(userRegistrationDTO.getPassword().trim());
 //        user.setPassword(encodedPassword);
 //
@@ -59,10 +59,16 @@ public class UserServiceImpl implements UserService {
 //    }
 
     @Override
-    public Page<UserListDTO> listUsers(int page, int size) {
+    public Page<UserListDTO> listUsers(String keyword, int page, int size) {
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> users = userRepository.findAll(pageable);
+        Page<User> users;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            users = userRepository.findByUserNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                    keyword, keyword, pageable);
+        }else {
+            users = userRepository.findAll(pageable);
+        }
         return users.map(mapper::toDto);
     }
 
