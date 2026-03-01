@@ -1,21 +1,21 @@
-<nav th:fragment="adminNavbar" class="admin-navbar fixed-top"
-     xmlns:th="http://www.thymeleaf.org">
-
-    <div class="container d-flex justify-content-between align-items-center">
-
-        <a class="admin-brand" th:href="@{/admin/dashboard}">ToMobs</a>
+<nav th:fragment="adminNavbar" class="admin-navbar fixed-top" xmlns:th="http://www.thymeleaf.org">
+    <div class="container-fluid px-3 px-md-4 d-flex justify-content-between align-items-center">
 
         <div class="d-flex align-items-center gap-2 gap-md-3">
+            <button class="btn border-0 d-md-none p-1 text-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#adminSidebar">
+                <i class="bi bi-list fs-2"></i>
+            </button>
 
+            <a class="admin-brand" th:href="@{/admin/dashboard}">ToMobs</a>
+        </div>
+
+        <div class="d-flex align-items-center gap-2 gap-md-3">
             <div class="admin-avatar"></div>
-
-            <div class="admin-info">
+            <div class="admin-info d-none d-sm-block">
                 <span class="admin-name">Thomas</span><br>
                 <span class="admin-role">Admin</span>
             </div>
-
         </div>
 
     </div>
-
 </nav>
