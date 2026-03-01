@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com');
+
+body {
+    font-family: "Poppins", sans-serif;
+}
+
+h1 {
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+}
+
+/* Search Bar Styling */
+.search-wrapper {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+    padding: 5px 15px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+.search-wrapper input {
+    border: none;
+    box-shadow: none;
+    flex-grow: 1;
+    padding: 10px 10px 10px 0;
+    outline: none;
+}
+.search-wrapper input:focus {
+    box-shadow: none;
+    outline: none;
+}
+.search-icon {
+    color: #6c757d;
+    margin-right: 10px;
+}
+.clear-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    display: none;
+}
+
+.table-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+    padding: 30px;
+}
+.table {
+    margin-bottom: 0;
+}
+.table th {
+    border-top: none;
+    border-bottom: 1px solid #212529 !important;
+    font-weight: 600;
+    color: #333;
+    padding-bottom: 15px;
+}
+.table td {
+    vertical-align: middle;
+    border-bottom: none;
+    padding: 15px 10px;
+    color: #495057;
+}
+
+.btn-black {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-radius: 6px;
+    padding: 6px 16px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+.btn-black:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* Pagination Styling */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 10px;
+}
+.page-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #e9ecef;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid #ced4da;
+    transition: all 0.2s;
+}
+.page-box:hover {
+    background-color: #dee2e6;
+    color: #000;
+}
+.page-box.active {
+    background-color: #8c8c8c;
+    color: #fff;
+    border-color: #8c8c8c;
+}
+.page-box.disabled {
+    background-color: #f8f9fa;
+    color: #adb5bd;
+    pointer-events: none;
+}

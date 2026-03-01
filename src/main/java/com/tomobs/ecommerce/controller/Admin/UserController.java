@@ -1,0 +1,38 @@
+package com.tomobs.ecommerce.controller.Admin;
+
+import com.tomobs.ecommerce.dto.UserListDTO;
+import com.tomobs.ecommerce.service.UserService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.buf.UEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+@Controller
+@RequestMapping("/admin")
+@RequiredArgsConstructor
+@Slf4j
+public class UserController {
+
+    private final UserService userService;
+
+    @GetMapping("/users")
+    public String getAllUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "8") int size,
+            Model model
+    ) {
+        Page<UserListDTO> userPage = userService.listUsers(page, size);
+
+        model.addAttribute("users", userPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPage", userPage.getTotalPages());
+        model.addAttribute("totalItems", userPage.getTotalElements());
+
+        return "admin/user-list";
+    }
+}

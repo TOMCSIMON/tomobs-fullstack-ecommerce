@@ -1,6 +1,5 @@
 package com.tomobs.ecommerce.model;
 
-// THIS IS THE DATABASE MODEL(Table = users) FOR STORING USER DETAILS FROM THE SIGNUP PAGE.
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +26,11 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "is_blocked")
+    private boolean isBlocked = false;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "role_id", nullable = false)
     private Role role;
-
 
 }
