@@ -1,42 +1,68 @@
 @import url('https://fonts.googleapis.com/css2?family=Michroma&family=Poppins:wght@300;400;500;600&display=swap');
 
-/* Navbar background */
-.admin-navbar {
-    background-color: #ffffff !important;
-    padding: 18px 0;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+body {
+    font-family: 'Poppins', sans-serif !important;
+    padding-top: 80px;
+    background-color: #f4f7f6;
 }
 
-/* Brand */
+.admin-navbar {
+    background-color: #ffffff !important;
+    padding: 15px 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    z-index: 1030;
+}
+
 .admin-brand {
     font-family: 'Michroma', sans-serif;
     font-size: 20px;
     font-weight: 500;
     color: #000 !important;
     text-decoration: none;
+    letter-spacing: 0.5px;
 }
 
-/* Font family for text */
-body, input, button {
-    font-family: 'Poppins', sans-serif !important;
-}
-
-/* Avatar circle */
 .admin-avatar {
     width: 42px;
     height: 42px;
-    background-color: #e2e2e2;
+    background-color: #d9d9d9;
     border-radius: 50%;
+    flex-shrink: 0;
 }
 
-/* Admin name + role */
+.admin-info {
+    line-height: 1.2;
+}
+
 .admin-info .admin-name {
     font-size: 14px;
-    font-weight: 500;
-    color: #000;
+    font-weight: 600;
+    color: #212529;
 }
 
 .admin-info .admin-role {
     font-size: 12px;
-    color: #555;
+    color: #6c757d;
+}
+
+@media (max-width: 576px) {
+    .admin-navbar {
+        padding: 12px 0;
+    }
+    .admin-brand {
+        font-size: 18px;
+    }
+    .admin-avatar {
+        width: 36px;
+        height: 36px;
+    }
+    .admin-info .admin-name {
+        font-size: 13px;
+    }
+    .admin-info .admin-role {
+        font-size: 11px;
+    }
+    body {
+        padding-top: 70px;
+    }
 }
