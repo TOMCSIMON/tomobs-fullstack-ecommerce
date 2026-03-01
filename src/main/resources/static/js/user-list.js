@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function() {
             clearBtn.style.display = 'none';
         }
     }
-
     toggleClearButton();
     searchInput.addEventListener('input', toggleClearButton);
     clearBtn.addEventListener('click', function() {
@@ -20,19 +19,47 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-function toggleBlock(button) {
+let currentTargetButton = null;
 
+function openConfirmModal(button) {
+    currentTargetButton = button;
+    const isCurrentlyBlocked = button.getAttribute('data-blocked') === 'true';
+
+    const actionText = isCurrentlyBlocked ? 'Unblock' : 'Block';
+    document.getElementById('modalActionText').innerText = actionText;
+
+    const confirmBtn = document.getElementById('confirmActionBtn');
+    confirmBtn.innerText = `Yes, ${actionText}`;
+
+    if(isCurrentlyBlocked) {
+        confirmBtn.className = "btn btn-success px-5 py-2 fw-bold";
+    } else {
+        confirmBtn.className = "btn btn-danger px-5 py-2 fw-bold";
+    }
+
+    const myModal = new bootstrap.Modal(document.getElementById('confirmBlockModal'));
+    myModal.show();
+}
+
+document.getElementById('confirmActionBtn').addEventListener('click', function() {
+    if(currentTargetButton) {
+        executeToggleBlock(currentTargetButton);
+    }
+});
+
+function executeToggleBlock(button) {
     const userId = button.getAttribute('data-id');
     const isCurrentlyBlocked = button.getAttribute('data-blocked') === 'true';
+
     fetch(`/admin/users/toggle-block/${userId}`, {
         method: 'POST'
     })
     .then(response => {
         if (response) {
-
             const newBlockedStatus = !isCurrentlyBlocked;
             button.setAttribute('data-blocked', newBlockedStatus);
             button.querySelector('span').innerText = newBlockedStatus ? 'Unblock' : 'Block';
+
             const row = button.closest('tr');
             const statusTd = row.querySelector('.user-status');
 
@@ -45,6 +72,11 @@ function toggleBlock(button) {
                 statusTd.style.color = '#495057';
                 statusTd.style.fontWeight = 'normal';
             }
+
+            const myModalEl = document.getElementById('confirmBlockModal');
+            const modal = bootstrap.Modal.getInstance(myModalEl);
+            modal.hide();
+
         } else {
             alert("Something went wrong on the server!");
         }
