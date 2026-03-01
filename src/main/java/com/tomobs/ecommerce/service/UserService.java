@@ -14,4 +14,6 @@ public interface UserService {
     User findByEmail(String email);
 
     Page<UserListDTO> listUsers(String keyword,int page, int size);
+
+    void toggleUserBlockStatus(Long id);
 }

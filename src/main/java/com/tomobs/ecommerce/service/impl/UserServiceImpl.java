@@ -84,4 +84,11 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @Override
+    public void toggleUserBlockStatus(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+        user.setBlocked(!user.isBlocked());
+        userRepository.save(user);
+    }
 }

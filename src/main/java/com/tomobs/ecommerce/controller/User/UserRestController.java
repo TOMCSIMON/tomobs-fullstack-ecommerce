@@ -18,27 +18,20 @@ public class UserRestController {
 
     @GetMapping("/ajax/check-email")
     public Map<String, Object> checkEmailExists(@RequestParam String email) {
-
         boolean emailExists = userService.isEmailExists(email);
-
         Map<String, Object>  response =  new HashMap<>();
-
         response.put("exists", emailExists);
-
         if(emailExists) {
             response.put("message", "Email already in use please enter another");
         }
         else {
             response.put("message", "Email available");
         }
-
         return response;
-
     }
 
     @GetMapping("/resend-otp")
     public ResponseEntity<?> resendOtp(@RequestParam String email){
-
         try{
             otpService.resendOtp(email);
             return ResponseEntity.ok().body(
@@ -47,7 +40,5 @@ public class UserRestController {
         }catch(RuntimeException e){
             return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
         }
-
     }
-
 }

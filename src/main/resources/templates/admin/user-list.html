@@ -44,13 +44,18 @@
           <td th:text="${user.name}" style="font-weight: 600; color: #212529;">Zacharia</td>
           <td th:text="${user.email}">zacharia@gmail.com</td>
 
-          <td th:text="${user.isBlocked ? 'Blocked' : 'Active'}"
-              th:style="${user.isBlocked ? 'color: #dc3545; font-weight: 600;' : ''}">Active</td>
-
+          <td class="user-status"
+              th:text="${user.isBlocked ? 'Blocked' : 'Active'}"
+              th:style="${user.isBlocked ? 'color: #dc3545; font-weight: 600;' : ''}">
+              Active
+          </td>
           <td>
-            <a th:href="@{/admin/users/toggle-block/{id}(id=${user.id})}">
-              <button class="btn btn-black" th:text="${user.isBlocked ? 'Unblock' : 'Block'}">Block</button>
-            </a>
+            <button class="btn btn-black toggle-btn"
+                    th:data-id="${user.id}"
+                    th:data-blocked="${user.isBlocked}"
+                    onclick="toggleBlock(this)">
+              <span th:text="${user.isBlocked ? 'Unblock' : 'Block'}">Block</span>
+            </button>
           </td>
         </tr>
 
