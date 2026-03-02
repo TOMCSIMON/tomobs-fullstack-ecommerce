@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.service;
 
+import com.tomobs.ecommerce.dto.ProfileUpdateDTO;
 import com.tomobs.ecommerce.dto.UserListDTO;
 import com.tomobs.ecommerce.dto.UserProfileDTO;
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
@@ -19,4 +20,6 @@ public interface UserService {
     void toggleUserBlockStatus(Long id);
 
     UserProfileDTO findByUserByEmail(String email);
+
+    void updateProfile(String email, ProfileUpdateDTO profileUpdateDTO);
 }

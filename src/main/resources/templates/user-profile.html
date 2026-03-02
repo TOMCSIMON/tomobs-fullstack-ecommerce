@@ -22,28 +22,43 @@
 
     <div class="profile-card">
 
-        <div>
+        <div class="field-group mb-4">
             <label class="profile-label">
                 Personal Information
-                <i class="bi bi-pencil edit-icon" title="Edit Name"></i>
+                <i class="bi bi-pencil edit-icon" onclick="startEdit(this)" title="Edit Name"></i>
             </label>
-            <input type="text" class="profile-input" th:value="${userDetails.name}" readonly>
+            <input type="text" class="profile-input" th:value="${userDetails.name}" data-field="name" readonly>
+
+            <div class="action-buttons d-none mt-2">
+                <button class="btn btn-sm btn-success px-3 me-2" onclick="saveEdit(this)">Save</button>
+                <button class="btn btn-sm btn-outline-secondary px-3" onclick="cancelEdit(this)">Cancel</button>
+            </div>
         </div>
 
-        <div>
+        <div class="field-group mb-4">
             <label class="profile-label">
                 Email Address
-                <i class="bi bi-pencil edit-icon" title="Edit Email"></i>
+                <i class="bi bi-pencil edit-icon" onclick="startEdit(this)" title="Edit Email"></i>
             </label>
-            <input type="email" class="profile-input" th:value="${userDetails.email}" readonly>
+            <input type="email" class="profile-input" th:value="${userDetails.email}" data-field="email" readonly>
+
+            <div class="action-buttons d-none mt-2">
+                <button class="btn btn-sm btn-success px-3 me-2" onclick="saveEdit(this)">Save</button>
+                <button class="btn btn-sm btn-outline-secondary px-3" onclick="cancelEdit(this)">Cancel</button>
+            </div>
         </div>
 
-        <div>
+        <div class="field-group mb-4">
             <label class="profile-label">
                 Phone number
-                <i class="bi bi-pencil edit-icon" title="Edit Phone"></i>
+                <i class="bi bi-pencil edit-icon" onclick="startEdit(this)" title="Edit Phone"></i>
             </label>
-            <input type="text" class="profile-input" th:value="${userDetails.phoneNumber}" readonly>
+            <input type="text" class="profile-input" th:value="${userDetails.phoneNumber}" data-field="phoneNumber" readonly>
+
+            <div class="action-buttons d-none mt-2">
+                <button class="btn btn-sm btn-success px-3 me-2" onclick="saveEdit(this)">Save</button>
+                <button class="btn btn-sm btn-outline-secondary px-3" onclick="cancelEdit(this)">Cancel</button>
+            </div>
         </div>
 
         <div class="mt-2">
@@ -56,5 +71,6 @@
 <div th:insert="~{fragments/footer :: footer}"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/user-profile.js}"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.service.impl;
 
+import com.tomobs.ecommerce.dto.ProfileUpdateDTO;
 import com.tomobs.ecommerce.dto.UserListDTO;
 import com.tomobs.ecommerce.dto.UserProfileDTO;
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
@@ -101,5 +102,33 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
         return mapper.toProfileDto(user);
+    }
+
+    @Override
+    public void updateProfile(String email, ProfileUpdateDTO dto) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        String field = dto.getField();
+        String value = dto.getValue();
+
+        switch (field) {
+
+            case "name":
+                user.setUserName(value);
+                break;
+            case "email":
+                if (!email.equals(value) && userRepository.existsByEmail(value)) {
+                    throw new RuntimeException("This email is already taken by another user!");
+                }
+                user.setEmail(value);
+                break;
+            case "phoneNumber":
+                user.setPhoneNumber(value);
+                break;
+            default:
+                throw new RuntimeException("Invalid user profile update Request!");
+        }
+        userRepository.save(user);
     }
 }
