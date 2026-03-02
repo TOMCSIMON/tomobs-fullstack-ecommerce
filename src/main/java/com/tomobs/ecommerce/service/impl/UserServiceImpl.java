@@ -1,6 +1,7 @@
 package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.dto.UserListDTO;
+import com.tomobs.ecommerce.dto.UserProfileDTO;
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
 import com.tomobs.ecommerce.mapper.UserMapper;
 import com.tomobs.ecommerce.model.Role;
@@ -91,5 +92,14 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found!"));
         user.setBlocked(!user.isBlocked());
         userRepository.save(user);
+    }
+
+    @Override
+    public UserProfileDTO findByUserByEmail(String email) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        return mapper.toProfileDto(user);
     }
 }

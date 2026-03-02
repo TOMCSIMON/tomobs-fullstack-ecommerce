@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+body {
+    font-family: 'Poppins', sans-serif !important;
+    background-color: #f9f9f9; /* ഒരു ചെറിയ ഗ്രേ ബാക്ക്ഗ്രൗണ്ട് */
+}
+
+/* കണ്ടെയ്നർ ഒതുക്കി നിർത്താൻ */
+.profile-wrapper {
+    max-width: 650px;
+    margin: 40px auto;
+}
+
+.profile-title {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #000;
+}
+
+/* ആ മെയിൻ കാർഡിന്റെ ഡിസൈൻ */
+.profile-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* മനോഹരമായ ഒരു ഷാഡോ */
+    padding: 40px;
+    border: 1px solid #f0f0f0;
+}
+
+/* ലേബലുകൾ (Personal Information, Email etc) */
+.profile-label {
+    font-size: 1.05rem;
+    font-weight: 500;
+    color: #000;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+/* പെൻസിൽ ഐക്കൺ */
+.edit-icon {
+    font-size: 0.85rem;
+    color: #666;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.edit-icon:hover {
+    color: #000;
+}
+
+/* ഇൻപുട്ട് ബോക്സുകൾ */
+.profile-input {
+    border-radius: 8px;
+    border: 1px solid #dcdcdc;
+    padding: 12px 15px;
+    font-size: 0.95rem;
+    color: #777; /* എഡിറ്റ് ചെയ്യാൻ പറ്റാത്തതുകൊണ്ട് ചെറിയ ഗ്രേ കളർ */
+    width: 100%;
+    margin-bottom: 30px;
+    background-color: #fff !important; /* Readonly ആണെങ്കിലും ബാക്ക്ഗ്രൗണ്ട് വെള്ള ആയിരിക്കാൻ */
+}
+
+.profile-input:focus {
+    outline: none;
+    border-color: #249AB2;
+}
+
+/* Change Password Button */
+.btn-black {
+    background-color: #000;
+    color: #fff;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-weight: 500;
+    font-size: 1rem;
+    border: none;
+    transition: 0.3s;
+}
+
+.btn-black:hover {
+    background-color: #333;
+    color: #fff;
+}
