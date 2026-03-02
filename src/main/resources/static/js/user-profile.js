@@ -70,3 +70,53 @@ function saveEdit(buttonElement) {
         cancelEdit(buttonElement);
     });
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+
+    const passwordForm = document.getElementById('changePasswordForm');
+        if (passwordForm) {
+        passwordForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const oldPassword = document.getElementById('oldPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmNewPassword) {
+                alert("New passwords do not match!");
+                return;
+            }
+
+            const payload = {
+                oldPassword: oldPassword,
+                newPassword: newPassword,
+                confirmNewPassword: confirmNewPassword
+            };
+
+            fetch('/profile/password', {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(async response => {
+                if (response.ok) {
+                    alert("Password successfully updated!");
+                    document.getElementById('changePasswordForm').reset();
+
+                    const modalEl = document.getElementById('changePasswordModal');
+                    const modal = bootstrap.Modal.getInstance(modalEl);
+                    modal.hide();
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.message || "Failed to change password. Check your old password.");
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert("Something went wrong!");
+            });
+        });
+    }
+});

@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.controller.User;
 
+import com.tomobs.ecommerce.dto.ChangePasswordDTO;
 import com.tomobs.ecommerce.dto.ProfileUpdateDTO;
 import com.tomobs.ecommerce.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,5 +27,15 @@ public class UserProfileRestController {
         userService.updateProfile(loggedInEmail, profileUpdateDTO);
 
         return ResponseEntity.ok(Map.of("success", true));
+    }
+
+    @PatchMapping("/password")
+    public ResponseEntity<Map<String,Boolean>> changePassword(
+            @RequestBody ChangePasswordDTO changePasswordDTO,
+            Principal principal) {
+
+        String email = principal.getName();
+        userService.updatePassword(email,changePasswordDTO);
+        return ResponseEntity.ok(Map.of("Success", true));
     }
 }

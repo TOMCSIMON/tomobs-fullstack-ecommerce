@@ -1,9 +1,6 @@
 package com.tomobs.ecommerce.service.impl;
 
-import com.tomobs.ecommerce.dto.ProfileUpdateDTO;
-import com.tomobs.ecommerce.dto.UserListDTO;
-import com.tomobs.ecommerce.dto.UserProfileDTO;
-import com.tomobs.ecommerce.dto.UserRegistrationDTO;
+import com.tomobs.ecommerce.dto.*;
 import com.tomobs.ecommerce.mapper.UserMapper;
 import com.tomobs.ecommerce.model.Role;
 import com.tomobs.ecommerce.model.User;
@@ -13,6 +10,7 @@ import com.tomobs.ecommerce.repository.UserRepository;
 import com.tomobs.ecommerce.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +20,12 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final UserMapper mapper;
+    private final PasswordEncoder passwordEncoder;
 //    private final RoleRepository roleRepository;
 //    private final PasswordEncoder passwordEncoder;
 //
@@ -129,6 +129,25 @@ public class UserServiceImpl implements UserService {
             default:
                 throw new RuntimeException("Invalid user profile update Request!");
         }
+        userRepository.save(user);
+    }
+
+    @Override
+    public void updatePassword(String email, ChangePasswordDTO dto) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        if(!dto.getNewPassword().equals(dto.getConfirmNewPassword())) {
+            throw new RuntimeException("Passwords do not match!");
+        }
+        if(!passwordEncoder.matches(dto.getOldPassword(), user.getPassword())) {
+            throw new RuntimeException("Wrong old password");
+        }
+        if(passwordEncoder.matches(dto.getNewPassword(), user.getPassword())) {
+            throw new RuntimeException("New password cannot be the same as the old password!");
+        }
+        user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
     }
 }
