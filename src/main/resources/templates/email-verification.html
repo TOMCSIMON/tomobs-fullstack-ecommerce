@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Assistance - ToMobs</title>
+    <link rel="stylesheet" th:href="@{/css/email-verification.css}">
+    <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="page-wrapper">
+
+    <div class="assistance-card">
+
+        <h1>Password assistance</h1>
+
+        <p class="description">
+            Enter the email address associated with your ToMobs account.
+        </p>
+
+        <form class="assistance-form" th:action="@{/forgot-password/email}" method="post">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <div class="input-container">
+                    <img th:src="@{/icons/email.png}" alt="email icon" class="field-icon">
+                    <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                </div>
+            </div>
+
+            <button type="submit" class="generate-btn">Generate OTP</button>
+        </form>
+
+        <div th:if="${error}" style="color: red; margin-top: 10px; text-align: center;">
+            <p th:text="${error}"></p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

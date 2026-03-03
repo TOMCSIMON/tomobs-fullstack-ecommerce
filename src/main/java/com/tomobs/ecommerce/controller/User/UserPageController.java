@@ -38,4 +38,14 @@ public class UserPageController {
       }
     return "login";
   }
+
+    @GetMapping("/forgot-password")
+    public String resetPassword(Principal principal)
+    {
+
+        if(principal != null){
+            return "redirect:/";
+        }
+        return "email-verification";
+    }
 }
