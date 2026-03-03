@@ -9,4 +9,6 @@ public interface OtpService {
     void verifyOtpAndCreateUser(String email, String otp);
 
     void resendOtp(String email);
+
+    boolean generateAndSendOtpForForgotPassword(String email);
 }

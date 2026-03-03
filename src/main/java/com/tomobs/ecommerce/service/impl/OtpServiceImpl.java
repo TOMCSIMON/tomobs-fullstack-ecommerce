@@ -24,6 +24,7 @@ import java.util.Random;
 public class OtpServiceImpl implements OtpService {
 
   private static final String SIGNUP_KEY_PREFIX = "signup:";
+  private static final String FORGOT_PASSWORD_PREFIX = "forgot_password_request:";
   private static final String ATTEMPT_KEY_PREFIX = "resend_count:";
   private static final Duration OTP_TTL = Duration.ofMinutes(5);
 
@@ -149,5 +150,17 @@ public class OtpServiceImpl implements OtpService {
     } catch (Exception e) {
       throw new RuntimeException("OTP verification failed: " + e.getMessage(), e);
     }
+  }
+
+  public boolean generateAndSendOtpForForgotPassword(String email) {
+
+    if(!userRepository.existsByEmail(email)){
+      throw new RuntimeException("Email is not registered! Please sign up.");
+    }
+    String otp = String.format("%06d", new Random().nextInt(1_000_000));
+    String key = FORGOT_PASSWORD_PREFIX + email;
+    redisTemplate.opsForValue().set(key, otp , OTP_TTL);
+    emailService.sendOtpEmail(email, otp);
+    return true;
   }
 }
