@@ -163,4 +163,15 @@ public class OtpServiceImpl implements OtpService {
     emailService.sendOtpEmail(email, otp);
     return true;
   }
+
+  public boolean verifyOtpForgotPassword(String email, String otp) {
+
+    String key = FORGOT_PASSWORD_PREFIX + email.trim();
+    String savedOtp = redisTemplate.opsForValue().get(key);
+    if(savedOtp != null && savedOtp.equals(otp)){
+      redisTemplate.delete(key);
+      return true;
+    }
+    return false;
+  }
 }

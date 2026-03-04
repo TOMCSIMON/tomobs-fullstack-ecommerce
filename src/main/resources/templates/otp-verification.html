@@ -20,6 +20,7 @@
         <form th:action="@{/verify-otp}" method="post" id="otp-form">
             <input type="hidden" name="email" th:value="${email}"/>
             <input type="hidden" name="otp" id="final-otp"/>
+            <input type="hidden" name="flow" th:value="${flow}"/>
 
             <label class="input-label">Enter your OTP here</label>
 

@@ -32,6 +32,7 @@ public class UserAuthController {
     }
     otpService.generateAndSendOtpForSignup(userRegistrationDTO);
     model.addAttribute("email", userRegistrationDTO.getEmail());
+    model.addAttribute("flow", "signup");
     return "otp-verification";
   }
 
@@ -39,33 +40,49 @@ public class UserAuthController {
   public String verifyOtp(
           @RequestParam("email") String email,
           @RequestParam("otp") String otp,
+          @RequestParam("flow") String flow,
+          RedirectAttributes redirectAttributes,
           Model model) {
 
-    try {
-      otpService.verifyOtpAndCreateUser(email, otp);
-      return "redirect:/login?verified=true";
-    } catch (RuntimeException ex) {
-      model.addAttribute("email", email);
-      model.addAttribute("otpError", ex.getMessage());
-      return "otp-verification";
+    if("forgot-password".equals(flow)) {
+      if(otpService.verifyOtpForgotPassword(email, otp)) {
+        redirectAttributes.addFlashAttribute("email", email);
+        return "reset-password";
+      } else {
+        redirectAttributes.addFlashAttribute("email", email);
+        redirectAttributes.addFlashAttribute("otpError", "otp verification failed!");
+        return "redirect:/otp-verification";
+      }
+    }else if(flow.equals("signup")){
+      try {
+        otpService.verifyOtpAndCreateUser(email, otp);
+        return "redirect:/login?verified=true";
+      } catch (RuntimeException ex) {
+        model.addAttribute("email", email);
+        model.addAttribute("otpError", ex.getMessage());
+        return "otp-verification";
+      }
+    }else {
+      throw new RuntimeException("Invalid flow flag for verify otp!");
     }
   }
 
   @PostMapping("/forgot-password/email")
   public String processForgotPassword(
           @RequestParam("email") String email,
-          RedirectAttributes redirectAttributes) {
+          Model model) {
 
     log.info("FORGOT PASSWORD BACKEND START: {}", email);
     boolean isSent = otpService.generateAndSendOtpForForgotPassword(email);
 
     if(isSent) {
-      redirectAttributes.addFlashAttribute("email", email);
-      redirectAttributes.addFlashAttribute("flow", "forgot-password");
+      model.addAttribute("email", email);
+      model.addAttribute("flow", "forgot-password");
       return "otp-verification";
     }else {
-      redirectAttributes.addFlashAttribute("error", "Email not found!");
+      model.addAttribute("error", "Email not found!");
       return "redirect:/email-verification";
     }
   }
+
 }

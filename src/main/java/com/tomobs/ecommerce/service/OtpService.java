@@ -11,4 +11,6 @@ public interface OtpService {
     void resendOtp(String email);
 
     boolean generateAndSendOtpForForgotPassword(String email);
+
+    boolean verifyOtpForgotPassword(String email, String otp);
 }
