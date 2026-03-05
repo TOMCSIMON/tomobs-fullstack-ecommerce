@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.config;
 
 import com.tomobs.ecommerce.service.impl.CustomOAuth2UserService;
 import com.tomobs.ecommerce.service.impl.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,21 +15,13 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class    SecurityConfig {
 
     private final CustomUserDetailsService customUserDetailsService;
     private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
-
-    public SecurityConfig(
-            CustomUserDetailsService customUserDetailsService,
-            CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler,
-            CustomOAuth2UserService customOAuth2UserService
-    ) {
-        this.customUserDetailsService = customUserDetailsService;
-        this.customAuthenticationSuccessHandler = customAuthenticationSuccessHandler;
-        this.customOAuth2UserService = customOAuth2UserService;
-    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -39,7 +32,6 @@ public class    SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                //  Disable CSRF only if you really need it
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .headers(headers -> headers
@@ -48,7 +40,7 @@ public class    SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/signup", "/verify-otp", "/resend-otp", "/forgot-password/**","/login",
+                                "/", "/signup", "/blocked-page", "/verify-otp", "/resend-otp", "/forgot-password/**","/login",
                                 "/css/**", "/js/**", "/ajax/**",
                                 "/icons/**", "/images/**"
                         ).permitAll()
@@ -64,6 +56,7 @@ public class    SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler(customAuthenticationSuccessHandler)
+                        .failureHandler(customAuthenticationFailureHandler)
                         .permitAll()
                 )
 

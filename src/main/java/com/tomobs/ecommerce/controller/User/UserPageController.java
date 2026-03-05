@@ -48,4 +48,9 @@ public class UserPageController {
         }
         return "email-verification";
     }
+
+    @GetMapping("blocked-page")
+    public String blockedUser() {
+      return "blocked-page";
+    }
 }
