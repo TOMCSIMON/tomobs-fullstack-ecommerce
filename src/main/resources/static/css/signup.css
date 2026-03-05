@@ -26,12 +26,13 @@ body {
 
 /* ===== Signup Form Wrapper ===== */
 .signup-form {
-    width: 100%;
-    max-width: 460px;
-    margin: 60px auto;
-    padding: 40px 30px;
-    border: 1px #000 solid;
-    border-radius: 10px;
+   width: 100%;
+   max-width: 460px;
+   margin: 60px auto;
+   padding: 40px 30px;
+   border: 0px #000 solid;
+   border-radius: 10px;
+   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
 /* ===== Headings ===== */
