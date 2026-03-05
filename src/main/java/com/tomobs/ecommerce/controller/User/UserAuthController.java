@@ -3,6 +3,7 @@ package com.tomobs.ecommerce.controller.User;
 // HANDLES HTTP REQUESTS FOR USER AUTHENTICATION,RECEIVING SIGNUP FORM DATA
 import com.tomobs.ecommerce.dto.UserRegistrationDTO;
 import com.tomobs.ecommerce.service.OtpService;
+import com.tomobs.ecommerce.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class UserAuthController {
 
   private final OtpService otpService;
+  private final UserService userService;
 
   @PostMapping("/signup")
   public String registerUser(
@@ -46,7 +48,7 @@ public class UserAuthController {
 
     if("forgot-password".equals(flow)) {
       if(otpService.verifyOtpForgotPassword(email, otp)) {
-        redirectAttributes.addFlashAttribute("email", email);
+        model.addAttribute("email", email);
         return "reset-password";
       } else {
         redirectAttributes.addFlashAttribute("email", email);
@@ -83,6 +85,15 @@ public class UserAuthController {
       model.addAttribute("error", "Email not found!");
       return "redirect:/email-verification";
     }
+  }
+
+  @PostMapping("/forgot-password/update")
+  public String updatePassword(
+          @RequestParam("email") String email,
+          @RequestParam("password") String password) {
+
+    userService.saveNewPassword(email,password);
+    return "login";
   }
 
 }

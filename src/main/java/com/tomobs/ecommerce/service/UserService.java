@@ -21,4 +21,6 @@ public interface UserService {
     void updateProfile(String email, ProfileUpdateDTO profileUpdateDTO);
 
     void updatePassword(String email, ChangePasswordDTO dto);
+
+    void saveNewPassword(String email, String password);
 }
