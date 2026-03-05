@@ -150,4 +150,13 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
         userRepository.save(user);
     }
+
+    @Override
+    public void saveNewPassword(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
 }
