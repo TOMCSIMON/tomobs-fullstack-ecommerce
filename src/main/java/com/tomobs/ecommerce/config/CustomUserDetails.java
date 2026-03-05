@@ -10,17 +10,20 @@ import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
+
     @Getter
     private final Long id;
     private final String username;
     private final String password;
     private final Collection<? extends GrantedAuthority> authorities;
+    private final User user;
 
     public CustomUserDetails(User user) {
         this.id = user.getId();
         this.username = user.getEmail();
         this.password = user.getPassword();
         this.authorities = List.of(new SimpleGrantedAuthority(user.getRole().getRoleName().name()));
+        this.user = user;
     }
 
     @Override public String getUsername() { return username; }
@@ -31,7 +34,7 @@ public class CustomUserDetails implements UserDetails {
     }
 
     @Override public boolean isAccountNonExpired() { return true; }
-    @Override public boolean isAccountNonLocked() { return true; }
+    @Override public boolean isAccountNonLocked() { return !user.isBlocked(); }
     @Override public boolean isCredentialsNonExpired() { return true; }
     @Override public boolean isEnabled() { return true; }
 

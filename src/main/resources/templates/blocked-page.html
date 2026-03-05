@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied - ToMobs</title>
+
+    <link rel="stylesheet" th:href="@{/css/blocked-page.css}">
+</head>
+<body>
+
+<div class="blocked-container">
+    <div class="blocked-card">
+
+        <div class="image-section">
+            <img th:src="@{/images/access-denied.webp}" alt="Access Denied Illustration" class="illustration">
+        </div>
+
+        <div class="text-section">
+            <h1 class="title">ACCESS DENIED</h1>
+
+            <p class="description">
+                Your account has been suspended.
+            </p>
+
+            <p class="sub-description">
+                You currently do not have permission to access your account. Please contact the administrator if you believe this is a mistake, or return to the homepage to browse public products.
+            </p>
+
+            <a th:href="@{/}" class="home-btn">Go to home</a>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
