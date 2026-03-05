@@ -70,7 +70,6 @@
 
 <div th:insert="~{fragments/footer :: footer}"></div>
 
-
 <div class="modal fade" id="changePasswordModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content" style="border-radius: 12px; padding: 20px;">
@@ -81,19 +80,35 @@
 
             <div class="modal-body pt-0">
                 <form id="changePasswordForm">
-                    <div class="mb-3">
+
+                    <div class="mb-3 position-relative">
                         <label class="form-label text-muted small">Old Password</label>
-                        <input type="password" class="form-control" id="oldPassword"  style="border-radius: 8px;">
+                        <div class="input-container">
+                            <img th:src="@{/icons/padlock.png}" alt="lock icon" class="field-icon">
+                            <input type="password" class="form-control px-5" id="oldPassword" style="border-radius: 8px;">
+                            <img th:src="@{/icons/hide.png}" class="toggle-eye" id="toggleOldPassword" alt="toggle">
+                        </div>
+                        <span id="oldPasswordError" style="color: red; font-size: 13px; margin-top: 5px; display: block;"></span>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="mb-3 position-relative">
                         <label class="form-label text-muted small">New Password</label>
-                        <input type="password" class="form-control" id="newPassword"  style="border-radius: 8px;">
+                        <div class="input-container">
+                            <img th:src="@{/icons/padlock.png}" alt="lock icon" class="field-icon">
+                            <input type="password" class="form-control px-5" id="newPassword" style="border-radius: 8px;">
+                            <img th:src="@{/icons/hide.png}" class="toggle-eye" id="toggleNewPassword" alt="toggle">
+                        </div>
+                        <span id="newPasswordError" style="color: red; font-size: 13px; margin-top: 5px; display: block;"></span>
                     </div>
 
-                    <div class="mb-4">
+                    <div class="mb-4 position-relative">
                         <label class="form-label text-muted small">Confirm New Password</label>
-                        <input type="password" class="form-control" id="confirmNewPassword"  style="border-radius: 8px;">
+                        <div class="input-container">
+                            <img th:src="@{/icons/padlock.png}" alt="lock icon" class="field-icon">
+                            <input type="password" class="form-control px-5" id="confirmNewPassword" style="border-radius: 8px;">
+                            <img th:src="@{/icons/hide.png}" class="toggle-eye" id="toggleConfirmNewPassword" alt="toggle">
+                        </div>
+                        <span id="confirmNewPasswordError" style="color: red; font-size: 13px; margin-top: 5px; display: block;"></span>
                     </div>
 
                     <button type="submit" class="btn w-100 text-white fw-bold" style="background-color: #000; border-radius: 8px; padding: 12px;">

@@ -1,88 +1,29 @@
+// 🟢 Sr. Tom's Reusable Password Toggle Helper
+function setupPasswordToggle(toggleId, inputId, hideIcon, viewIcon) {
+    const toggle = document.getElementById(toggleId);
+    const input = document.getElementById(inputId);
 
-function startEdit(iconElement) {
-    const group = iconElement.closest('.field-group');
-    const inputField = group.querySelector('.profile-input');
-    const actionButtons = group.querySelector('.action-buttons');
-
-    inputField.setAttribute('data-original-value', inputField.value);
-    inputField.removeAttribute('readonly');
-    inputField.focus();
-
-    iconElement.style.display = 'none';
-    actionButtons.classList.remove('d-none');
-}
-
-function cancelEdit(buttonElement) {
-    const group = buttonElement.closest('.field-group');
-    const inputField = group.querySelector('.profile-input');
-    const iconElement = group.querySelector('.edit-icon');
-    const actionButtons = group.querySelector('.action-buttons');
-
-    inputField.value = inputField.getAttribute('data-original-value');
-    inputField.setAttribute('readonly', true);
-
-    actionButtons.classList.add('d-none');
-    iconElement.style.display = 'inline-block';
-}
-
-function saveEdit(buttonElement) {
-    const group = buttonElement.closest('.field-group');
-    const inputField = group.querySelector('.profile-input');
-    const iconElement = group.querySelector('.edit-icon');
-    const actionButtons = group.querySelector('.action-buttons');
-
-    const fieldName = inputField.getAttribute('data-field');
-    const newValue = inputField.value.trim();
-    const originalValue = inputField.getAttribute('data-original-value');
-
-    if (newValue === originalValue) {
-        cancelEdit(buttonElement);
-        return;
-    }
-
-    const payload = {
-        field: fieldName,
-        value: newValue
-    };
-
-    fetch('/profile/update', {
-        method: 'PATCH',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => {
-        if (response.ok) {
-            inputField.setAttribute('data-original-value', newValue);
-            inputField.setAttribute('readonly', true);
-            actionButtons.classList.add('d-none');
-            iconElement.style.display = 'inline-block';
-            Toast.fire({
-                icon: 'success',
-                title: 'Profile updated successfully!'
-            });
-        } else {
-            Toast.fire({
-                icon: 'error',
-                title: 'Failed to update. Please try again.'
-            });
-            cancelEdit(buttonElement);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        Toast.fire({
-            icon: 'error',
-            title: 'Something went wrong!'
+    if (toggle && input) {
+        toggle.addEventListener("click", () => {
+            const type = input.type === "password" ? "text" : "password";
+            input.type = type;
+            toggle.src = type === "password" ? hideIcon : viewIcon;
         });
-        cancelEdit(buttonElement);
-    });
+    }
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    // 1. Setup Password Toggles
+    setupPasswordToggle("toggleOldPassword", "oldPassword", "/icons/hide.png", "/icons/view.png");
+    setupPasswordToggle("toggleNewPassword", "newPassword", "/icons/hide.png", "/icons/view.png");
+    setupPasswordToggle("toggleConfirmNewPassword", "confirmNewPassword", "/icons/hide.png", "/icons/view.png");
+
     const passwordForm = document.getElementById('changePasswordForm');
+
     if (passwordForm) {
+        const strongPasswordRegex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\S+$).{8,}$/;
+
         passwordForm.addEventListener('submit', function(e) {
             e.preventDefault();
 
@@ -90,13 +31,41 @@ document.addEventListener('DOMContentLoaded', function() {
             const newPassword = document.getElementById('newPassword').value;
             const confirmNewPassword = document.getElementById('confirmNewPassword').value;
 
-            if (newPassword !== confirmNewPassword) {
-                Toast.fire({
-                    icon: 'warning',
-                    title: 'New passwords do not match!'
-                });
-                return;
+            // Error Elements
+            const oldError = document.getElementById('oldPasswordError');
+            const newError = document.getElementById('newPasswordError');
+            const confirmError = document.getElementById('confirmNewPasswordError');
+
+            // Clear previous errors
+            oldError.textContent = "";
+            newError.textContent = "";
+            confirmError.textContent = "";
+
+            let isValid = true;
+
+            // 1. Old Password Check
+            if (!oldPassword) {
+                oldError.textContent = "Please enter your current password.";
+                isValid = false;
             }
+
+            // 2. New Password Check
+            if (!strongPasswordRegex.test(newPassword)) {
+                newError.textContent = "Must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number & 1 special char.";
+                isValid = false;
+            } else if (oldPassword && oldPassword === newPassword) {
+                newError.textContent = "New password cannot be the same as the old password.";
+                isValid = false;
+            }
+
+            // 3. Confirm Password Check
+            if (newPassword !== confirmNewPassword) {
+                confirmError.textContent = "Passwords do not match.";
+                isValid = false;
+            }
+
+            // എവിടെയെങ്കിലും തെറ്റുണ്ടെങ്കിൽ ഇവിടെ വെച്ച് നിർത്തും (API വിളിക്കില്ല)
+            if (!isValid) return;
 
             const payload = {
                 oldPassword: oldPassword,
@@ -124,10 +93,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     modal.hide();
                 } else {
                     const errorData = await response.json();
-                    Toast.fire({
-                        icon: 'error',
-                        title: errorData.message || "Failed to change password."
-                    });
+
+                    // ബാക്ക്എൻഡിൽ നിന്ന് "Wrong old password" എറർ വന്നാൽ അത് ഇൻപുട്ടിന് താഴെ കാണിക്കാം
+                    if (errorData.message && errorData.message.toLowerCase().includes('old password')) {
+                        oldError.textContent = "Incorrect old password. Please try again.";
+                    } else {
+                        Toast.fire({
+                            icon: 'error',
+                            title: errorData.message || "Failed to change password."
+                        });
+                    }
                 }
             })
             .catch(error => {
