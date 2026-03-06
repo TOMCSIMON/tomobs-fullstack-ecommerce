@@ -1,46 +1,121 @@
-.addButton {
-    background-color: #000;
-    color: #fff;
-    border-radius: 20px;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f9fa;
+}
+
+h1 {
+    font-weight: 500;
+}
+
+/* ===== Search Bar Styling ===== */
+.search-wrapper {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+    padding: 5px 15px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+.search-wrapper input {
     border: none;
-    height: 50px;
-    width: 15%;
-    margin-top: 150px;
-    margin-bottom: 20px;
-    margin-right: 100px;
+    box-shadow: none;
+    flex-grow: 1;
+    padding: 10px 10px 10px 0;
+    outline: none;
+}
+.search-wrapper input:focus {
+    box-shadow: none;
+    outline: none;
+}
+.search-icon {
+    color: #6c757d;
+    margin-right: 10px;
+}
+.clear-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    display: none;
+    margin-right: 20px;
+}
+/* ===== Table Styling ===== */
+.table-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+    padding: 30px;
+}
+.table {
+    margin-bottom: 0;
+}
+.table th {
+    border-top: none;
+    border-bottom: 1px solid #212529 !important;
+    font-weight: 600;
+    color: #333;
+    padding-bottom: 15px;
+}
+.table td {
+    vertical-align: middle;
+    border-bottom: none;
+    padding: 15px 10px;
+    color: #495057;
 }
 
-.addButton:hover {
-    color: #000;
-    border: 2px solid;
-    background-color: #E4E4E4;
+/* ===== Custom Add Button ===== */
+.btn-black {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: 0.3s;
+    border: none;
+    display: inline-block;
 }
-
-.page-header {
-    margin-top: 150px;
-    margin-inline-start: 300px;
-}
-
-.addButton a {
-    text-decoration: none;
+.btn-black:hover {
+    background-color: #333;
     color: #fff;
 }
-.addButton a:hover {
-    color:#000;
+
+/* ===== Pagination Styling ===== */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 10px;
 }
-
-
-.productTableContainer{
-    margin-left: 300px;
-    margin-top: 15px;
-    width: 70%;
+.page-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #e9ecef;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid #ced4da;
+    transition: all 0.2s;
 }
-
-
-.paginationBox {
-    border-color: #000 3px;
-    width: 20px;
-    height: 30px;
+.page-box:hover {
+    background-color: #dee2e6;
     color: #000;
 }
-
+.page-box.active {
+    background-color: #8c8c8c;
+    color: #fff;
+    border-color: #8c8c8c;
+}
+.page-box.disabled {
+    background-color: #f8f9fa;
+    color: #adb5bd;
+    pointer-events: none;
+}

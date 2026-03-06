@@ -1,81 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
+body {
+    font-family: "Poppins", sans-serif;
+    background-color: #f8f9fa;
+}
+
+h1 {
+    font-weight: 500;
+}
+
+/* ===== Search Bar Styling ===== */
+.search-wrapper {
+    position: relative;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+    padding: 5px 15px;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+.search-wrapper input {
+    border: none;
+    box-shadow: none;
+    flex-grow: 1;
+    padding: 10px 10px 10px 0;
+    outline: none;
+}
+.search-wrapper input:focus {
+    box-shadow: none;
+    outline: none;
+}
+.search-icon {
+    color: #6c757d;
+    margin-right: 10px;
+}
+.clear-btn {
+    background: none;
+    border: none;
+    color: #6c757d;
+    cursor: pointer;
+    display: none;
+    margin-right: 20px;
+}
+
+/* ===== Table Styling ===== */
+.table-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
+    padding: 30px;
+}
+.table {
+    margin-bottom: 0;
+}
+.table th {
+    border-top: none;
+    border-bottom: 1px solid #212529 !important;
+    font-weight: 600;
+    color: #333;
+    padding-bottom: 15px;
+}
+.table td {
+    vertical-align: middle;
+    border-bottom: none;
+    padding: 15px 10px;
+    color: #495057;
+}
+
+/* ===== Custom Buttons ===== */
+.btn-black {
+    background-color: #1a1a1a;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: 0.3s;
+    border: none;
+}
+.btn-black:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* ===== Pagination Styling ===== */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 10px;
+}
+.page-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: #e9ecef;
+    color: #333;
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: 600;
+    border: 1px solid #ced4da;
+    transition: all 0.2s;
+}
+.page-box:hover {
+    background-color: #dee2e6;
+    color: #000;
+}
+.page-box.active {
+    background-color: #8c8c8c;
+    color: #fff;
+    border-color: #8c8c8c;
+}
+.page-box.disabled {
+    background-color: #f8f9fa;
+    color: #adb5bd;
+    pointer-events: none;
+}
+
+/* ===== Toast Message ===== */
 .toast-success {
     position: fixed;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-
-    background-color: #28a745; /* green */
+    background-color: #28a745;
     color: white;
-
     padding: 12px 24px;
     border-radius: 6px;
     font-size: 15px;
     font-weight: 500;
-
     z-index: 9999;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-
-.addButton {
-   background-color: #000;
-   color: #fff;
-   border-radius: 20px;
-   border: none;
-   height: 50px;
-   width: 15%;
-   margin-right: 100px;
-   margin-top: 15px;
-}
-.page-header {
-    margin-top: 150px;
-    margin-inline-start: 300px;
-}
-
-.brand-table{
-
-    background-color: #fff;
-    color: #000;
-    width: 70%;
-    margin-left: 300px;
-}
-
-
-/* (THIS IS COMMON )Search Bar start */
-.search-bar{
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    border-radius: 26px;
-    height: 50px;
-    font-size: 16px;
-    width: 50%;
-    background-color: #fff;
-    text-align: justify;
-    margin-left: 300px;
-}
-.search-bar input{
-    border:none;
-    outline: none;
-    border-radius:20px;
-}
-.user-layout {
-    display: flex;
-    flex-grow: 1;
-    min-height: calc(100vh - 60px);
-    margin-bottom: 0;
-}
-.user-layout main{
-    padding-bottom: 40px;
-}
-.search-icon{
-    height: 20px;
-    width: 20px
-}
-/* search bar end*/
-
-
-.page-item a {
-    text-align: center;
-    border-radius: 8px;
-    width: 40px;
-    height: 40px;
 }
