@@ -41,6 +41,7 @@ h1 {
     color: #6c757d;
     cursor: pointer;
     display: none;
+    margin-right: 20px;
 }
 
 .table-card {
