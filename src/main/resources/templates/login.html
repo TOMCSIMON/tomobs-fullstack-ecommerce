@@ -12,7 +12,7 @@
           rel="stylesheet">
 </head>
 
-<body style="background-color:#E4E4E4;">
+<body>
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
@@ -20,24 +20,26 @@
     <form id="login-form" class="login-form" th:action = "@{/login}" method="post">
 
         <h3 class="text-center mb-5">Login to Your Account</h3>
-
-        <!-- Email -->
+        <div th:if="${param.error}" class="server-error-box">
+            Invalid email or password. Please try again.
+        </div>
         <div class="input-groups">
             <label for="email">Email</label>
             <div class="icon-input">
                 <img th:src="@{/icons/email.png}" class="field-icon" alt="">
-                <input type="email" id="email" name="email" placeholder="Enter your email address" required>
+                <input type="email" id="email" name="email" placeholder="Enter your email address">
             </div>
+            <span id="emailError" style="color: red; font-size: 13px; margin-top: 5px; display: block;"></span>
         </div>
 
-        <!-- Password -->
         <div class="input-groups">
             <label for="password">Password</label>
             <div class="icon-input">
                 <img th:src="@{/icons/padlock.png}" class="field-icon" alt="">
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-                <img th:src="@{/icons/hide.png}" class="toggle-eye" id="togglePassword" alt="">
+                <input type="password" id="password" name="password" placeholder="Enter your password">
+                <img th:src="@{/icons/hide.png}" class="toggle-eye" id="togglePassword" alt="" style="cursor: pointer;">
             </div>
+            <span id="passwordError" style="color: red; font-size: 13px; margin-top: 5px; display: block;"></span>
         </div>
 
         <div class="text-center">
@@ -60,7 +62,6 @@
             Don’t have an account?
             <a th:href="@{/signup}">Signup now</a>
         </p>
-
     </form>
 </div>
 

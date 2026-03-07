@@ -18,7 +18,9 @@ main, .content-wrapper {
     max-width: 420px;
     margin: 60px auto;
     padding: 40px 30px;
-    background-color: #E4E4E4;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
 }
 
 /* ===== Headings ===== */
@@ -119,6 +121,25 @@ color: #fff;
     text-decoration: underline;
 }
 
+.server-error-box {
+    background-color: #fde8e8; /* ഇളം ചുവപ്പ് ബാക്ക്ഗ്രൗണ്ട് */
+    border: 1px solid #f8b4b4; /* ചുവന്ന ബോർഡർ */
+    color: #c81e1e;            /* കടും ചുവപ്പ് അക്ഷരങ്ങൾ */
+    padding: 12px 15px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(200, 30, 30, 0.1);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* എറർ ബോക്സ് സ്മൂത്ത് ആയി വരാൻ ഒരു ചെറിയ ആനിമേഷൻ */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
 @media (max-width: 576px) {
     .login-form {
         padding: 20px;

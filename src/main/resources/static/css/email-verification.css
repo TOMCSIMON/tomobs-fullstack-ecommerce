@@ -11,7 +11,6 @@ body {
     background-color: #ffffff;
 }
 
-/* Center the card on the screen */
 .page-wrapper {
     display: flex;
     justify-content: center;
@@ -23,11 +22,10 @@ body {
 .assistance-card {
     background: #ffffff;
     width: 100%;
-    max-width: 500px; /* Max width 500px as requested */
+    max-width: 500px;
     padding: 40px;
     border-radius: 12px;
-    border: 1px solid #000;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); /* Card shadow effect */
+    box-shadow: 2px 4px 12px rgba(0,0,0,0.15);
 }
 
 h1 {
@@ -64,7 +62,7 @@ h1 {
 
 .input-container input {
     width: 100%;
-    padding: 12px 12px 12px 40px; /* Space for icon */
+    padding: 12px 12px 12px 40px;
     border: 1px solid #000;
     border-radius: 8px;
     font-size: 0.95rem;
@@ -85,7 +83,7 @@ h1 {
     color: #fff;
     padding: 14px;
     border: none;
-    border-radius: 25px; /* Rounded button like in your images */
+    border-radius: 25px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -96,7 +94,6 @@ h1 {
     background-color: #333;
 }
 
-/* Responsive adjustments for small phones */
 @media (max-width: 480px) {
     .assistance-card {
         padding: 25px;
