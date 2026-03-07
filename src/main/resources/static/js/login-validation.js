@@ -1,20 +1,19 @@
+function setupPasswordToggle(toggleId, inputId, hideIcon, viewIcon) {
+    const toggle = document.getElementById(toggleId);
+    const input = document.getElementById(inputId);
+
+    toggle.addEventListener("click", () => {
+        const type = input.type === "password" ? "text" : "password";
+        input.type = type;
+        toggle.src = type === "password" ? hideIcon : viewIcon;
+    });
+}
+
+setupPasswordToggle("togglePassword", "password", "/icons/hide.png", "/icons/view.png");
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    function setupPasswordToggle(toggleId, inputId, hideIcon, viewIcon) {
-        const toggle = document.getElementById(toggleId);
-        const input = document.getElementById(inputId);
-
-        if (toggle && input) {
-            toggle.addEventListener("click", () => {
-                const type = input.type === "password" ? "text" : "password";
-                input.type = type;
-                toggle.src = type === "password" ? hideIcon : viewIcon;
-            });
-        }
-    }
-
-
+        const loginForm = document.getElementById("login-form");
         const emailInput = document.getElementById("email");
         const passwordInput = document.getElementById("password");
         const emailError = document.getElementById("emailError");
