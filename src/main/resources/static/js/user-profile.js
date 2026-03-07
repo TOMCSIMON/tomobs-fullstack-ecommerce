@@ -1,4 +1,84 @@
-// 🟢 Sr. Tom's Reusable Password Toggle Helper
+
+function startEdit(iconElement) {
+    const group = iconElement.closest('.field-group');
+    const inputField = group.querySelector('.profile-input');
+    const actionButtons = group.querySelector('.action-buttons');
+
+    inputField.setAttribute('data-original-value', inputField.value);
+
+    inputField.removeAttribute('readonly');
+    inputField.focus();
+    inputField.classList.add('editing');
+
+    iconElement.style.display = 'none';
+    actionButtons.classList.remove('d-none');
+}
+
+function cancelEdit(buttonElement) {
+    const group = buttonElement.closest('.field-group');
+    const inputField = group.querySelector('.profile-input');
+    const iconElement = group.querySelector('.edit-icon');
+    const actionButtons = group.querySelector('.action-buttons');
+
+    inputField.value = inputField.getAttribute('data-original-value');
+
+    inputField.setAttribute('readonly', true);
+    inputField.classList.remove('editing');
+
+    actionButtons.classList.add('d-none');
+    iconElement.style.display = 'inline-block';
+}
+function saveEdit(buttonElement) {
+    const group = buttonElement.closest('.field-group');
+    const inputField = group.querySelector('.profile-input');
+    const iconElement = group.querySelector('.edit-icon');
+    const actionButtons = group.querySelector('.action-buttons');
+
+    const fieldName = inputField.getAttribute('data-field');
+    const newValue = inputField.value.trim();
+    const originalValue = inputField.getAttribute('data-original-value');
+
+    if (newValue === originalValue) {
+        cancelEdit(buttonElement);
+        return;
+    }
+
+    fetch('/profile/update', {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ field: fieldName, value: newValue })
+    })
+    .then(response => {
+        if (response.ok) {
+            inputField.setAttribute('data-original-value', newValue);
+            inputField.setAttribute('readonly', true);
+            inputField.classList.remove('editing');
+            actionButtons.classList.add('d-none');
+            iconElement.style.display = 'inline-block';
+
+            Toast.fire({
+                icon: 'success',
+                title: 'Profile updated successfully!'
+            });
+        } else {
+            Toast.fire({
+                icon: 'error',
+                title: 'Failed to update. Please try again.'
+            });
+            cancelEdit(buttonElement);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Toast.fire({
+            icon: 'error',
+            title: 'Something went wrong!'
+        });
+        cancelEdit(buttonElement);
+    });
+}
 function setupPasswordToggle(toggleId, inputId, hideIcon, viewIcon) {
     const toggle = document.getElementById(toggleId);
     const input = document.getElementById(inputId);
@@ -14,7 +94,6 @@ function setupPasswordToggle(toggleId, inputId, hideIcon, viewIcon) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
-    // 1. Setup Password Toggles
     setupPasswordToggle("toggleOldPassword", "oldPassword", "/icons/hide.png", "/icons/view.png");
     setupPasswordToggle("toggleNewPassword", "newPassword", "/icons/hide.png", "/icons/view.png");
     setupPasswordToggle("toggleConfirmNewPassword", "confirmNewPassword", "/icons/hide.png", "/icons/view.png");
@@ -31,25 +110,21 @@ document.addEventListener('DOMContentLoaded', function() {
             const newPassword = document.getElementById('newPassword').value;
             const confirmNewPassword = document.getElementById('confirmNewPassword').value;
 
-            // Error Elements
             const oldError = document.getElementById('oldPasswordError');
             const newError = document.getElementById('newPasswordError');
             const confirmError = document.getElementById('confirmNewPasswordError');
 
-            // Clear previous errors
             oldError.textContent = "";
             newError.textContent = "";
             confirmError.textContent = "";
 
             let isValid = true;
 
-            // 1. Old Password Check
             if (!oldPassword) {
                 oldError.textContent = "Please enter your current password.";
                 isValid = false;
             }
 
-            // 2. New Password Check
             if (!strongPasswordRegex.test(newPassword)) {
                 newError.textContent = "Must contain at least 8 chars, 1 uppercase, 1 lowercase, 1 number & 1 special char.";
                 isValid = false;
@@ -58,13 +133,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 isValid = false;
             }
 
-            // 3. Confirm Password Check
             if (newPassword !== confirmNewPassword) {
                 confirmError.textContent = "Passwords do not match.";
                 isValid = false;
             }
 
-            // എവിടെയെങ്കിലും തെറ്റുണ്ടെങ്കിൽ ഇവിടെ വെച്ച് നിർത്തും (API വിളിക്കില്ല)
             if (!isValid) return;
 
             const payload = {
@@ -94,7 +167,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     const errorData = await response.json();
 
-                    // ബാക്ക്എൻഡിൽ നിന്ന് "Wrong old password" എറർ വന്നാൽ അത് ഇൻപുട്ടിന് താഴെ കാണിക്കാം
                     if (errorData.message && errorData.message.toLowerCase().includes('old password')) {
                         oldError.textContent = "Incorrect old password. Please try again.";
                     } else {
