@@ -1,6 +1,7 @@
 
 <nav th:fragment="navbar" class="custom-navbar"
-     xmlns:th="http://www.w3.org/1999/xhtml">
+     xmlns:th="http://www.w3.org/1999/xhtml"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <div class="nav-container">
         <div class="logo">
             <a th:href="@{/}">
@@ -46,11 +47,11 @@
                         </div>
                     </a>
                     <hr>
-                    <a th:href="@{/login}" class="menu-item login-btn">
+                    <a th:href="@{/login}" class="menu-item login-btn" sec:authorize="isAnonymous()">
                         <img th:src="@{/icons/login.png}" alt="icon">
                         <div class="menu-text"><strong>Login</strong></div>
                     </a>
-                    <a th:href="@{/logout}" class="menu-item login-btn">
+                    <a th:href="@{/logout}" class="menu-item login-btn" sec:authorize="isAuthenticated()">
                         <img th:src="@{/icons/log-out.png}" alt="icon">
                         <div class="menu-text"><strong>Logout</strong></div>
                     </a>
