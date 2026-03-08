@@ -51,12 +51,4 @@ public class AddressController {
         userAddressService.addAddress(userAddressAddDTO);
         return "redirect:/address";
     }
-
-    // FOR DELETING ADDRESS
-    @GetMapping("/delete/{id}")
-    public String deleteAddress(@PathVariable Long id) {
-
-        userAddressService.deleteAddress(id);
-        return "redirect:/address";
-    }
 }
