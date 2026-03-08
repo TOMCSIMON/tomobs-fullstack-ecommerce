@@ -3,12 +3,14 @@ package com.tomobs.ecommerce.service.impl;
 import com.tomobs.ecommerce.config.CustomUserDetails;
 import com.tomobs.ecommerce.dto.UserAddressAddDTO;
 import com.tomobs.ecommerce.dto.UserAddressListDTO;
+import com.tomobs.ecommerce.dto.AddressUpdateDTO;
 import com.tomobs.ecommerce.mapper.AddressMapper;
 import com.tomobs.ecommerce.model.Address;
 import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.repository.UserAddressRepository;
 import com.tomobs.ecommerce.repository.UserRepository;
 import com.tomobs.ecommerce.service.UserAddressService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,18 +20,13 @@ import java.util.List;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserAddressServiceImpl implements UserAddressService {
 
     private final UserAddressRepository userAddressRepository;
     private final UserRepository userRepository;
     private final AddressMapper addressMapper;
 
-
-    public UserAddressServiceImpl(UserAddressRepository userAddressRepository, UserRepository userRepository, AddressMapper addressMapper) {
-        this.userAddressRepository = userAddressRepository;
-        this.userRepository = userRepository;
-        this.addressMapper = addressMapper;
-    }
 
     private Long getCurrentUserId() {
         Authentication authentication = SecurityContextHolder
@@ -72,6 +69,7 @@ public class UserAddressServiceImpl implements UserAddressService {
         userAddressRepository.save(address);
     }
 
+
     @Override
     public List<UserAddressListDTO> getAddress() {
 
@@ -88,8 +86,6 @@ public class UserAddressServiceImpl implements UserAddressService {
 
     }
 
-
-
     @Override
     public void deleteAddress(Long id) {
 
@@ -102,5 +98,30 @@ public class UserAddressServiceImpl implements UserAddressService {
             throw new RuntimeException("You are not allowed to delete this address");
         }
         userAddressRepository.deleteById(id);
+    }
+
+    @Override
+    public void updateAddress(AddressUpdateDTO dto) {
+
+        Long userId = getCurrentUserId();
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Address existingAddress = userAddressRepository.findById(dto.getId())
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        if (!existingAddress.getUser().getId().equals(userId)) {
+            throw new RuntimeException("You are not allowed to update this address");
+        }
+        if(dto.isDefault() && !existingAddress.isDefault()) {
+            userAddressRepository.findByUserAndIsDefaultTrue(user)
+                    .ifPresent(oldDefault -> {
+                        oldDefault.setDefault(false);
+                        userAddressRepository.save(oldDefault);
+                    });
+        }
+        addressMapper.updateDtoToEntity(dto, existingAddress);
+        userAddressRepository.save(existingAddress);
     }
 }
