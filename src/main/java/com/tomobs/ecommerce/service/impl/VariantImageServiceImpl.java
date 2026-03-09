@@ -5,6 +5,8 @@ import com.tomobs.ecommerce.model.VariantImage;
 import com.tomobs.ecommerce.repository.VariantImageRepository;
 import com.tomobs.ecommerce.service.VariantImageService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,17 +17,15 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class VariantImageServiceImpl implements VariantImageService {
 
     private final VariantImageRepository variantImageRepository;
 
     @Value("${product.images.upload.path}")
     private String uploadDir;
-
-    public VariantImageServiceImpl(VariantImageRepository variantImageRepository) {
-        this.variantImageRepository = variantImageRepository;
-    }
 
     @Override
     @Transactional
@@ -43,15 +43,14 @@ public class VariantImageServiceImpl implements VariantImageService {
         }
 
         // Log for debugging
-        System.out.println("Saving image to: " + uploadDir);
-        System.out.println("Original filename: " + file.getOriginalFilename());
-        System.out.println("File size: " + file.getSize() + " bytes");
+        log.info("Saving image to: {}",  uploadDir);
+        log.info("Original filename: {} ", file.getOriginalFilename());
+        log.info("File size: {} " , file.getSize() + " bytes");
 
         // ENSURE FOLDER EXISTS
         Path uploadPath = Paths.get(uploadDir);
         if (!Files.exists(uploadPath)) {
             Files.createDirectories(uploadPath);
-            System.out.println("Created upload directory: " + uploadPath.toAbsolutePath());
         }
 
         // GENERATE UNIQUE FILE NAME
@@ -60,27 +59,25 @@ public class VariantImageServiceImpl implements VariantImageService {
         if (originalFilename != null && originalFilename.contains(".")) {
             fileExtension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
-        String fileName = System.currentTimeMillis() + "_" + UUID.randomUUID().toString() + fileExtension;
+        String fileName = System.currentTimeMillis() + "_" + UUID.randomUUID() + fileExtension;
 
         // PATH WHERE FILE WILL BE SAVED
         Path filePath = uploadPath.resolve(fileName);
 
         // SAVE FILE TO DISK
         file.transferTo(filePath.toFile());
-        System.out.println("File saved to: " + filePath.toAbsolutePath());
+        log.info("File saved to: {}",  filePath.toAbsolutePath());
 
         // Check if this is the first image
         long existingImageCount = variantImageRepository.countByProductVariant(variant);
         boolean isPrimary = (existingImageCount == 0);
 
-        // SAVE TO DB RECORD
         VariantImage variantImage = new VariantImage();
         variantImage.setFileName(fileName);
         variantImage.setFilePath(filePath.toString());
-        variantImage.setPrimary(isPrimary); // First image is primary
+        variantImage.setPrimary(isPrimary);
         variantImage.setProductVariant(variant);
 
         VariantImage saved = variantImageRepository.save(variantImage);
-        System.out.println("Image record saved to database with ID: " + saved.getId());
     }
 }
