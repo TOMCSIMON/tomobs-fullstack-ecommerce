@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.repository;
 
+import com.tomobs.ecommerce.model.Product;
 import com.tomobs.ecommerce.model.ProductVariant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +13,6 @@ public interface ProductVariantRepository extends JpaRepository<ProductVariant, 
     @EntityGraph(attributePaths = {"product"})
     Page<ProductVariant> findAll(Pageable pageable);
 
-    List<ProductVariant> findByProductId(Long  id);
-
-    List<ProductVariant> findByProduct_ProductName(String name);
+    List<ProductVariant> findByProduct(Product product);
 
 }

@@ -1,12 +1,14 @@
 package com.tomobs.ecommerce.controller.Admin;
 
 import com.tomobs.ecommerce.dto.ProductAddDTO;
+import com.tomobs.ecommerce.dto.ProductEditDTO;
 import com.tomobs.ecommerce.dto.ProductListDTO;
 import com.tomobs.ecommerce.dto.ProductVariantAddDTO;
 import com.tomobs.ecommerce.model.ProductVariant;
 import com.tomobs.ecommerce.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/products")
 @RequiredArgsConstructor
@@ -89,4 +92,19 @@ public class AdminProductController {
         }
         return "redirect:/admin/products";
     }
+
+    @GetMapping("/edit/{id}")
+    public String showEditProductPage(
+            @PathVariable("id") Long id,
+            Model model) {
+
+        ProductEditDTO productEditDTO = productService.getProductForEdit(id);
+
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("brands", brandService.getAllBrands());
+        model.addAttribute("product", productEditDTO);
+
+        return "admin/edit-product";
+    }
+
 }
