@@ -80,4 +80,25 @@ public class VariantImageServiceImpl implements VariantImageService {
 
         VariantImage saved = variantImageRepository.save(variantImage);
     }
+
+    @Override
+    @Transactional
+    public void deleteImage(Long imageId) {
+        variantImageRepository.findById(imageId).ifPresent(image -> {
+            try {
+                // 1. Delete the physical file from the disk
+                Path filePath = Paths.get(image.getFilePath());
+                Files.deleteIfExists(filePath);
+                log.info("Deleted physical image file: {}", filePath.toAbsolutePath());
+
+                // 2. Delete the record from the database
+                variantImageRepository.delete(image);
+                log.info("Deleted image record from DB with ID: {}", imageId);
+
+            } catch (IOException e) {
+                log.error("Failed to delete image file: {}", image.getFilePath(), e);
+                throw new RuntimeException("Could not delete image file", e);
+            }
+        });
+    }
 }

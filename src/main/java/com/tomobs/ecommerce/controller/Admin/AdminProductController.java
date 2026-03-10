@@ -15,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -105,6 +107,26 @@ public class AdminProductController {
         model.addAttribute("product", productEditDTO);
 
         return "admin/edit-product";
+    }
+
+    @PostMapping("/update")
+    public String updateProduct(@ModelAttribute("product") ProductEditDTO productDTO,
+                                BindingResult result,
+                                RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            return "admin/edit-product";
+        }
+
+        try {
+            productService.updateProduct(productDTO);
+            redirectAttributes.addFlashAttribute("successMessage", "Product updated successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error updating product: " + e.getMessage());
+            return "redirect:/admin/products/edit/" + productDTO.getId();
+        }
+
+        return "redirect:/admin/products";
     }
 
 }

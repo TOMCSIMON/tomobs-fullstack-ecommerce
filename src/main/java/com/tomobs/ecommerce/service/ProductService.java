@@ -12,4 +12,6 @@ public interface ProductService {
     Page<ProductListDTO> getPaginatedProducts(int page, int size);
 
     ProductEditDTO getProductForEdit(Long id);
+
+    void updateProduct(ProductEditDTO productDTO) throws Exception;
 }

@@ -4,12 +4,14 @@ import com.tomobs.ecommerce.dto.*;
 import com.tomobs.ecommerce.model.*;
 import com.tomobs.ecommerce.repository.*;
 import com.tomobs.ecommerce.service.ProductService;
+import com.tomobs.ecommerce.service.VariantImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -22,6 +24,7 @@ public class ProductServiceImpl implements ProductService {
   private final VariantImageRepository imageRepository;
   private final BrandRepository brandRepository;
   private final CategoryRepository categoryRepository;
+  private final VariantImageService variantImageService;
 
   @Override
   @Transactional
@@ -106,5 +109,63 @@ public class ProductServiceImpl implements ProductService {
       dto.getVariants().add(variantEditDTO);
     }
     return dto;
+  }
+
+  @Override
+  @Transactional
+  public void updateProduct(ProductEditDTO dto) throws Exception {
+
+    Product existingProduct = productRepository.findById(dto.getId())
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+    existingProduct.setProductName(dto.getProductName());
+
+    Category category = categoryRepository.findById(dto.getCategoryId())
+            .orElseThrow(() -> new RuntimeException("Category not found"));
+    existingProduct.setCategory(category);
+
+    Brand brand = brandRepository.findById(dto.getBrandId())
+            .orElseThrow(() -> new RuntimeException("Brand not found"));
+    existingProduct.setBrand(brand);
+
+    for (ProductVariantEditDTO variantDTO : dto.getVariants()) {
+
+      ProductVariant variant;
+
+      if (variantDTO.getId() != null) {
+        variant = productVariantRepository.findById(variantDTO.getId())
+                .orElseThrow(() -> new RuntimeException("Variant not found"));
+
+        if (variantDTO.getDeletedImageIds() != null && !variantDTO.getDeletedImageIds().isEmpty()) {
+          for (Long imageId : variantDTO.getDeletedImageIds()) {
+            variantImageService.deleteImage(imageId);
+          }
+        }
+      } else {
+        variant = new ProductVariant();
+        variant.setProduct(existingProduct);
+      }
+
+      variant.setVariantName(variantDTO.getVariantName());
+      variant.setSkuCode(variantDTO.getSkuCode());
+      variant.setStock(variantDTO.getStock());
+      variant.setColor(variantDTO.getColor());
+      variant.setPrice(variantDTO.getPrice());
+      variant.setRam(variantDTO.getRam());
+      variant.setStorage(variantDTO.getStorage());
+      variant.setKeyFeatures(variantDTO.getKeyFeatures());
+
+      variant = productVariantRepository.save(variant);
+
+      if (variantDTO.getNewImages() != null && !variantDTO.getNewImages().isEmpty()) {
+        for (MultipartFile file : variantDTO.getNewImages()) {
+          if (!file.isEmpty()) {
+            variantImageService.saveImage(file , variant);
+          }
+        }
+      }
+    }
+
+    productRepository.save(existingProduct);
   }
 }

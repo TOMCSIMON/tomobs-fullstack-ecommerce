@@ -8,5 +8,7 @@ import java.io.IOException;
 public interface VariantImageService {
 
     void saveImage(MultipartFile file, ProductVariant variant) throws IOException;
+
+    void deleteImage(Long imageId);
 }
 

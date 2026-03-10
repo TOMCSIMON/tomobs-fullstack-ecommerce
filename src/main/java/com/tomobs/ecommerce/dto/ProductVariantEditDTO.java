@@ -25,6 +25,6 @@ public class ProductVariantEditDTO {
     private String keyFeatures;
 
     private List<MultipartFile> newImages = new ArrayList<>();
-
+    private List<Long> deletedImageIds = new ArrayList<>();
     private List<VariantImageDTO> existingImages = new ArrayList<>();
 }
