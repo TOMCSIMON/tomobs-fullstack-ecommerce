@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,11 +52,16 @@ public class ProductServiceImpl implements ProductService {
   }
 
   @Override
-  public Page<ProductListDTO> getPaginatedProducts(int page, int size) {
+  public Page<ProductListDTO> getPaginatedProducts(String keyword, int page, int size) {
 
-    Pageable pageable = PageRequest.of(page, size);
+    Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-    Page<Product> productPage = productRepository.findAll(pageable);
+    Page<Product> productPage;
+    if (keyword != null && !keyword.trim().isEmpty()) {
+      productPage = productRepository.findByProductNameContainingIgnoreCase(keyword, pageable);
+    }else {
+      productPage = productRepository.findAll(pageable);
+    }
 
     return productPage.map(
         product ->
@@ -167,5 +173,29 @@ public class ProductServiceImpl implements ProductService {
     }
 
     productRepository.save(existingProduct);
+  }
+
+  @Override
+  public void deleteProduct(Long id) {
+
+    Product existingProduct = productRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+
+
+    productRepository.deleteById(id);
+
+    List<ProductVariant> variants = productVariantRepository.findByProduct(existingProduct);
+
+    for(ProductVariant variant : variants) {
+      productVariantRepository.deleteById(variant.getId());
+
+     List<VariantImage> images = imageRepository.findByProductVariant(variant);
+
+     for(VariantImage image : images) {
+
+       variantImageService.deleteImage(image.getId());
+     }
+    }
+
   }
 }

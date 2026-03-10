@@ -38,8 +38,9 @@ public class AdminProductController {
     public String showListProducts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String keyword,
             Model model) {
-        Page<ProductListDTO> productPage = productService.getPaginatedProducts(page, size);
+        Page<ProductListDTO> productPage = productService.getPaginatedProducts(keyword, page, size);
 
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", page);
@@ -129,4 +130,11 @@ public class AdminProductController {
         return "redirect:/admin/products";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteProduct(
+            @PathVariable("id") Long id) {
+
+        productService.deleteProduct(id);
+        return "redirect:/admin/products";
+    }
 }

@@ -6,6 +6,7 @@ import com.tomobs.ecommerce.dto.CategoryDTO;
 import com.tomobs.ecommerce.service.BrandService;
 import com.tomobs.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -17,17 +18,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/admin/brands")
 @Slf4j
+@RequiredArgsConstructor
 public class AdminBrandController {
 
     private final BrandService brandService;
     private final CategoryService categoryService;
-
-    public AdminBrandController(BrandService brandService,
-                                CategoryService  categoryService) {
-
-        this.brandService = brandService;
-        this.categoryService = categoryService;
-    }
 
     @GetMapping
     public String showBrands(

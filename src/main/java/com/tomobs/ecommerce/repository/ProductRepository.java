@@ -19,4 +19,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.id = :productId")
     Optional<Product> findByIdWithVariantsAndImages(@Param("productId") Long productId);
 
+    Page<Product> findByProductNameContainingIgnoreCase(String productName, Pageable pageable);
+
 }

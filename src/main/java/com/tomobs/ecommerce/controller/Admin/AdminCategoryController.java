@@ -3,6 +3,7 @@ package com.tomobs.ecommerce.controller.Admin;
 import com.tomobs.ecommerce.dto.CategoryDTO;
 import com.tomobs.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -13,14 +14,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Slf4j
 @Controller
 @RequestMapping("/admin/categories")
+@RequiredArgsConstructor
 public class AdminCategoryController {
 
   private final CategoryService categoryService;
-
-  public AdminCategoryController(CategoryService categoryService) {
-
-    this.categoryService = categoryService;
-  }
 
   @GetMapping
   public String showCategories(

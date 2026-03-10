@@ -9,9 +9,11 @@ public interface ProductService {
 
     Long addProductAndReturnId(ProductAddDTO productAddDTO);
 
-    Page<ProductListDTO> getPaginatedProducts(int page, int size);
+    Page<ProductListDTO> getPaginatedProducts(String keyword, int page, int size);
 
     ProductEditDTO getProductForEdit(Long id);
 
     void updateProduct(ProductEditDTO productDTO) throws Exception;
+
+    void deleteProduct(Long id);
 }
