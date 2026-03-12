@@ -5,9 +5,11 @@ import com.tomobs.ecommerce.dto.ProductEditDTO;
 import com.tomobs.ecommerce.dto.ProductListDTO;
 import org.springframework.data.domain.Page;
 
+import java.io.IOException;
+
 public interface ProductService {
 
-    Long addProductAndReturnId(ProductAddDTO productAddDTO);
+    void addProduct(ProductAddDTO productAddDTO) throws IOException;
 
     Page<ProductListDTO> getPaginatedProducts(String keyword, int page, int size);
 

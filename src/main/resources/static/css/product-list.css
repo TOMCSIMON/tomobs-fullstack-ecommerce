@@ -1,42 +1,214 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
-/* Profile Hover Dropdown */
-
-.category {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
+body {
+    background-color: #f9f9f9;
+    font-family: "Poppins",  sans-serif;
 }
+ /* 🟢 LEFT SIDEBAR (FILTER) 🟢 */
+ .filter-sidebar {
+     background-color: #ffffff;
+     border: 1px solid #e0e0e0;
+     padding: 24px;
+     box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+     min-height: 800px;
+ }
 
+ .clear-all-link {
+     color: #4db8ff; /* Light blue link color */
+     text-decoration: none;
+     font-size: 13px;
+     font-weight: 500;
+ }
+ .clear-all-link:hover {
+     text-decoration: underline;
+ }
 
-/* Dropdown box */
-.category-dropdown {
-    position: absolute;
-    top: 100%;
-    left: 0;
+ .filter-divider {
+     border-color: #e0e0e0;
+     margin: 20px 0;
+     opacity: 1;
+ }
 
-    background-color: #000;
-    min-width: 150px;
-    border-radius: 5px;
+ /* Active Tags */
+ .filter-tag {
+     background-color: #e0e0e0;
+     color: #333;
+     font-size: 11px;
+     padding: 4px 10px;
+     border-radius: 4px;
+     display: inline-flex;
+     align-items: center;
+     gap: 5px;
+ }
 
-    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
-    padding: 8px 0;
+ .filter-tag .bi-x {
+     cursor: pointer;
+     font-size: 14px;
+ }
 
-    display: none;
-    z-index: 1000;
-}
-/* Show on hover */
-.category:hover .category-dropdown {
-    display: block;
-}
+ /* Accordions */
+ .filter-title {
+     font-size: 12px;
+     font-weight: 600;
+     color: #333;
+     letter-spacing: 0.5px;
+ }
 
-/* Dropdown items */
-.category-dropdown a {
-    display: block;
-    padding: 8px 14px;
+ .toggle-icon {
+     font-size: 12px;
+     color: #333;
+     transition: transform 0.3s ease;
+ }
 
-    text-decoration: none;
-    font-size: 14px;
-    color: #fff;
-}
+ /* Custom Green Checkboxes */
+ .custom-checkbox-group {
+     margin-bottom: 12px;
+     display: flex;
+     align-items: center;
+ }
 
+ .custom-checkbox-group .form-check-input {
+     width: 16px;
+     height: 16px;
+     margin-top: 0;
+     border: 1px solid #c2c2c2;
+     border-radius: 2px;
+     cursor: pointer;
+ }
 
+ .custom-checkbox-group .form-check-input:checked {
+     background-color: #00e676; /* Bright Green */
+     border-color: #00e676;
+ }
+
+ .custom-checkbox-group .form-check-input:focus {
+     box-shadow: none;
+ }
+
+ .custom-checkbox-group .form-check-label {
+     font-size: 13px;
+     color: #212121;
+     margin-left: 8px;
+     cursor: pointer;
+ }
+
+ .show-more-link {
+     color: #4db8ff;
+     text-decoration: none;
+     font-size: 12px;
+ }
+
+ /* 🟢 RIGHT CONTENT (SORT BAR) 🟢 */
+ .sort-title {
+     font-size: 14px;
+     font-weight: 600;
+     margin-right: 20px;
+ }
+
+ .sort-item {
+     font-size: 13px;
+     color: #666;
+     text-decoration: none;
+     font-weight: 500;
+ }
+
+ .sort-item.active {
+     color: #4db8ff; /* Light blue active color */
+     border-bottom: 2px solid #4db8ff;
+     padding-bottom: 4px;
+ }
+
+ /* 🟢 PRODUCT CARD STYLES 🟢 */
+ .product-card {
+     background: transparent;
+     border: none;
+     padding: 10px;
+     position: relative;
+     height: 100%;
+     transition: transform 0.2s;
+ }
+
+ .product-card:hover {
+     transform: translateY(-2px);
+ }
+
+ .wishlist-btn {
+     position: absolute;
+     top: 5px;
+     right: 15px;
+     color: #878787;
+     font-size: 1.2rem;
+     cursor: pointer;
+     z-index: 2;
+ }
+
+ .img-wrapper {
+     background: #fff;
+     border: 1px solid #f0f0f0;
+     border-radius: 8px;
+     height: 240px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin-bottom: 15px;
+     padding: 15px;
+ }
+
+ .img-wrapper img {
+     max-height: 100%;
+     max-width: 100%;
+     object-fit: contain;
+ }
+
+ .product-title {
+     font-size: 13px;
+     line-height: 1.4;
+     font-weight: 500;
+     display: -webkit-box;
+     -webkit-line-clamp: 2;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+ }
+
+ .price-block {
+     display: flex;
+     align-items: center;
+     gap: 8px;
+ }
+
+ .current-price {
+     font-size: 15px;
+     font-weight: 700;
+     color: #212121;
+ }
+
+ .mrp-price {
+     font-size: 11px;
+ }
+
+ .discount-percent {
+     font-size: 11px;
+     color: #00e676; /* Bright Green */
+ }
+
+ /* Pagination */
+ .custom-pagination {
+     display: inline-flex;
+     gap: 8px;
+ }
+
+ .page-link-btn {
+     border: 1px solid #d4d4d4;
+     background: #fff;
+     color: #212121;
+     padding: 4px 14px;
+     border-radius: 4px;
+     text-decoration: none;
+     font-size: 12px;
+ }
+
+ .page-link-btn.active {
+     background: #878787;
+     color: #fff;
+     border-color: #878787;
+ }

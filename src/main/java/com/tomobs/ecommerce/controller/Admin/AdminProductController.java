@@ -28,12 +28,9 @@ import java.util.List;
 public class AdminProductController {
 
     private final ProductService productService;
-    private final ProductVariantService productVariantService;
     private final CategoryService categoryService;
     private final BrandService brandService;
-    private final  VariantImageService variantImageService;
 
-    // PAGINATED PRODUCT LIST
     @GetMapping
     public String showListProducts(
             @RequestParam(defaultValue = "0") int page,
@@ -51,7 +48,6 @@ public class AdminProductController {
         return "admin/product";
     }
 
-    //LOADING THE ADD PRODUCT PAGE
     @GetMapping("/add")
     public String showAddProductPage(Model model) {
 
@@ -77,22 +73,8 @@ public class AdminProductController {
 
             return "admin/add-product";
         }
+        productService.addProduct(productAddDTO);
 
-        Long savedProductId = productService.addProductAndReturnId(productAddDTO);
-
-        for(ProductVariantAddDTO v : productAddDTO.getVariants()) {
-
-            v.setProductId(savedProductId);
-            ProductVariant savedVariant = productVariantService.addProductVariant(v);
-
-            List<MultipartFile> validImages = v.getImages().stream()
-                    .filter(file -> file != null && !file.isEmpty())
-                    .toList();
-
-            for(MultipartFile file : validImages) {
-                variantImageService.saveImage(file, savedVariant);
-            }
-        }
         return "redirect:/admin/products";
     }
 

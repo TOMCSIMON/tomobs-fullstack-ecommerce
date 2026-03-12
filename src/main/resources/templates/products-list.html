@@ -1,147 +1,195 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>ToMobs</title>
-
+    <title>ToMobs - Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/navbar.css}">
     <link rel="stylesheet" th:href="@{/css/footer.css}">
     <link rel="stylesheet" th:href="@{/css/product-list.css}">
-
-    <link th:href="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css}"
-          rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 
-<body style="background-color:#f1f3f6;">
+<body>
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
-<div class="container" style="margin-top: 100px;">
+<div class="container-fluid main-container" style="margin-top: 100px; max-width: 1400px; padding: 0 30px;">
+    <div class="row">
 
-    <h4><a>Product</a></h4>
+        <div class="col-lg-3 col-md-4 mb-4 d-none d-md-block">
+            <div class="filter-sidebar">
 
-    <!-- Filter + Sort Bar -->
-    <div class="d-flex align-items-center justify-content-between my-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0 fw-bold" style="font-size: 1.5rem;">Filters</h4>
+                    <a href="#" id="clearAllFilters" class="clear-all-link">clear all</a>
+                </div>
 
-        <!-- LEFT: Filters -->
-        <div class="d-flex flex-wrap align-items-center gap-2">
+                <div id="activeFiltersContainer" class="active-filters d-flex flex-wrap gap-2 mb-3">
+                </div>
 
-            <!-- Categories -->
+                <hr class="filter-divider">
 
-            <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle"
-                        type="button"
-                        data-bs-toggle="dropdown">
-                    Categories
-                </button>
-
-                <ul class="dropdown-menu">
-                    <li th:each="category : ${categories}">
-                        <a class="dropdown-item"
-                           th:text="${category.name}"
-                           th:href="@{/products(categoryId=${category.id})}">
-                            Category Name
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Brand -->
-            <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    Brand
-                </button>
-                <ul class="dropdown-menu">
-                    <li th:each="brand : ${brands}">
-                        <a class="dropdown-item"
-                           th:text="${brand.name}"
-                           th:href="@{/products(brandId=${brand.id})}">
-                            Category Name
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Price -->
-            <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    Price
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Below ₹20,000</a></li>
-                    <li><a class="dropdown-item" href="#">₹20,000 - ₹40,000</a></li>
-                    <li><a class="dropdown-item" href="#">Above ₹40,000</a></li>
-                </ul>
-            </div>
-
-            <!-- RAM -->
-            <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    RAM (GB)
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">4 GB</a></li>
-                    <li><a class="dropdown-item" href="#">8 GB</a></li>
-                    <li><a class="dropdown-item" href="#">16 GB</a></li>
-                </ul>
-            </div>
-
-        </div>
-
-        <!-- RIGHT: Sort By -->
-        <div class="dropdown">
-            <button class="btn btn-light dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                Sort by Relevancy
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Relevancy</a></li>
-                <li><a class="dropdown-item" href="#">Price: Low to High</a></li>
-                <li><a class="dropdown-item" href="#">Price: High to Low</a></li>
-                <li><a class="dropdown-item" href="#">Newest First</a></li>
-            </ul>
-        </div>
-
-    </div>
-
-
-    <div class="container">
-        <div class="row">
-            <div th:each="product : ${products}" class="col-lg-4 col-md-6 mb-4">
-                <div class="card">
-                    <img th:src="@{${product.imageUrl}}"
-                         class="card-img-top"
-                         th:alt="${product.productName}">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${product.productName}">Product Name</h5>
-                        <p class="card-text" th:text="${product.variantName}">Variant Name</p>
-                        <p class="card-text">
-                            <strong th:text="${'₹' + product.price}">Price</strong>
-                        </p>
-                        <a th:href="@{/products/detail/{id}(id=${product.productId})}"
-                           class="btn btn-dark">View Details</a>
+                <div class="filter-group">
+                    <div class="filter-header d-flex justify-content-between align-items-center collapsed"
+                         data-bs-toggle="collapse"
+                         data-bs-target="#collapseCategories" aria-expanded="false" style="cursor: pointer;">
+                        <span class="filter-title">CATEGORIES</span>
+                        <i class="bi bi-chevron-down toggle-icon"></i>
+                    </div>
+                    <div id="collapseCategories" class="collapse mt-3">
+                        <div th:each="category : ${categories}" class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox"
+                                   th:id="'category-' + ${category.id}"
+                                   th:value="${category.id}"
+                                   th:data-name="${category.name}">
+                            <label class="form-check-label"
+                                   th:for="'category-' + ${category.id}"
+                                   th:text="${category.name}"></label>
+                        </div>
                     </div>
                 </div>
+
+                <hr class="filter-divider">
+
+                <div class="filter-group">
+                    <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseBrands" aria-expanded="false" style="cursor: pointer;">
+                        <span class="filter-title">BRANDS</span>
+                        <i class="bi bi-chevron-down toggle-icon"></i>
+                    </div>
+                    <div id="collapseBrands" class="collapse mt-3">
+                        <div th:each="brand : ${brands}" class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" th:id="'brand-' + ${brand.id}" th:value="${brand.id}" th:data-name="${brand.name}">
+                            <label class="form-check-label" th:for="'brand-' + ${brand.id}" th:text="${brand.name}"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="filter-divider">
+
+                <div class="filter-group">
+                    <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseRam" aria-expanded="false" style="cursor: pointer;">
+                        <span class="filter-title">RAM</span>
+                        <i class="bi bi-chevron-down toggle-icon"></i>
+                    </div>
+                    <div id="collapseRam" class="collapse mt-3">
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-4gb" value="4 GB" data-name="4 GB">
+                            <label class="form-check-label" for="ram-4gb">4 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-8gb" value="8 GB" data-name="8 GB">
+                            <label class="form-check-label" for="ram-8gb">8 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-12gb" value="12 GB" data-name="12 GB">
+                            <label class="form-check-label" for="ram-12gb">12 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-16gb" value="16 GB" data-name="16 GB">
+                            <label class="form-check-label" for="ram-16gb">16 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-32gb" value="32 GB" data-name="32 GB">
+                            <label class="form-check-label" for="ram-32gb">32 GB</label>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="filter-divider">
+
+                <div class="filter-group">
+                    <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseStorage" aria-expanded="false" style="cursor: pointer;">
+                        <span class="filter-title">STORAGE</span>
+                        <i class="bi bi-chevron-down toggle-icon"></i>
+                    </div>
+                    <div id="collapseStorage" class="collapse mt-3">
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-64" value="64 GB" data-name="64 GB">
+                            <label class="form-check-label" for="storage-64">64 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-128" value="128 GB" data-name="128 GB">
+                            <label class="form-check-label" for="storage-128">128 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-256" value="256 GB" data-name="256 GB">
+                            <label class="form-check-label" for="storage-256">256 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-512" value="512 GB" data-name="512 GB">
+                            <label class="form-check-label" for="storage-512">512 GB</label>
+                        </div>
+                        <div class="form-check custom-checkbox-group">
+                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-1TB" value="1 TB" data-name="1 TB">
+                            <label class="form-check-label" for="storage-1TB">1 TB</label>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <!-- Pagination -->
-        <nav th:if="${totalPages > 1}">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                    <a class="page-link" th:href="@{/products(page=${currentPage - 1})}"> < </a>
-                </li>
-                <li class="page-item"
-                    th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                    th:classappend="${i == currentPage} ? 'active'">
-                    <a class="page-link" th:href="@{/products(page=${i})}" th:text="${i + 1}">1</a>
-                </li>
-                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                    <a class="page-link" th:href="@{/products(page=${currentPage + 1})}"> > </a>
-                </li>
-            </ul>
-        </nav>
+        <div class="col-lg-9 col-md-8">
+
+            <div class="sort-bar d-flex align-items-center flex-wrap mb-4 pb-3">
+                <span class="sort-title text-dark">Sort By</span>
+                <div class="sort-links d-flex flex-wrap gap-4">
+                    <a href="#" class="sort-item active" data-sort="Relevance">Relevance</a>
+                    <a href="#" class="sort-item" data-sort="PriceAsc">Price -- Low to High</a>
+                    <a href="#" class="sort-item" data-sort="PriceDesc">Price -- High to Low</a>
+                    <a href="#" class="sort-item" data-sort="Newest">Newest First</a>
+                </div>
+            </div>
+
+            <div id="product-grid-container" th:fragment="product-grid-fragment">
+
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
+                    <div th:each="product : ${products}" class="col">
+                        <a th:href="@{/products/detail/{id}(id=${product.productId})}" class="text-decoration-none">
+                            <div class="product-card">
+
+                                <div class="wishlist-btn">
+                                    <i class="bi bi-heart"></i>
+                                </div>
+
+                                <div class="img-wrapper">
+                                    <img th:src="@{${product.imageUrl}}" th:alt="${product.productName}">
+                                </div>
+
+                                <div class="product-info">
+                                    <h6 class="product-title text-dark" th:text="${product.productName + ' (' + product.variantName + ')'}">
+                                        Product Name
+                                    </h6>
+
+                                    <div class="price-block mt-2">
+                                        <span class="current-price" th:text="${'₹' + #numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">₹0.00</span>
+                                        <span class="mrp-price text-muted text-decoration-line-through">₹49,999</span>
+                                        <span class="discount-percent fw-bold">10% Off</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <hr class="mt-4 mb-0" style="border-top: 1px solid #e0e0e0; opacity: 1;">
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center mt-5 mb-5" th:if="${totalPages > 1}">
+                    <div class="custom-pagination">
+                        <a th:if="${currentPage > 0}" href="#" class="page-link-btn ajax-page-link" th:data-page="${currentPage - 1}">Prev</a>
+                        <a class="page-link-btn active" th:text="${currentPage + 1}">1</a>
+                        <a th:if="${currentPage < totalPages - 1}" href="#" class="page-link-btn ajax-page-link" th:data-page="${currentPage + 1}">Next</a>
+                    </div>
+                </div>
+
+
+            </div> </div>
     </div>
 </div>
+
 <div th:insert="~{fragments/footer :: footer}"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/product-list.js}"></script>
 
 </body>
+</html>

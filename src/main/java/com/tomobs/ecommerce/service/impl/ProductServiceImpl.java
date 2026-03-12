@@ -4,6 +4,7 @@ import com.tomobs.ecommerce.dto.*;
 import com.tomobs.ecommerce.model.*;
 import com.tomobs.ecommerce.repository.*;
 import com.tomobs.ecommerce.service.ProductService;
+import com.tomobs.ecommerce.service.ProductVariantService;
 import com.tomobs.ecommerce.service.VariantImageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,11 +27,12 @@ public class ProductServiceImpl implements ProductService {
   private final VariantImageRepository imageRepository;
   private final BrandRepository brandRepository;
   private final CategoryRepository categoryRepository;
+  private final ProductVariantService productVariantService;
   private final VariantImageService variantImageService;
 
   @Override
   @Transactional
-  public Long addProductAndReturnId(ProductAddDTO productAddDTO) {
+  public void addProduct(ProductAddDTO productAddDTO) throws IOException {
 
     Brand brand =
         brandRepository
@@ -48,7 +51,19 @@ public class ProductServiceImpl implements ProductService {
 
     productRepository.save(product);
 
-    return product.getId();
+    for(ProductVariantAddDTO variantAddDTO : productAddDTO.getVariants()) {
+
+      variantAddDTO.setProductId(product.getId());
+      ProductVariant savedVariant = productVariantService.addProductVariant(variantAddDTO);
+
+      List<MultipartFile> validImages = variantAddDTO.getImages().stream()
+              .filter(file -> file != null && !file.isEmpty())
+              .toList();
+
+      for(MultipartFile file : validImages) {
+        variantImageService.saveImage(file, savedVariant);
+      }
+    }
   }
 
   @Override
