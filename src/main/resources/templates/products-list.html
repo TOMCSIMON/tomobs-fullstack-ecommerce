@@ -17,122 +17,141 @@
 <div class="container-fluid main-container" style="margin-top: 100px; max-width: 1400px; padding: 0 30px;">
     <div class="row">
 
-        <div class="col-lg-3 col-md-4 mb-4 d-none d-md-block">
-            <div class="filter-sidebar">
+        <div class="col-lg-3 col-md-4 mb-4">
 
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0 fw-semibold" style="font-size: 1.5rem;">FILTERS</h4>
-                    <a href="#" id="clearAllFilters" class="clear-all-link">clear all</a>
+            <div class="offcanvas-md offcanvas-start border-0" tabindex="-1" id="offcanvasFilter" aria-labelledby="offcanvasFilterLabel">
+
+                <div class="offcanvas-header border-bottom d-md-none">
+                    <h5 class="offcanvas-title fw-semibold" id="offcanvasFilterLabel">FILTERS</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#offcanvasFilter" aria-label="Close"></button>
                 </div>
 
-                <div id="activeFiltersContainer" class="active-filters d-flex flex-wrap gap-2 mb-3">
+                <div class="offcanvas-body p-0">
+                    <div class="filter-sidebar w-100">
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="mb-0 fw-semibold d-none d-md-block" style="font-size: 1.5rem;">FILTERS</h4>
+                            <a href="#" id="clearAllFilters" class="clear-all-link ms-auto">clear all</a>
+                        </div>
+
+                        <div id="activeFiltersContainer" class="active-filters d-flex flex-wrap gap-2 mb-3"></div>
+
+                        <hr class="filter-divider">
+
+                        <div class="filter-group">
+                            <div class="filter-header d-flex justify-content-between align-items-center collapsed"
+                                 data-bs-toggle="collapse"
+                                 data-bs-target="#collapseCategories" aria-expanded="false" style="cursor: pointer;">
+                                <span class="filter-title">CATEGORIES</span>
+                                <i class="bi bi-chevron-down toggle-icon"></i>
+                            </div>
+                            <div id="collapseCategories" class="collapse mt-3">
+                                <div th:each="category : ${categories}" class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox"
+                                           th:id="'category-' + ${category.id}"
+                                           th:value="${category.id}"
+                                           th:data-name="${category.name}">
+                                    <label class="form-check-label"
+                                           th:for="'category-' + ${category.id}"
+                                           th:text="${category.name}"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="filter-divider">
+
+                        <div class="filter-group">
+                            <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseBrands" aria-expanded="false" style="cursor: pointer;">
+                                <span class="filter-title">BRANDS</span>
+                                <i class="bi bi-chevron-down toggle-icon"></i>
+                            </div>
+                            <div id="collapseBrands" class="collapse mt-3">
+                                <div th:each="brand : ${brands}" class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" th:id="'brand-' + ${brand.id}" th:value="${brand.id}" th:data-name="${brand.name}">
+                                    <label class="form-check-label" th:for="'brand-' + ${brand.id}" th:text="${brand.name}"></label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="filter-divider">
+
+                        <div class="filter-group">
+                            <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseRam" aria-expanded="false" style="cursor: pointer;">
+                                <span class="filter-title">RAM</span>
+                                <i class="bi bi-chevron-down toggle-icon"></i>
+                            </div>
+                            <div id="collapseRam" class="collapse mt-3">
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="ram-4gb" value="4 GB" data-name="4 GB">
+                                    <label class="form-check-label" for="ram-4gb">4 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="ram-8gb" value="8 GB" data-name="8 GB">
+                                    <label class="form-check-label" for="ram-8gb">8 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="ram-12gb" value="12 GB" data-name="12 GB">
+                                    <label class="form-check-label" for="ram-12gb">12 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="ram-16gb" value="16 GB" data-name="16 GB">
+                                    <label class="form-check-label" for="ram-16gb">16 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="ram-32gb" value="32 GB" data-name="32 GB">
+                                    <label class="form-check-label" for="ram-32gb">32 GB</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="filter-divider">
+
+                        <div class="filter-group">
+                            <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseStorage" aria-expanded="false" style="cursor: pointer;">
+                                <span class="filter-title">STORAGE</span>
+                                <i class="bi bi-chevron-down toggle-icon"></i>
+                            </div>
+                            <div id="collapseStorage" class="collapse mt-3">
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="storage-64" value="64 GB" data-name="64 GB">
+                                    <label class="form-check-label" for="storage-64">64 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="storage-128" value="128 GB" data-name="128 GB">
+                                    <label class="form-check-label" for="storage-128">128 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="storage-256" value="256 GB" data-name="256 GB">
+                                    <label class="form-check-label" for="storage-256">256 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="storage-512" value="512 GB" data-name="512 GB">
+                                    <label class="form-check-label" for="storage-512">512 GB</label>
+                                </div>
+                                <div class="form-check custom-checkbox-group">
+                                    <input class="form-check-input filter-checkbox" type="checkbox" id="storage-1TB" value="1 TB" data-name="1 TB">
+                                    <label class="form-check-label" for="storage-1TB">1 TB</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-
-                <hr class="filter-divider">
-
-                <div class="filter-group">
-                    <div class="filter-header d-flex justify-content-between align-items-center collapsed"
-                         data-bs-toggle="collapse"
-                         data-bs-target="#collapseCategories" aria-expanded="false" style="cursor: pointer;">
-                        <span class="filter-title">CATEGORIES</span>
-                        <i class="bi bi-chevron-down toggle-icon"></i>
-                    </div>
-                    <div id="collapseCategories" class="collapse mt-3">
-                        <div th:each="category : ${categories}" class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox"
-                                   th:id="'category-' + ${category.id}"
-                                   th:value="${category.id}"
-                                   th:data-name="${category.name}">
-                            <label class="form-check-label"
-                                   th:for="'category-' + ${category.id}"
-                                   th:text="${category.name}"></label>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="filter-divider">
-
-                <div class="filter-group">
-                    <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseBrands" aria-expanded="false" style="cursor: pointer;">
-                        <span class="filter-title">BRANDS</span>
-                        <i class="bi bi-chevron-down toggle-icon"></i>
-                    </div>
-                    <div id="collapseBrands" class="collapse mt-3">
-                        <div th:each="brand : ${brands}" class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" th:id="'brand-' + ${brand.id}" th:value="${brand.id}" th:data-name="${brand.name}">
-                            <label class="form-check-label" th:for="'brand-' + ${brand.id}" th:text="${brand.name}"></label>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="filter-divider">
-
-                <div class="filter-group">
-                    <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseRam" aria-expanded="false" style="cursor: pointer;">
-                        <span class="filter-title">RAM</span>
-                        <i class="bi bi-chevron-down toggle-icon"></i>
-                    </div>
-                    <div id="collapseRam" class="collapse mt-3">
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-4gb" value="4 GB" data-name="4 GB">
-                            <label class="form-check-label" for="ram-4gb">4 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-8gb" value="8 GB" data-name="8 GB">
-                            <label class="form-check-label" for="ram-8gb">8 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-12gb" value="12 GB" data-name="12 GB">
-                            <label class="form-check-label" for="ram-12gb">12 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-16gb" value="16 GB" data-name="16 GB">
-                            <label class="form-check-label" for="ram-16gb">16 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="ram-32gb" value="32 GB" data-name="32 GB">
-                            <label class="form-check-label" for="ram-32gb">32 GB</label>
-                        </div>
-                    </div>
-                </div>
-
-                <hr class="filter-divider">
-
-                <div class="filter-group">
-                    <div class="filter-header d-flex justify-content-between align-items-center collapsed" data-bs-toggle="collapse" data-bs-target="#collapseStorage" aria-expanded="false" style="cursor: pointer;">
-                        <span class="filter-title">STORAGE</span>
-                        <i class="bi bi-chevron-down toggle-icon"></i>
-                    </div>
-                    <div id="collapseStorage" class="collapse mt-3">
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-64" value="64 GB" data-name="64 GB">
-                            <label class="form-check-label" for="storage-64">64 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-128" value="128 GB" data-name="128 GB">
-                            <label class="form-check-label" for="storage-128">128 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-256" value="256 GB" data-name="256 GB">
-                            <label class="form-check-label" for="storage-256">256 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-512" value="512 GB" data-name="512 GB">
-                            <label class="form-check-label" for="storage-512">512 GB</label>
-                        </div>
-                        <div class="form-check custom-checkbox-group">
-                            <input class="form-check-input filter-checkbox" type="checkbox" id="storage-1TB" value="1 TB" data-name="1 TB">
-                            <label class="form-check-label" for="storage-1TB">1 TB</label>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
 
         <div class="col-lg-9 col-md-8">
 
-            <div class="sort-bar d-flex align-items-center flex-wrap pb-3">
+            <div class="d-flex d-md-none gap-2 mb-3 sticky-mobile-actions">
+                <button class="btn btn-outline-dark flex-grow-1 fw-medium" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFilter">
+                    <i class="bi bi-funnel"></i> Filter
+                </button>
+                <button class="btn btn-outline-dark flex-grow-1 fw-medium" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSort">
+                    <i class="bi bi-sort-down"></i> Sort
+                </button>
+            </div>
+
+            <div class="sort-bar d-none d-md-flex align-items-center flex-wrap pb-3">
                 <span class="sort-title text-dark">Sort By</span>
                 <div class="sort-links d-flex flex-wrap gap-4">
                     <a href="#" class="sort-item active" data-sort="Relevance">Relevance</a>
@@ -170,7 +189,6 @@
                                 </div>
                             </div>
                         </a>
-
                     </div>
                 </div>
 
@@ -182,8 +200,23 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+    </div>
+</div>
 
-            </div> </div>
+<div class="offcanvas offcanvas-bottom d-md-none" tabindex="-1" id="offcanvasSort" style="height: auto; border-top-left-radius: 16px; border-top-right-radius: 16px;">
+    <div class="offcanvas-header border-bottom">
+        <h6 class="offcanvas-title fw-bold">Sort By</h6>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="d-flex flex-column gap-3">
+            <a href="#" class="sort-item active text-dark text-decoration-none fw-medium" data-sort="Relevance" data-bs-dismiss="offcanvas">Relevance</a>
+            <a href="#" class="sort-item text-dark text-decoration-none fw-medium" data-sort="PriceAsc" data-bs-dismiss="offcanvas">Price -- Low to High</a>
+            <a href="#" class="sort-item text-dark text-decoration-none fw-medium" data-sort="PriceDesc" data-bs-dismiss="offcanvas">Price -- High to Low</a>
+            <a href="#" class="sort-item text-dark text-decoration-none fw-medium" data-sort="Newest" data-bs-dismiss="offcanvas">Newest First</a>
+        </div>
     </div>
 </div>
 

@@ -83,8 +83,18 @@ document.addEventListener("DOMContentLoaded", function() {
     sortItems.forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
-            sortItems.forEach(s => s.classList.remove('active'));
-            this.classList.add('active');
+
+            // Get the sort value that was clicked
+            const clickedSortValue = this.getAttribute('data-sort');
+
+            // Sync active state across BOTH mobile and desktop sort items
+            sortItems.forEach(s => {
+                if (s.getAttribute('data-sort') === clickedSortValue) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
 
             currentPage = 0;
             filterProducts();
@@ -136,7 +146,8 @@ document.addEventListener("DOMContentLoaded", function() {
         if (selectedRams.length > 0) queryParams.append('rams', selectedRams.join(','));
         if (selectedStorages.length > 0) queryParams.append('storages', selectedStorages.join(','));
 
-        queryParams.append('sort', sortValue);                                                                                                                                                                                          queryParams.append('page', currentPage);
+        queryParams.append('sort', sortValue);
+        queryParams.append('page', currentPage);
 
         fetch('/products/filter?' + queryParams.toString())
             .then(response => {
@@ -146,7 +157,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 return response.text();
             })
             .then(htmlFragment => {
-
                 document.getElementById('product-grid-container').innerHTML = htmlFragment;
             })
             .catch(error => console.error('Error fetching filtered products:', error));
