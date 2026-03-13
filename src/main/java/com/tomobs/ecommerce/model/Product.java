@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -35,6 +36,9 @@ public class Product {
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ProductVariant> variants = new ArrayList<>();
+
+  @Formula("(SELECT MIN(v.price) FROM product_variants v WHERE v.product_id = id)")
+  private Double startingPrice;
 
   @CreationTimestamp
   @Column(updatable = false, name = "created_at")

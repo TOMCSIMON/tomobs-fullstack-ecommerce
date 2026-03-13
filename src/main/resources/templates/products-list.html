@@ -21,7 +21,7 @@
             <div class="filter-sidebar">
 
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0 fw-bold" style="font-size: 1.5rem;">Filters</h4>
+                    <h4 class="mb-0 fw-semibold" style="font-size: 1.5rem;">FILTERS</h4>
                     <a href="#" id="clearAllFilters" class="clear-all-link">clear all</a>
                 </div>
 
@@ -132,7 +132,7 @@
 
         <div class="col-lg-9 col-md-8">
 
-            <div class="sort-bar d-flex align-items-center flex-wrap mb-4 pb-3">
+            <div class="sort-bar d-flex align-items-center flex-wrap pb-3">
                 <span class="sort-title text-dark">Sort By</span>
                 <div class="sort-links d-flex flex-wrap gap-4">
                     <a href="#" class="sort-item active" data-sort="Relevance">Relevance</a>
@@ -147,7 +147,7 @@
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4">
                     <div th:each="product : ${products}" class="col">
                         <a th:href="@{/products/detail/{id}(id=${product.productId})}" class="text-decoration-none">
-                            <div class="product-card">
+                            <div class="product-card mt-4 mb-3">
 
                                 <div class="wishlist-btn">
                                     <i class="bi bi-heart"></i>
@@ -170,7 +170,7 @@
                                 </div>
                             </div>
                         </a>
-                        <hr class="mt-4 mb-0" style="border-top: 1px solid #e0e0e0; opacity: 1;">
+
                     </div>
                 </div>
 

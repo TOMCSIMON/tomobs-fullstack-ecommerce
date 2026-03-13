@@ -66,12 +66,13 @@ public class ProductListController {
            @RequestParam(value = "brands", required = false) List<Long> brands,
            @RequestParam(value = "rams", required = false) List<String> rams,
            @RequestParam(value = "storages", required = false) List<String> storages,
+           @RequestParam(value = "sort", defaultValue = "Relevance") String sort,
            @RequestParam(value = "page", defaultValue = "0") int page,
            @RequestParam(value = "size", defaultValue = "6") int size,
            Model model
            )
     {
-        Page<UserProductListDTO> products = userProductService.getFilteredProducts(categories, brands, rams, storages, page, size);
+        Page<UserProductListDTO> products = userProductService.getFilteredProducts(categories, brands, rams, storages, sort, page, size);
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("currentPage", page);

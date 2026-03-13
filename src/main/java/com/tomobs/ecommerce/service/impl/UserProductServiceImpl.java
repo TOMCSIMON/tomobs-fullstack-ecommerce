@@ -8,9 +8,11 @@ import com.tomobs.ecommerce.repository.ProductRepository;
 import com.tomobs.ecommerce.service.UserProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,15 +36,25 @@ public class UserProductServiceImpl implements UserProductService {
   }
 
   @Override
-  public Page<UserProductListDTO>  getFilteredProducts(List<Long> categories, List<Long> brands, List<String> rams, List<String> storages, int page, int size) {
+  public Page<UserProductListDTO>  getFilteredProducts(List<Long> categories, List<Long> brands, List<String> rams, List<String> storages, String sort, int page, int size) {
 
-    Pageable pageable = PageRequest.of(page, size);
+    Sort JpaSort = Sort.by("createdAt").descending();
+    if("PriceAsc".equalsIgnoreCase(sort)){
+      JpaSort = Sort.by(Sort.Direction.ASC, "startingPrice");
+    }
+    if("PriceDesc".equalsIgnoreCase(sort)){
+      JpaSort = Sort.by(Sort.Direction.DESC, "startingPrice");
+    }
+    if("Newest".equalsIgnoreCase(sort)){
+      JpaSort = Sort.by(Sort.Direction.DESC, "createdAt");
+    }
+    Pageable pageable = PageRequest.of(page, size, JpaSort);
     Page<Product> products = productRepository.findFilteredProducts(categories, brands, rams, storages, pageable);
     return products.map(this::convertToDTO);
   }
 
 
-  private UserProductListDTO convertToDTO(Product product) {
+  private @NonNull UserProductListDTO convertToDTO(Product product) {
 
     UserProductListDTO dto = new UserProductListDTO();
     dto.setProductId(product.getId());

@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function() {
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
             updateActiveTags();
-
             currentPage = 0;
             filterProducts();
         });
@@ -19,8 +18,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function updateActiveTags() {
         activeFiltersContainer.innerHTML = '';
-        log.info("storage 512 : {}", storages);
-
         checkboxes.forEach(checkbox => {
             if (checkbox.checked) {
                 const displayName = checkbox.getAttribute('data-name');
@@ -43,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function() {
             if (targetCheckbox) {
                 targetCheckbox.checked = false;
                 updateActiveTags();
-
                 currentPage = 0;
                 filterProducts();
             }
@@ -140,8 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (selectedRams.length > 0) queryParams.append('rams', selectedRams.join(','));
         if (selectedStorages.length > 0) queryParams.append('storages', selectedStorages.join(','));
 
-        queryParams.append('sort', sortValue);
-                                                                                                                                                                                                                queryParams.append('page', currentPage);
+        queryParams.append('sort', sortValue);                                                                                                                                                                                          queryParams.append('page', currentPage);
 
         fetch('/products/filter?' + queryParams.toString())
             .then(response => {
