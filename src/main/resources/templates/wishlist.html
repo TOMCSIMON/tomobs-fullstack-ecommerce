@@ -19,72 +19,42 @@
 <div class="container wishlist-container">
     <h3 class="wishlist-title">My Wishlist</h3>
 
-    <div class="wishlist-card">
+    <div class="wishlist-card" th:if="${!#lists.isEmpty(wishlistItems)}">
 
-        <div class="wishlist-item">
+        <div class="wishlist-item" th:each="item : ${wishlistItems}">
+
             <div class="item-img-wrapper">
-                <img src="https://fdn2.gsmarena.com/vv/bigpic/vivo-v29e.jpg" alt="vivo Y39 5G">
+                <img th:src="@{${item.primaryImageName}}" th:alt="${item.productName}">
             </div>
 
             <div class="item-details flex-grow-1">
-                <div class="item-title">vivo Y39 5G (Ocean Blue, 256 GB, 8GB RAM)</div>
-                <div>
-                    <span class="item-price">₹19,990</span>
-                    <span class="item-discount">5% Off</span>
+                <div class="item-title" th:text="${item.productName + ' (' + item.variantName + ')'}">
+                    Product Name (Variant)
                 </div>
-                <a href="#" class="add-to-cart-btn">Add To Cart</a>
+
+                <div>
+                    <span class="item-price" th:text="${'₹' + #numbers.formatDecimal(item.price, 0, 'COMMA', 2, 'POINT')}">₹0.00</span>
+                    <span class="item-discount">5% Off</span> </div>
+
+                <a href="#" class="add-to-cart-btn" th:data-variant-id="${item.variantId}">Add To Cart</a>
             </div>
 
             <div class="item-actions">
-                <button class="remove-btn" title="Remove from Wishlist">
+                <button class="remove-btn" title="Remove from Wishlist" th:data-variant-id="${item.variantId}">
                     <i class="bi bi-trash3-fill"></i>
                 </button>
             </div>
+
         </div>
-
-        <div class="wishlist-item">
-            <div class="item-img-wrapper">
-                <img src="https://fdn2.gsmarena.com/vv/bigpic/vivo-v29e.jpg" alt="vivo Y39 5G">
-            </div>
-
-            <div class="item-details flex-grow-1">
-                <div class="item-title">vivo Y39 5G (Ocean Blue, 256 GB, 8GB RAM)</div>
-                <div>
-                    <span class="item-price">₹19,990</span>
-                    <span class="item-discount">5% Off</span>
-                </div>
-                <a href="#" class="add-to-cart-btn">Add To Cart</a>
-            </div>
-
-            <div class="item-actions">
-                <button class="remove-btn" title="Remove from Wishlist">
-                    <i class="bi bi-trash3-fill"></i>
-                </button>
-            </div>
-        </div>
-
-        <div class="wishlist-item">
-            <div class="item-img-wrapper">
-                <img src="https://fdn2.gsmarena.com/vv/bigpic/vivo-v29e.jpg" alt="vivo Y39 5G">
-            </div>
-
-            <div class="item-details flex-grow-1">
-                <div class="item-title">vivo Y39 5G (Ocean Blue, 256 GB, 8GB RAM)</div>
-                <div>
-                    <span class="item-price">₹19,990</span>
-                    <span class="item-discount">5% Off</span>
-                </div>
-                <a href="#" class="add-to-cart-btn">Add To Cart</a>
-            </div>
-
-            <div class="item-actions">
-                <button class="remove-btn" title="Remove from Wishlist">
-                    <i class="bi bi-trash3-fill"></i>
-                </button>
-            </div>
-        </div>
-
     </div>
+
+    <div class="wishlist-card text-center py-5" th:if="${#lists.isEmpty(wishlistItems)}">
+        <i class="bi bi-heart text-muted mb-3" style="font-size: 3rem;"></i>
+        <h5 class="text-secondary fw-semibold">Your wishlist is empty!</h5>
+        <p class="text-muted" style="font-size: 13px;">Save items that you like in your wishlist.</p>
+        <a th:href="@{/products}" class="btn btn-dark mt-2" style="font-size: 13px; border-radius: 8px;">Explore Products</a>
+    </div>
+
 </div>
 
 <div th:insert="~{fragments/footer :: footer}"></div>

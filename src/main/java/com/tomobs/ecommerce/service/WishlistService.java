@@ -1,8 +1,12 @@
 package com.tomobs.ecommerce.service;
 
+import com.tomobs.ecommerce.dto.WishlistVariantDTO;
+
+import java.util.List;
+
 public interface WishlistService {
 
-    void getWishlist(String email);
+    List<WishlistVariantDTO> getWishlist(String email);
 
     void addToWishlist(String email, Long variantId);
 }
