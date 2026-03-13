@@ -10,7 +10,6 @@ body {
     border-radius: 12px;
 }
 
-
 @media (min-width: 768px) {
     .filter-sidebar {
         padding: 24px;
@@ -22,7 +21,6 @@ body {
     }
 }
 
-/* 📱 MOBILE STYLES */
 @media (max-width: 767px) {
     .filter-sidebar {
         padding: 15px;
@@ -30,7 +28,6 @@ body {
 
 
     .sticky-mobile-actions {
-        position: sticky;
         top: 80px;
         z-index: 1020;
         background-color: #f9f9f9;
@@ -72,7 +69,6 @@ body {
     font-size: 14px;
 }
 
-/* Accordions */
 .filter-title {
     font-size: 12px;
     font-weight: 500;
@@ -157,8 +153,10 @@ body {
     transform: translateY(-2px);
 }
 
-.wishlist-btn {
+.add-to-wishlist-btn {
     position: absolute;
+    border: none;
+    background: none;
     top: 5px;
     right: 15px;
     color: #878787;

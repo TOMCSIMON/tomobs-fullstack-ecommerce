@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
 
     const checkboxes = document.querySelectorAll('.filter-checkbox');
     const activeFiltersContainer = document.getElementById('activeFiltersContainer');
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
     updateActiveTags();
 
     checkboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', function() {
+        checkbox.addEventListener('change', function () {
             updateActiveTags();
             currentPage = 0;
             filterProducts();
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    activeFiltersContainer.addEventListener('click', function(e) {
+    activeFiltersContainer.addEventListener('click', function (e) {
         if (e.target.classList.contains('bi-x')) {
             const targetCheckboxId = e.target.getAttribute('data-target');
             const targetCheckbox = document.getElementById(targetCheckboxId);
@@ -46,24 +46,21 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    if(clearAllBtn) {
-        clearAllBtn.addEventListener('click', function(e) {
+    if (clearAllBtn) {
+        clearAllBtn.addEventListener('click', function (e) {
             e.preventDefault();
-
             checkboxes.forEach(checkbox => {
                 checkbox.checked = false;
             });
-
             updateActiveTags();
             currentPage = 0;
             filterProducts();
         });
     }
 
-    // 6. Handle Accordion Chevron Rotation
     const filterHeaders = document.querySelectorAll('.filter-header');
     filterHeaders.forEach(header => {
-        header.addEventListener('click', function() {
+        header.addEventListener('click', function () {
             const icon = this.querySelector('.toggle-icon');
             if (icon.classList.contains('bi-chevron-up')) {
                 icon.classList.remove('bi-chevron-up');
@@ -75,19 +72,12 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // ==========================================
-    // NEW EVENT LISTENERS (SORT & PAGINATION)
-    // ==========================================
-
     const sortItems = document.querySelectorAll('.sort-item');
     sortItems.forEach(item => {
-        item.addEventListener('click', function(e) {
+        item.addEventListener('click', function (e) {
             e.preventDefault();
-
-            // Get the sort value that was clicked
             const clickedSortValue = this.getAttribute('data-sort');
 
-            // Sync active state across BOTH mobile and desktop sort items
             sortItems.forEach(s => {
                 if (s.getAttribute('data-sort') === clickedSortValue) {
                     s.classList.add('active');
@@ -101,7 +91,44 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', function (e) {
+        const wishlistBtn = e.target.closest('.add-to-wishlist-btn');
+        if (wishlistBtn) {
+            e.preventDefault();
+            const variantId = wishlistBtn.getAttribute('data-variant-id');
+            const icon = wishlistBtn.querySelector('i');
+
+            if (!variantId) return;
+
+            const formData = new URLSearchParams();
+            formData.append('variantId', variantId);
+            fetch('/wishlist/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData.toString()
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            })
+            .then(data => {
+                if (data && data.success) {
+                    icon.classList.remove('bi-heart', 'text-secondary');
+                    icon.classList.add('bi-heart-fill', 'text-danger');
+                    Toast.fire({
+                        icon: 'success',
+                        title: 'item added to wishlist'
+                    });
+                }
+            })
+            .catch(error => console.error('Error adding to wishlist:', error));
+        }
+
         if (e.target.classList.contains('ajax-page-link')) {
             e.preventDefault();
             const selectedPage = e.target.getAttribute('data-page');
@@ -112,11 +139,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
-    // ==========================================
-    //  THE MAIN AJAX FETCH FUNCTION
-    // ==========================================
     function filterProducts() {
-
         let selectedCategories = [];
         let selectedBrands = [];
         let selectedRams = [];
@@ -127,20 +150,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
         checkboxes.forEach(checkbox => {
             if (checkbox.checked) {
-                if (checkbox.id.startsWith('category-')) {
-                    selectedCategories.push(checkbox.value);
-                } else if (checkbox.id.startsWith('brand-')) {
-                    selectedBrands.push(checkbox.value);
-                } else if (checkbox.id.startsWith('ram-')) {
-                    selectedRams.push(checkbox.value);
-                } else if (checkbox.id.startsWith('storage-')) {
-                    selectedStorages.push(checkbox.value);
-                }
+                if (checkbox.id.startsWith('category-')) selectedCategories.push(checkbox.value);
+                else if (checkbox.id.startsWith('brand-')) selectedBrands.push(checkbox.value);
+                else if (checkbox.id.startsWith('ram-')) selectedRams.push(checkbox.value);
+                else if (checkbox.id.startsWith('storage-')) selectedStorages.push(checkbox.value);
             }
         });
 
         const queryParams = new URLSearchParams();
-
         if (selectedCategories.length > 0) queryParams.append('categories', selectedCategories.join(','));
         if (selectedBrands.length > 0) queryParams.append('brands', selectedBrands.join(','));
         if (selectedRams.length > 0) queryParams.append('rams', selectedRams.join(','));
@@ -151,9 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         fetch('/products/filter?' + queryParams.toString())
             .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
+                if (!response.ok) throw new Error('Network response was not ok');
                 return response.text();
             })
             .then(htmlFragment => {
