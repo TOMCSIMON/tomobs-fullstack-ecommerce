@@ -1,8 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
 
     document.querySelectorAll(".add-to-cart-btn").forEach(button => {
-        button.addEventListener("click", async () => {
+        button.addEventListener("click", async (e) => {
+            e.preventDefault();
+
             const variantId = button.dataset.variantId;
+            const itemRow = button.closest('.wishlist-item');
 
             const response = await fetch(`/cart/add?variantId=${variantId}`, {
                 method: "POST"
@@ -16,9 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     title: 'Product added to cart successfully!'
                 });
 
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
+                if (itemRow) {
+                    itemRow.remove();
+                }
+                if (document.querySelectorAll('.wishlist-item').length === 0) {
+                    setTimeout(() => location.reload(), 1000);
+                }
             } else {
                 Toast.fire({
                     icon: 'error',
@@ -29,8 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.querySelectorAll(".remove-btn").forEach(button => {
-        button.addEventListener("click", async () => {
+        button.addEventListener("click", async (e) => {
+            e.preventDefault();
+
             const variantId = button.dataset.variantId;
+            const itemRow = button.closest('.wishlist-item');
 
             const response = await fetch(`/wishlist/delete?variantId=${variantId}`, {
                 method: "DELETE"
@@ -43,10 +52,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     icon: 'success',
                     title: 'Item removed from wishlist!'
                 });
-
-                setTimeout(() => {
-                    location.reload();
-                }, 1500);
+                if (itemRow) {
+                    itemRow.remove();
+                }
+                if (document.querySelectorAll('.wishlist-item').length === 0) {
+                    setTimeout(() => location.reload(), 1000);
+                }
             } else {
                 Toast.fire({
                     icon: 'error',
