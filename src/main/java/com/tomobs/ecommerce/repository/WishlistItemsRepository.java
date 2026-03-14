@@ -1,6 +1,7 @@
 package com.tomobs.ecommerce.repository;
 
 import com.tomobs.ecommerce.dto.WishlistVariantDTO;
+import com.tomobs.ecommerce.model.ProductVariant;
 import com.tomobs.ecommerce.model.WishlistItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -23,4 +24,6 @@ public interface WishlistItemsRepository extends JpaRepository<WishlistItem, Lon
     AND (vi.isPrimary = true OR vi IS NULL)
 """)
     List<WishlistVariantDTO> findVariantDetailsByWishlistId(@Param("wishlistId") Long wishlistId);
+
+    void deleteByProductVariant(ProductVariant variant);
 }

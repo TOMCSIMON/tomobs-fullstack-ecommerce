@@ -63,6 +63,18 @@ public class WishlistServiceImpl implements WishlistService {
         }
     }
 
+    @Override
+    @Transactional
+    public void deleteWishlist(String email,Long variantId) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        ProductVariant variant = productVariantRepository.findById(variantId)
+                .orElseThrow(() -> new RuntimeException("Product Variant not found"));
+
+        wishlistItemsRepository.deleteByProductVariant(variant);
+    }
 
     private Wishlist getOrCreateWishlist(User user) {
         Wishlist wishlist = wishlistRepository.findByUser(user);
