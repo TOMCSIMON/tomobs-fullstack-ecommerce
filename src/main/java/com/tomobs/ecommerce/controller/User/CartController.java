@@ -4,6 +4,7 @@ import com.tomobs.ecommerce.dto.CartDTO;
 import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.service.CartService;
 import com.tomobs.ecommerce.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,15 +18,11 @@ import java.util.Map;
 @Slf4j
 @Controller
 @RequestMapping("/cart")
+@RequiredArgsConstructor
 public class CartController {
 
     private final CartService cartService;
     private final UserService userService;
-
-    public CartController(CartService cartService, UserService userService) {
-        this.cartService = cartService;
-        this.userService = userService;
-    }
 
     @GetMapping()
     public String viewCart(
@@ -37,32 +34,8 @@ public class CartController {
         List<CartDTO> cartItems = cartService.findCart(user.getId());
         Double totalAmount = cartService.calculateTotal(user.getId());
 
-        log.info("cartDetails:{}" , cartItems);
-        log.info("totalPrice:{}" , totalAmount);
-
-
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("totalPrice", totalAmount);
         return "cart";
     }
-
-
-    @PostMapping("/add")
-    public String addToCart(@RequestParam Long variantId){
-
-        cartService.addToCart(variantId);
-
-        return "redirect:/cart";
-    }
-
-    @PostMapping("/update-quantity")
-    @ResponseBody
-    public String updateQuantity(
-            @RequestParam Long cartItemId,
-            @RequestParam int quantity) {
-
-        cartService.updateQuantity(cartItemId, quantity);
-        return "OK";
-    }
-
 }

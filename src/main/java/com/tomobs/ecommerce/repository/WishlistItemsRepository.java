@@ -26,4 +26,6 @@ public interface WishlistItemsRepository extends JpaRepository<WishlistItem, Lon
     List<WishlistVariantDTO> findVariantDetailsByWishlistId(@Param("wishlistId") Long wishlistId);
 
     void deleteByProductVariant(ProductVariant variant);
+
+    boolean existsByProductVariant(ProductVariant variant);
 }

@@ -3,11 +3,9 @@ package com.tomobs.ecommerce.service.impl;
 import com.tomobs.ecommerce.config.CustomUserDetails;
 import com.tomobs.ecommerce.dto.CartDTO;
 import com.tomobs.ecommerce.model.*;
-import com.tomobs.ecommerce.repository.CartItemsRepository;
-import com.tomobs.ecommerce.repository.CartRepository;
-import com.tomobs.ecommerce.repository.ProductVariantRepository;
-import com.tomobs.ecommerce.repository.UserRepository;
+import com.tomobs.ecommerce.repository.*;
 import com.tomobs.ecommerce.service.CartService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -22,23 +20,14 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CartServiceImpl implements CartService {
 
   private final UserRepository userRepository;
   private final ProductVariantRepository productVariantRepository;
   private final CartRepository cartRepository;
   private final CartItemsRepository cartItemsRepository;
-
-  public CartServiceImpl(
-      CartRepository cartRepository,
-      ProductVariantRepository productVariantRepository,
-      UserRepository userRepository,
-      CartItemsRepository cartItemsRepository) {
-    this.cartRepository = cartRepository;
-    this.userRepository = userRepository;
-    this.productVariantRepository = productVariantRepository;
-    this.cartItemsRepository = cartItemsRepository;
-  }
+  private final WishlistItemsRepository wishlistItemsRepository;
 
   private Long getCurrentUserId() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -59,19 +48,14 @@ public class CartServiceImpl implements CartService {
 
     Long userId = getCurrentUserId();
 
-    ProductVariant variant =
-        productVariantRepository
-            .findById(variantId)
+    ProductVariant variant = productVariantRepository.findById(variantId)
             .orElseThrow(() -> new RuntimeException("Product Variant not found!"));
 
-    User user =
-        userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found!"));
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found!"));
 
-    Cart cart =
-        cartRepository
-            .findByUserId(userId)
-            .orElseGet(
-                () -> {
+    Cart cart = cartRepository.findByUserId(userId)
+            .orElseGet(() -> {
                   Cart newCart = new Cart();
                   newCart.setUser(user);
                   return cartRepository.save(newCart);
@@ -94,6 +78,10 @@ public class CartServiceImpl implements CartService {
       cartItems.setSubtotal(variant.getPrice());
     }
     cartItemsRepository.save(cartItems);
+
+    if(wishlistItemsRepository.existsByProductVariant(variant)) {
+      wishlistItemsRepository.deleteByProductVariant(variant);
+    }
   }
 
   @Override

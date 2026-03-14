@@ -26,6 +26,7 @@ body {
 
 .wishlist-item {
     display: flex;
+    gap: 15px;
     align-items: center;
     padding: 20px;
     border-bottom: 2px solid #d6d6d6;
@@ -57,7 +58,7 @@ body {
 }
 
 .item-title {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 500;
     color: #212121;
     margin-bottom: 6px;
@@ -68,13 +69,13 @@ body {
 }
 
 .item-price {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     color: #212121;
 }
 
 .item-discount {
-    font-size: 11px;
+    font-size: 15px;
     font-weight: 700;
     color: #198754;
     margin-left: 8px;
@@ -84,10 +85,10 @@ body {
     display: inline-block;
     background-color: #000000;
     color: #ffffff;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
     padding: 5px 14px;
-    border-radius: 20px;
+    border-radius: 15px;
     text-decoration: none;
     margin-top: 8px;
     transition: opacity 0.2s;
@@ -96,6 +97,7 @@ body {
 .add-to-cart-btn:hover {
     opacity: 0.8;
     color: #ffffff;
+    transform: translateY(-3px);
 }
 
 .remove-btn {
