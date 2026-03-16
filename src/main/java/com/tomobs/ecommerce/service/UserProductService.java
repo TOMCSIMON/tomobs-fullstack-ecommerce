@@ -9,5 +9,5 @@ public interface UserProductService {
 
     Page<UserProductListDTO> getProductForListing(int page, int size);
 
-    Page<UserProductListDTO>  getFilteredProducts(List<Long> categories, List<Long> brands, List<String> rams, List<String> storages, String sort, int page, int size);
+    Page<UserProductListDTO>  getFilteredProducts(String search ,List<Long> categories, List<Long> brands, List<String> rams, List<String> storages, String sort, int page, int size);
 }

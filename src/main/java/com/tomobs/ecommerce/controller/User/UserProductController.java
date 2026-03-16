@@ -62,6 +62,7 @@ public class UserProductController {
 
     @GetMapping("/filter")
     public String filterProductList(
+           @RequestParam(value = "search", required = false) String search,
            @RequestParam(value = "categories", required = false) List<Long> categories,
            @RequestParam(value = "brands", required = false) List<Long> brands,
            @RequestParam(value = "rams", required = false) List<String> rams,
@@ -72,10 +73,12 @@ public class UserProductController {
            Model model
            )
     {
-        Page<UserProductListDTO> products = userProductService.getFilteredProducts(categories, brands, rams, storages, sort, page, size);
+        log.info("products backend: ==========================================={}", search);
+        Page<UserProductListDTO> products = userProductService.getFilteredProducts(search, categories, brands, rams, storages, sort, page, size);
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("currentPage", page);
+        log.info("products: ==========================================={}", products.getContent());
         return "products-list :: product-grid-fragment";
     }
 }

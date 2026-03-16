@@ -4,9 +4,58 @@ document.addEventListener("DOMContentLoaded", function () {
     const activeFiltersContainer = document.getElementById('activeFiltersContainer');
     const clearAllBtn = document.getElementById('clearAllFilters');
 
+    // --- SEARCH ELEMENTS ---
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('clear-search');
+    const searchIcon = document.querySelector('.search-img-icon');
+
     let currentPage = 0;
 
     updateActiveTags();
+
+    // --- SEARCH EVENT LISTENERS ---
+    if (searchInput) {
+        // 1. Listen for the 'Enter' key
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                currentPage = 0; // Reset page on new search
+                filterProducts();
+            }
+        });
+
+        // 2. Listen for clicks on the search image icon
+        if (searchIcon) {
+            searchIcon.addEventListener('click', function() {
+                currentPage = 0;
+                filterProducts();
+            });
+        }
+
+        // 3. Live search (Debouncing)
+        let debounceTimer;
+        searchInput.addEventListener('input', function() {
+            if (clearBtn) clearBtn.style.display = this.value ? 'block' : 'none';
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                currentPage = 0;
+                filterProducts();
+            }, 500);
+        });
+
+        // 4. Clear search button functionality
+        if (clearBtn) {
+            clearBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                this.style.display = 'none';
+                currentPage = 0;
+                filterProducts();
+            });
+            // Initial setup for clear button
+            clearBtn.style.display = searchInput.value ? 'block' : 'none';
+        }
+    }
+    // ------------------------------
 
     checkboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function () {
@@ -91,6 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
 
+    // Handle Wishlist & Pagination Clicks
     document.addEventListener('click', function (e) {
         const wishlistBtn = e.target.closest('.add-to-wishlist-btn');
         if (wishlistBtn) {
@@ -139,6 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 
+    // --- MAIN FETCH FUNCTION ---
     function filterProducts() {
         let selectedCategories = [];
         let selectedBrands = [];
@@ -158,6 +209,13 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         const queryParams = new URLSearchParams();
+
+        // --- NEW: Grab the search value ---
+        if (searchInput && searchInput.value.trim() !== '') {
+            queryParams.append('search', searchInput.value.trim());
+        }
+
+        // Append the rest of the arrays
         if (selectedCategories.length > 0) queryParams.append('categories', selectedCategories.join(','));
         if (selectedBrands.length > 0) queryParams.append('brands', selectedBrands.join(','));
         if (selectedRams.length > 0) queryParams.append('rams', selectedRams.join(','));
@@ -165,16 +223,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
         queryParams.append('sort', sortValue);
         queryParams.append('page', currentPage);
+        // queryParams.append('size', 6); // Optional: append size if you want to explicitly control it from JS
 
-        fetch('/products/filter?' + queryParams.toString())
+        // Execute the single fetch call
+        fetch('/products/filter?' + queryParams.toString(), {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest' // Helps Spring distinguish AJAX from full page loads
+            }
+        })
             .then(response => {
                 if (!response.ok) throw new Error('Network response was not ok');
                 return response.text();
             })
             .then(htmlFragment => {
-                document.getElementById('product-grid-container').innerHTML = htmlFragment;
+                const container = document.getElementById('product-grid-container');
+                if (container) {
+                    container.innerHTML = htmlFragment;
+                }
             })
             .catch(error => console.error('Error fetching filtered products:', error));
     }
-
 });

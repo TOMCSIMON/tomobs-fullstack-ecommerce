@@ -30,4 +30,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             @Param("rams") List<String> rams,
             @Param("storages") List<String> storages,
             Pageable pageable);
+
+    @Query("SELECT DISTINCT p FROM Product p LEFT JOIN p.variants v WHERE " +
+            "(:search IS NULL OR LOWER(p.productName) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+            "LOWER(p.brand.name) LIKE LOWER(CONCAT('%', :search, '%')) OR " +
+            "LOWER(p.category.name) LIKE LOWER(CONCAT('%', :search, '%'))) AND " +
+            "(:categories IS NULL OR p.category.id IN :categories) AND " +
+            "(:brands IS NULL OR p.brand.id IN :brands) AND " +
+            "(:rams IS NULL OR v.ram IN :rams) AND " +
+            "(:storages IS NULL OR v.storage IN :storages)")
+    Page<Product> findFilteredProductsWithSearch(
+            @Param("search") String search,
+            @Param("categories") List<Long> categories,
+            @Param("brands") List<Long> brands,
+            @Param("rams") List<String> rams,
+            @Param("storages") List<String> storages,
+            Pageable pageable);
 }

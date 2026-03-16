@@ -32,10 +32,6 @@
                         <img th:src="@{/icons/home-address.png}" alt="icon">
                         <div class="menu-text"><strong>My Address</strong><span>Manage your saved addresses</span></div>
                     </a>
-                    <a th:href="@{/orders}" class="menu-item">
-                        <img th:src="@{/icons/order.png}" alt="icon">
-                        <div class="menu-text"><strong>My Orders</strong><span>View, track, cancel orders</span></div>
-                    </a>
                     <a th:href="@{/wishlist}" class="menu-item">
                         <img th:src="@{/icons/wishlist.png}" alt="icon">
                         <div class="menu-text"><strong>My Wishlist</strong><span>Have a look at your favourite products</span>
@@ -45,6 +41,10 @@
                         <img th:src="@{/icons/shopping-cart.png}" alt="icon">
                         <div class="menu-text"><strong>My Cart</strong><span>Have a look at your Added products</span>
                         </div>
+                    </a>
+                    <a th:href="@{/orders}" class="menu-item">
+                        <img th:src="@{/icons/order.png}" alt="icon">
+                        <div class="menu-text"><strong>My Orders</strong><span>View, track, cancel orders</span></div>
                     </a>
                     <hr>
                     <a th:href="@{/login}" class="menu-item login-btn" sec:authorize="isAnonymous()">

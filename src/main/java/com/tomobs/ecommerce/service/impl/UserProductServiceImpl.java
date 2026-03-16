@@ -36,7 +36,7 @@ public class UserProductServiceImpl implements UserProductService {
   }
 
   @Override
-  public Page<UserProductListDTO>  getFilteredProducts(List<Long> categories, List<Long> brands, List<String> rams, List<String> storages, String sort, int page, int size) {
+  public Page<UserProductListDTO>  getFilteredProducts(String search,List<Long> categories, List<Long> brands, List<String> rams, List<String> storages, String sort, int page, int size) {
 
     Sort JpaSort = Sort.by("createdAt").descending();
     if("PriceAsc".equalsIgnoreCase(sort)){
@@ -49,7 +49,12 @@ public class UserProductServiceImpl implements UserProductService {
       JpaSort = Sort.by(Sort.Direction.DESC, "createdAt");
     }
     Pageable pageable = PageRequest.of(page, size, JpaSort);
-    Page<Product> products = productRepository.findFilteredProducts(categories, brands, rams, storages, pageable);
+    Page<Product> products;
+    if(search != null) {
+      products = productRepository.findFilteredProductsWithSearch(search,categories, brands, rams, storages, pageable);
+    }else{
+      products = productRepository.findFilteredProducts(categories, brands, rams, storages, pageable);
+    }
     return products.map(this::convertToDTO);
   }
 
