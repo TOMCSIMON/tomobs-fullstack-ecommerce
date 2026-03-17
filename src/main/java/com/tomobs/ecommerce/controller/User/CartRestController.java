@@ -23,12 +23,12 @@ public class CartRestController {
     }
 
     @PostMapping("/update-quantity")
-    public String updateQuantity(
+    public ResponseEntity<Map<String, Boolean>> updateQuantity(
             @RequestParam Long cartItemId,
             @RequestParam int quantity) {
 
         cartService.updateQuantity(cartItemId, quantity);
-        return "OK";
+        return ResponseEntity.ok(Map.of("success", true));
     }
 
 }

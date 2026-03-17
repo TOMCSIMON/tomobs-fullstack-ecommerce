@@ -61,8 +61,7 @@ public class CartServiceImpl implements CartService {
                   return cartRepository.save(newCart);
                 });
 
-    Optional<CartItems> existingItem =
-        cartItemsRepository.findByCartIdAndProductVariantId(cart.getId(), variantId);
+    Optional<CartItems> existingItem = cartItemsRepository.findByCartIdAndProductVariantId(cart.getId(), variantId);
 
     CartItems cartItems;
     if (existingItem.isPresent()) {

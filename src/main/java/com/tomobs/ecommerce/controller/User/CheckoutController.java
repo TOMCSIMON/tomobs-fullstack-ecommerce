@@ -9,6 +9,7 @@ import com.tomobs.ecommerce.service.OrderService;
 import com.tomobs.ecommerce.service.UserAddressService;
 import com.tomobs.ecommerce.service.UserService;
 import com.tomobs.ecommerce.service.impl.RazorpayService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ import java.util.List;
 @Slf4j
 @Controller
 @RequestMapping("/checkout")
+@RequiredArgsConstructor
 public class CheckoutController {
 
   @Autowired private RazorpayService razorpayService;
@@ -35,18 +37,6 @@ public class CheckoutController {
   private final UserService userService;
   private final CartService cartService;
   private final OrderService orderService;
-
-  public CheckoutController(
-      UserAddressService userAddressService,
-      OrderService orderService,
-      UserService userService,
-      CartService cartService) {
-
-    this.userAddressService = userAddressService;
-    this.userService = userService;
-    this.cartService = cartService;
-    this.orderService = orderService;
-  }
 
   @GetMapping()
   public String viewCheckoutPage(Principal principal, Model model) {

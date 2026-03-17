@@ -68,6 +68,7 @@ public class UserProductServiceImpl implements UserProductService {
     // FOR FIRST VARIANT FOR A PRODUCT
     if (!product.getVariants().isEmpty()) {
       ProductVariant firstVariant = product.getVariants().get(0);
+      dto.setVariantId(firstVariant.getId());
       dto.setVariantName(firstVariant.getVariantName());
       dto.setPrice(firstVariant.getPrice());
 

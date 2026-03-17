@@ -19,7 +19,7 @@
 
 </head>
 
-<body class="d-flex flex-column min-vh-100" style="background-color:#E4E4E4;">
+<body class="d-flex flex-column min-vh-100">
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
@@ -60,7 +60,6 @@
                     <!-- Product Name -->
                     <h4 th:text="${productDetail.productName}" class="fw-bold">Product Name</h4>
 
-                    <!-- First Variant Name (if needed) -->
                     <h4 th:if="${productDetail.variants != null and !productDetail.variants.isEmpty()}"
                         th:text="${productDetail.variants[0].name}"
                         class="fw-bold">Variant Name</h4>
@@ -119,9 +118,9 @@
                     <!-- Actions -->
                     <div class="d-flex gap-3">
                         <button class="btn buy-btn">Buy Now</button>
-                        <form th:action="@{/cart/add}" method="post">
-                        <input type="hidden" name="variantId" th:value="${productDetail.variants[0].id}">
-                        <button   class="btn btn-outline-dark cart-btn">Add to Cart</button>
+                        <form id="addToCartForm" th:action="@{/cart/add}" method="post">
+                            <input type="hidden" name="variantId" th:value="${productDetail.variants[0].id}">
+                            <button type="submit" class="btn btn-outline-dark cart-btn">Add to Cart</button>
                         </form>
                     </div>
                 </div>
@@ -188,6 +187,9 @@
 </main>
 <div th:insert="~{fragments/footer :: footer}"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script th:src="@{/js/toast.js}"></script>
+<script th:src="@{/js/product-detail.js}"></script>
 </body>
 </html>
 
