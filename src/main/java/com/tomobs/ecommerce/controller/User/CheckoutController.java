@@ -99,9 +99,6 @@ public class CheckoutController {
       @RequestParam String razorpay_signature,
       @RequestParam Long orderId,
       RedirectAttributes redirectAttributes) {
-    System.out.println("Reached Payment verification:");
-    System.out.println();
-    System.out.println();
     try {
       boolean isValid =
           razorpayService.verifySignature(

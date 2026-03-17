@@ -15,215 +15,142 @@
 <body class="d-flex flex-column min-vh-100" style="background-color:#f1f3f6;">
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
+<main class="container flex-grow-1 my-5 checkout-container">
 
-<main class="container flex-grow-1 my-5">
-
-    <!-- ========== ERROR/SUCCESS MESSAGES ========== -->
-    <div th:if="${success}"
-         class="alert alert-success alert-dismissible fade show"
-         role="alert">
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
         <span th:text="${success}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 
-    <div th:if="${error}"
-         class="alert alert-danger alert-dismissible fade show"
-         role="alert">
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
         <span th:text="${error}"></span>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
-    <!-- ========== END ERROR/SUCCESS MESSAGES ========== -->
-
-
-    <!-- FORM START -->
     <form th:action="@{/checkout/placeOrder}" method="post" id="checkoutForm">
+        <div class="row gx-lg-5 mb-4">
 
-        <div class="row mb-4">
-
-            <!-- LEFT SECTION -->
             <div class="col-lg-8">
 
-                <!-- ADDRESS SECTION -->
-                <h4 class="mb-3">Delivery Address</h4>
-
-                <!-- ========== ADD THIS: Address Error Alert ========== -->
-                <div id="addressError"
-                     class="alert alert-danger d-none"
-                     role="alert">
-                     Please select a delivery address
-                </div>
-                <!-- ========== END Address Error Alert ========== -->
-
-                <div th:if="${#lists.isEmpty(addressList)}"
-                     class="checkout-card p-4">
-
-                    <h5>No delivery address found</h5>
-
-                    <p class="text-muted">
-                        Please add an address to continue.
-                    </p>
-
-                    <a th:href="@{/address}"
-                       class="btn btn-dark">
-                        Add Address
-                    </a>
+                <div id="addressError" class="alert alert-danger d-none" role="alert">
+                    Please select a delivery address
                 </div>
 
-
-                <div class="checkout-card"
-                     th:if="${!#lists.isEmpty(addressList)}"
-                     th:each="address : ${addressList}">
-
-                    <label class="address-box mb-3 d-block">
-
-                        <input type="radio"
-                               name="addressId"
-                               th:value="${address.id}"
-                               th:checked="${address.default}"
-                               class="form-check-input me-2"
-                               required/>
-
-                        <strong th:text="${address.fullName}">Name</strong>
-
-                        <p class="mb-1">
-                            <span th:text="${address.addressLine1}"></span><br>
-                            <span th:if="${address.addressLine2}"
-                                  th:text="${address.addressLine2}"></span><br>
-                            <span th:text="${address.city}"></span>,
-                            <span th:text="${address.state}"></span> -
-                            <span th:text="${address.postalCode}"></span>
-                        </p>
-
-                    </label>
-
+                <div th:if="${#lists.isEmpty(addressList)}" class="checkout-card p-4">
+                    <h5 class="fw-bold">No delivery address found</h5>
+                    <p class="text-muted">Please add an address to continue.</p>
+                    <a th:href="@{/address}" class="btn btn-outline-dark btn-sm">+ Add a new Address</a>
                 </div>
 
-                <div class="checkout-card d-flex align-items-start gap-3"
-                     th:if="${!#lists.isEmpty(addressList)}">
-
-                    <h5>Deliver to another Address</h5>
-                    <a th:href="@{/address}"
-                       class="btn btn-dark">
-                        Add Address
-                    </a>
-                </div>
-
-                <!-- PRODUCTS -->
-                <h4 class="mb-3">Products</h4>
-
-                <div class="checkout-card"
-                     th:each="item : ${cartItems}">
-
-                    <div class="product-item">
-
-                        <img th:src="${item.imageUrl}" alt="product">
-
-                        <div>
-                            <p class="mb-1" th:text="${item.variantName}">
-                                Product Name
+                <div class="checkout-card address-card" th:if="${!#lists.isEmpty(addressList)}" th:each="address : ${addressList}">
+                    <label class="d-flex w-100 cursor-pointer">
+                        <div class="me-3 mt-1">
+                            <input type="radio" name="addressId" th:value="${address.id}" th:checked="${address.default}" class="form-check-input custom-radio" required/>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <h5 class="address-title mb-0">Delivering to <span th:text="${address.fullName}">Name</span></h5>
+                                <a th:href="@{/address}" class="text-dark">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                        <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <p class="address-text text-muted mb-0">
+                                <span th:text="${address.addressLine1}"></span>,
+                                <span th:if="${address.addressLine2}" th:text="${address.addressLine2}"></span>
+                                <span th:text="${address.city}"></span>,
+                                <span th:text="${address.state}"></span>,
+                                <span th:text="${address.postalCode}"></span>
                             </p>
+                        </div>
+                    </label>
+                </div>
 
-                            <small>
-                                Qty:
-                                <span th:text="${item.quantity}"></span>
-                            </small>
+                <div class="checkout-card address-card" th:if="${!#lists.isEmpty(addressList)}">
+                    <h5 class="address-title mb-2">Delivering to <span th:text="${addressList[0].fullName}">Name</span></h5>
+                    <a th:href="@{/address}" class="add-address-link text-dark text-decoration-none">
+                        <small>+ Add a new Address</small>
+                    </a>
+                </div>
 
-                            <div>
-                                <strong th:text="'₹' + ${item.subtotal}"></strong>
+                <div class="checkout-card product-card mt-4">
+                    <div class="product-item" th:each="item : ${cartItems}">
+                        <div class="product-img-wrapper">
+                            <img th:src="${item.imageUrl}" alt="product">
+                        </div>
+                        <div class="product-details">
+                            <p class="product-name mb-1" th:text="${item.variantName}">Product Name</p>
+                            <div class="d-flex align-items-center gap-2">
+                                <strong class="product-price" th:text="'₹' + ${item.subtotal}"></strong>
+                                <span class="discount-tag">5% Off</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
-                <!-- PAYMENT OPTIONS -->
-                <h4 class="mb-3">Payment Options</h4>
+                <h5 class="fw-bold mt-5 mb-3 px-2">Payment Options</h5>
 
-                <div id="paymentError"
-                     class="alert alert-danger d-none"
-                     role="alert">
-                     Please select a payment method
+                <div id="paymentError" class="alert alert-danger d-none" role="alert">
+                    Please select a payment method
                 </div>
-                <!-- ========== END Payment Error Alert ========== -->
 
                 <div class="checkout-card payment-box">
-                    <h6>Select Your Payment Option</h6>
+                    <p class="text-muted small mb-4">Select any payment options:</p>
 
-                    <label class="d-block">
-                        <input type="radio"
-                               name="paymentMethod"
-                               value="ONLINE_PAYMENT"
-                               class="form-check-input me-2"
-                               required>
-                        Online Payment
-                    </label>
+                    <div class="payment-options-container">
+                        <label class="payment-option d-flex align-items-center mb-3 cursor-pointer">
+                            <input type="radio" name="paymentMethod" value="ONLINE_PAYMENT" class="form-check-input custom-radio me-3" required>
+                            <span>Online Payment</span>
+                        </label>
 
-                    <label class="d-block">
-                        <input type="radio"
-                               name="paymentMethod"
-                               value="WALLET"
-                               class="form-check-input me-2"
-                               required>
-                        Wallet
-                    </label>
-
-                    <label class="d-block">
-                        <input type="radio"
-                               name="paymentMethod"
-                               value="CASH_ON_DELIVERY"
-                               checked
-                               class="form-check-input me-2"
-                               required>
-                        Cash on Delivery
-                    </label>
+                        <label class="payment-option d-flex align-items-center mb-0 cursor-pointer">
+                            <input type="radio" name="paymentMethod" value="CASH_ON_DELIVERY" checked class="form-check-input custom-radio me-3" required>
+                            <span>Cash On Delivery</span>
+                        </label>
+                    </div>
                 </div>
 
             </div>
 
-            <!-- RIGHT SECTION -->
-            <div class="col-lg-4">
-                <div class="order-summary">
-                    <h6 class="mb-3">Order Summary</h6>
-
+            <div class="col-lg-4 mt-4 mt-lg-0">
+                <div class="checkout-card order-summary">
                     <div class="summary-row">
-                        <span>Price</span>
-                        <span th:text="'₹' + ${totalPrice}"></span>
+                        <span class="summary-label">Items 3 :</span>
+                        <span class="summary-value" th:text="'₹' + ${totalPrice}">₹107,308.00</span>
                     </div>
 
                     <div class="summary-row">
-                        <span>Discount</span>
-                        <span>- ₹800</span>
+                        <span class="summary-label">Discount :</span>
+                        <span class="summary-value">- ₹8,000.00</span>
                     </div>
 
                     <div class="summary-row">
-                        <span>Coupon</span>
-                        <span>- ₹200</span>
+                        <span class="summary-label">Coupon :</span>
+                        <span class="summary-value">- ₹200.00</span>
                     </div>
 
-                    <hr>
+                    <hr class="summary-divider">
 
-                    <div class="summary-row total">
-                        <span>Total Amount</span>
-                        <span th:text="'₹' + ${totalPrice}"></span>
+                    <div class="summary-row total mb-3">
+                        <span class="summary-label text-dark fw-bold">Total Amount :</span>
+                        <span class="summary-value text-dark fw-bold" th:text="'₹' + ${totalPrice}">₹00.00</span>
                     </div>
 
-                    <button type="submit"
-                            class="btn-payment mt-3"
-                            id="placeOrderBtn"
+                    <p class="savings-text text-center text-success mb-4">
+                        <small>You will save ₹11000 on this order</small>
+                    </p>
+
+                    <button type="submit" class="btn-payment" id="placeOrderBtn"
                             th:disabled="${#lists.isEmpty(addressList)}"
-                            th:text="${#lists.isEmpty(addressList)} ? 'Please Add an Address' : 'Place Order'">
-                        Place Order
+                            th:text="${#lists.isEmpty(addressList)} ? 'Please Add an Address' : 'Use this Payment Method'">
+                        Use this Payment Method
                     </button>
                 </div>
             </div>
 
         </div>
-
     </form>
-    <!-- FORM END -->
-
 </main>
-
 <div th:insert="~{fragments/footer :: footer}"></div>
 <script th:src="@{/js/checkout.js}"></script>
 </body>
