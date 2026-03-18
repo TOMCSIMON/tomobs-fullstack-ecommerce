@@ -5,6 +5,7 @@ import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.repository.OrdersRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,30 +14,22 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class RazorpayService {
 
     @Autowired
     private RazorpayClient razorpayClient;
-
     private final OrdersRepository ordersRepository;
-
-    public RazorpayService(OrdersRepository ordersRepository) {
-        this.ordersRepository = ordersRepository;
-    }
 
     public JSONObject createRazorpayOrder(Orders order) throws RazorpayException {
 
         JSONObject orderRequest = new JSONObject();
-        orderRequest.put("amount", order.getTotalAmount().multiply(new java.math.BigDecimal("100")).intValue()); // amount in paise
+        orderRequest.put("amount", order.getTotalAmount().multiply(new java.math.BigDecimal("100")).intValue());
         orderRequest.put("currency", "INR");
         orderRequest.put("receipt", "order_" + order.getId());
-
         Order razorpayOrder = razorpayClient.orders.create(orderRequest);
-
-        // Save Razorpay order ID to your order
         order.setRazorpayOrderId(razorpayOrder.get("id"));
         ordersRepository.save(order);
-
         return razorpayOrder.toJson();
     }
 
@@ -58,7 +51,6 @@ public class RazorpayService {
 
             byte[] hash = mac.doFinal(data.getBytes());
 
-            // Convert byte array to hex string
             StringBuilder hexString = new StringBuilder();
             for (byte b : hash) {
                 String hex = Integer.toHexString(0xff & b);

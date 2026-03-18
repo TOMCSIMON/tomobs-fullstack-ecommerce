@@ -1,11 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+body {
+    background-color: #f9f9f9;
+    font-family: "Poppins", sans-serif;
+}
+
 .order-success-card {
     background-color: #fff;
-    border-radius: 15px;
+    border-radius: 12px;
     padding: 40px 30px;
     max-width: 600px;
     width: 100%;
-    border: 2px solid black;
     margin-block: 70px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
 .order-success-img {

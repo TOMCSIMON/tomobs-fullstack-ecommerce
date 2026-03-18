@@ -10,7 +10,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,23 +18,17 @@ import java.util.List;
 @Setter
 public class Orders {
 
-  // PRIMARY KEY
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  // Bidirectional relationship - mapped by 'orders' field in OrderItems entity
-  // No additional column created (foreign key exists in order_items table)
-  // bidirectional relationship
   @OneToMany(mappedBy = "orders", cascade = CascadeType.ALL)
   private List<OrderItems> orderItems;
 
-  // FOREIGN KEY
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "user_id", nullable = false)
   private User user;
 
-  // FOREIGN KEY
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "address_id", nullable = false)
   private Address address;

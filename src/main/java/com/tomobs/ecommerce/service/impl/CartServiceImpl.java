@@ -141,15 +141,12 @@ public class CartServiceImpl implements CartService {
   @Override
   public Double calculateTotal(Long userId) {
 
-    Cart cart =
-        cartRepository
-            .findByUserId(userId)
+    Cart cart = cartRepository.findByUserId(userId)
             .orElseThrow(() -> new RuntimeException("cart not found!"));
 
     List<CartItems> items = cartItemsRepository.findAllByCart(cart);
 
-    BigDecimal total =
-        items.stream()
+    BigDecimal total = items.stream()
             .map(item -> item.getPricePerUnit().multiply(BigDecimal.valueOf(item.getQuantity())))
             .reduce(BigDecimal.ZERO, BigDecimal::add);
 

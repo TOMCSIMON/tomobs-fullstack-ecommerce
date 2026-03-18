@@ -12,10 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "cart_items",
-        uniqueConstraints = @UniqueConstraint(
-            columnNames = {"cart_id", "product_variant_id"})
-      )
+@Table(name = "cart_items", uniqueConstraints = @UniqueConstraint(columnNames = {"cart_id", "product_variant_id"}))
 @Setter
 @Getter
 @NoArgsConstructor
@@ -59,7 +56,6 @@ public class CartItems {
     @PrePersist
     @PreUpdate
     public void updateSubtotal() {
-
         this.subtotal = calculateSubtotal();
     }
 }

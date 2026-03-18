@@ -80,15 +80,14 @@ public class CheckoutController {
         model.addAttribute("amount", order.getTotalAmount());
         model.addAttribute("customerName", order.getUser().getUserName());
         model.addAttribute("customerEmail", order.getUser().getEmail());
-
         return "razorpay-checkout";
       } catch (Exception e) {
         redirectAttributes.addFlashAttribute("error", "Payment initialization failed");
         return "redirect:/checkout";
       }
     } else {
-      redirectAttributes.addAttribute("orderId", orderId);
-      return "redirect:/order-success";
+      model.addAttribute("orderId", orderId);
+      return "order-success";
     }
   }
 

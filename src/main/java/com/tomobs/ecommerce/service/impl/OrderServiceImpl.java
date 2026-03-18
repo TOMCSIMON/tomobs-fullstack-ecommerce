@@ -8,7 +8,9 @@ import com.tomobs.ecommerce.exception.CartNotFoundException;
 import com.tomobs.ecommerce.model.*;
 import com.tomobs.ecommerce.enums.*;
 import com.tomobs.ecommerce.repository.*;
+import com.tomobs.ecommerce.service.CartService;
 import com.tomobs.ecommerce.service.OrderService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,6 +23,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
   private final OrdersRepository ordersRepository;
@@ -30,25 +33,8 @@ public class OrderServiceImpl implements OrderService {
   private final UserAddressRepository userAddressRepository;
   private final CartRepository cartRepository;
   private final CartItemsRepository cartItemsRepository;
+  private final CartService cartService;
 
-  public OrderServiceImpl(
-      OrdersRepository ordersRepository,
-      OrderItemsRepository orderItemsRepository,
-      ProductVariantRepository productVariantRepository,
-      UserRepository userRepository,
-      UserAddressRepository userAddressRepository,
-      CartRepository cartRepository,
-      CartItemsRepository cartItemsRepository) {
-    this.ordersRepository = ordersRepository;
-    this.orderItemsRepository = orderItemsRepository;
-    this.productVariantRepository = productVariantRepository;
-    this.userRepository = userRepository;
-    this.userAddressRepository = userAddressRepository;
-    this.cartRepository = cartRepository;
-    this.cartItemsRepository = cartItemsRepository;
-  }
-
-  // METHOD FOR GET CURRENT USER FROM SESSION
   private Long getCurrentUserId() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -63,56 +49,33 @@ public class OrderServiceImpl implements OrderService {
     return userDetails.getId();
   }
 
-  // METHOD FOR PLACE ORDER
   @Override
   @Transactional
   public Long placeOrder(String email, Long addressId, String paymentMethod) {
-    // EXTRACTING USER BY EMAIL
-    User user =
-        userRepository
-            .findByEmail(email)
+
+    User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("email not found"));
 
-    // EXTRACTING ADDRESS BY ADDRESS ID
-    Address address =
-        userAddressRepository
-            .findById(addressId)
+    Address address = userAddressRepository.findById(addressId)
             .orElseThrow(() -> new RuntimeException("address not found"));
 
-    // EXTRACTING CART BY USER ID
-    Cart cart =
-        cartRepository
-            .findByUserId(user.getId())
+    Cart cart = cartRepository.findByUserId(user.getId())
             .orElseThrow(() -> new RuntimeException("Cart not found"));
 
-    // CHECKING SESSION USER AND DB USER BY ID
     if (!address.getUser().getId().equals(user.getId())) {
       throw new RuntimeException("Address does not belong to user");
     }
 
-    // FETCHING CART ITEMS
     List<CartItems> cartItems = cartItemsRepository.findAllByCart(cart);
     if (cartItems.isEmpty()) {
       throw new CartNotFoundException("Cart is empty");
     }
-    // VALIDATING STOCK & CALCULATE TOTAL
-    BigDecimal totalAmount = BigDecimal.ZERO;
-    for (CartItems items : cartItems) {
-      ProductVariant variant = items.getProductVariant();
-      if (variant.getStock() < items.getQuantity()) {
-        throw new RuntimeException("Insufficient stock for product: " + variant.getId());
-      }
-      BigDecimal itemTotal = variant.getPrice().multiply(BigDecimal.valueOf(items.getQuantity()));
-
-      totalAmount = totalAmount.add(itemTotal);
-    }
-    // CREATE ORDERS
+    Double finalCartTotal = cartService.calculateTotal(user.getId());
     Orders orders = new Orders();
     orders.setUser(user);
     orders.setAddress(address);
-    orders.setTotalAmount(totalAmount);
+    orders.setTotalAmount(BigDecimal.valueOf(finalCartTotal));
 
-    // CONVERTING STRING TO ENUM
     PaymentType paymentType;
     try {
       paymentType = PaymentType.valueOf(paymentMethod.toUpperCase());
@@ -120,14 +83,10 @@ public class OrderServiceImpl implements OrderService {
       throw new RuntimeException("Invalid Payment method:" + paymentMethod);
     }
     orders.setPaymentType(paymentType);
-    orders.setPaymentStatus(
-        paymentType == PaymentType.CASH_ON_DELIVERY
-            ? PaymentStatus.PENDING
-            : PaymentStatus.INITIATED);
+    orders.setPaymentStatus(paymentType == PaymentType.CASH_ON_DELIVERY ? PaymentStatus.PENDING : PaymentStatus.INITIATED);
     orders.setStatus(OrderStatus.PLACED);
     Orders savedOrder = ordersRepository.save(orders);
 
-    // LOOP THROUGH CART ITEMS AGAIN TO CREATE ORDER_ITEMS RECORDS
     for (CartItems item : cartItems) {
       ProductVariant variant = item.getProductVariant();
       OrderItems orderItem = new OrderItems();
@@ -138,21 +97,17 @@ public class OrderServiceImpl implements OrderService {
 
       orderItemsRepository.save(orderItem);
 
-      if(paymentType == PaymentType.CASH_ON_DELIVERY) {
-        // REDUCING STOCK FROM PRODUCT VARIANT
+      if (paymentType == PaymentType.CASH_ON_DELIVERY) {
         variant.setStock(variant.getStock() - item.getQuantity());
         productVariantRepository.save(variant);
       }
     }
-    if(paymentType == PaymentType.CASH_ON_DELIVERY) {
-      // CLEARING THE CART FOR THE USER
+    if (paymentType == PaymentType.CASH_ON_DELIVERY) {
       cartItemsRepository.deleteByCart(cart);
     }
-
     return savedOrder.getId();
   }
 
-  // METHOD FOR FETCHING ORDER HISTORY
   @Override
   public Page<OrderListDTO> findOrders(int page, int size) {
 
@@ -170,32 +125,38 @@ public class OrderServiceImpl implements OrderService {
   public Orders getOrderById(Long orderId) {
 
     return ordersRepository.findById(orderId)
-            .orElseThrow(() -> new RuntimeException("Order not found!"));
+        .orElseThrow(() -> new RuntimeException("Order not found!"));
   }
 
-  // METHOD TO CONFIRM PAYMENT
   @Override
   @Transactional
   public void confirmPayment(Long orderId, String paymentId) {
     Orders order = ordersRepository.findById(orderId)
-            .orElseThrow(() -> new RuntimeException("Order not found"));
+          .orElseThrow(() -> new RuntimeException("Order not found"));
 
-    // UPDATING PAYMENT DETAILS
-    order.setPaymentStatus(PaymentStatus.SUCCESS);
-    order.setRazorpayPaymentId(paymentId);
-    ordersRepository.save(order);
-
-    // REDUCING STOCK & CLEAR CART
     List<OrderItems> orderItems = orderItemsRepository.findByOrders(order);
-    for(OrderItems item : orderItems) {
+    for (OrderItems item : orderItems) {
       ProductVariant variant = item.getProductVariant();
+
+      if (variant.getStock() < item.getQuantity()) {
+
+        order.setPaymentStatus(PaymentStatus.FAILED);
+        order.setStatus(OrderStatus.CANCELLED);
+        ordersRepository.save(order);
+        throw new RuntimeException("Sorry, an item in your order went out of stock before payment completed.");
+      }
       variant.setStock(variant.getStock() - item.getQuantity());
       productVariantRepository.save(variant);
     }
 
-    // CLEAR CART
-    Cart cart = cartRepository.findByUserId(order.getUser().getId())
-            .orElseThrow(() -> new RuntimeException("Cart not found"));
+    order.setPaymentStatus(PaymentStatus.SUCCESS);
+    order.setRazorpayPaymentId(paymentId);
+    ordersRepository.save(order);
+
+    Cart cart =
+            cartRepository
+                    .findByUserId(order.getUser().getId())
+                    .orElseThrow(() -> new RuntimeException("Cart not found"));
     cartItemsRepository.deleteByCart(cart);
   }
 }

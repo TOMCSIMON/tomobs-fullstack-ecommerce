@@ -1,11 +1,8 @@
 package com.tomobs.ecommerce.service;
 
-import com.tomobs.ecommerce.dto.OrderDetailsDTO;
 import com.tomobs.ecommerce.dto.OrderListDTO;
 import com.tomobs.ecommerce.model.Orders;
 import org.springframework.data.domain.Page;
-import java.util.List;
-
 
 public interface OrderService {
 
