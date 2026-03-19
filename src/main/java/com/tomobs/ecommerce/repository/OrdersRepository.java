@@ -33,4 +33,14 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
           @Param("user") User user,
           Pageable pageable
   );
+
+  @Query("""
+        SELECT o FROM Orders o
+        LEFT JOIN o.user u
+        WHERE
+        (:keyword IS NULL OR
+            LOWER(CAST(u.userName AS string)) LIKE LOWER(CONCAT('%', CAST(:keyword AS string), '%'))
+        )
+        """)
+  Page<Orders> findFilteredOrders(@Param("keyword") String keyword, Pageable pageable);
 }

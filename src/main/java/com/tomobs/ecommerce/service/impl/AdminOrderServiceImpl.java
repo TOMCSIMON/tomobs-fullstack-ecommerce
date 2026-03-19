@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,19 +19,28 @@ public class AdminOrderServiceImpl implements AdminOrderService {
 
     private final OrdersRepository ordersRepository;
 
+    @Override
     public Page<AdminOrderListDTO> getAllOrdersPaginated(int page, int size) {
-
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Orders> orderPage = ordersRepository.findAll(pageable);
+        return orderPage.map(this::convertToDTO);
+    }
 
-        return orderPage.map(order -> {
-            AdminOrderListDTO dto = new AdminOrderListDTO();
-            dto.setId(order.getId());
-            dto.setTotalAmount(order.getTotalAmount());
-            dto.setPaymentType(order.getPaymentType());
-            dto.setStatus(order.getStatus());
-            dto.setCreatedAt(order.getCreatedAt());
-            return dto;
-        });
+    @Override
+    public Page<AdminOrderListDTO> getOrdersFiltered(String keyword, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Orders> orderPage = ordersRepository.findFilteredOrders(keyword, pageable);
+        return orderPage.map(this::convertToDTO);
+    }
+
+    private AdminOrderListDTO convertToDTO(Orders order) {
+        AdminOrderListDTO dto = new AdminOrderListDTO();
+        dto.setId(order.getId());
+        dto.setTotalAmount(order.getTotalAmount());
+        dto.setPaymentType(order.getPaymentType());
+        dto.setStatus(order.getStatus());
+        dto.setCreatedAt(order.getCreatedAt());
+        dto.setUserName(order.getUser().getUserName());
+        return dto;
     }
 }

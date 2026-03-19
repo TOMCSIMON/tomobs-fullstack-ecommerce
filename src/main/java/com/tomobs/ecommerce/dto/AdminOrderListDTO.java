@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 public class AdminOrderListDTO {
 
     private Long id;
+    private String userName;
     private BigDecimal totalAmount;
     private PaymentType paymentType;
     private OrderStatus status;
