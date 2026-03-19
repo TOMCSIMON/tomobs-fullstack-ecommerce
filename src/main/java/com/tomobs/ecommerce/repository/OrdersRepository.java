@@ -29,18 +29,15 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
                 GROUP BY o.id, pv.variantName, o.totalAmount, o.status, vi.fileName
                 ORDER BY o.createdAt DESC
         """)
-  Page<OrderListDTO> findByUser(
-          @Param("user") User user,
-          Pageable pageable
-  );
+  Page<OrderListDTO> findByUser(@Param("user") User user, Pageable pageable);
+
 
   @Query("""
         SELECT o FROM Orders o
         LEFT JOIN o.user u
         WHERE
-        (:keyword IS NULL OR
-            LOWER(CAST(u.userName AS string)) LIKE LOWER(CONCAT('%', CAST(:keyword AS string), '%'))
-        )
+        (:keyword IS NULL OR LOWER(CAST(u.userName AS string)) LIKE LOWER(CONCAT('%', CAST(:keyword AS string), '%')))
+        AND (:status IS NULL OR UPPER(CAST(o.status AS string)) = UPPER(CAST(:status AS string)))
         """)
-  Page<Orders> findFilteredOrders(@Param("keyword") String keyword, Pageable pageable);
+  Page<Orders> findFilteredOrders(@Param("keyword") String keyword, @Param("status") String status, Pageable pageable);
 }

@@ -42,7 +42,7 @@ public class AdminOrderController {
             @RequestParam(defaultValue = "6") int size,
             Model model) {
 
-        Page<AdminOrderListDTO> orderListPage = adminOrderService.getOrdersFiltered(keyword, page, size);
+        Page<AdminOrderListDTO> orderListPage = adminOrderService.getOrdersFiltered(keyword, status, sort, page, size);
 
         model.addAttribute("orders", orderListPage.getContent());
         model.addAttribute("currentPage", page);

@@ -8,5 +8,5 @@ public interface AdminOrderService {
 
     Page<AdminOrderListDTO> getAllOrdersPaginated(int page, int size);
 
-    Page<AdminOrderListDTO> getOrdersFiltered(String keyword, int page, int size);
+    Page<AdminOrderListDTO> getOrdersFiltered(String keyword, String status, String sort, int page, int size);
 }

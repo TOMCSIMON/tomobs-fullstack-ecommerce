@@ -38,7 +38,7 @@
             </div>
             <div class="col-md-4">
                 <div class="stats-card">
-                    <h6 class="text-muted mb-2">Cancelled Orders</h6>
+                    <h6 class="text-muted mb-2">Canceled Orders</h6>
                     <h3 class="mb-0 fw-bold">0</h3>
                 </div>
             </div>
@@ -58,15 +58,18 @@
             <div class="d-flex gap-4">
                 <select id="statusFilter" class="form-select custom-select" style="min-width: 150px;">
                     <option value="">Filter By</option>
-                    <option value="PROCESSING">Processing</option>
-                    <option value="DELIVERED">Delivered</option>
-                    <option value="CANCELLED">Cancelled</option>
+                    <option value="PENDING">PENDING</option>
+                    <option value="PLACED">PLACED</option>
+                    <option value="SHIPPED">SHIPPED</option>
+                    <option value="DELIVERED">DELIVERED</option>
+                    <option value="CANCELLED">CANCELLED</option>
                 </select>
                 <select id="sortFilter" class="form-select custom-select" style="min-width: 150px;">
-                    <option value="date_desc">Newest First</option>
-                    <option value="date_asc">Oldest First</option>
-                    <option value="amount_desc">Highest Amount</option>
-                    <option value="amount_asc">Lowest Amount</option>
+                    <option value="">Sort By</option>
+                    <option value="date_desc">Newest</option>
+                    <option value="date_asc">Oldest</option>
+                    <option value="amount_desc">Price: High ⬇</option>
+                    <option value="amount_asc">Price: Low ⬆</option>
                 </select>
             </div>
         </div>

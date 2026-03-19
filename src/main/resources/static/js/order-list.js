@@ -90,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const newUrl = window.location.pathname + "?" + params.toString();
         window.history.pushState({ path: newUrl }, '', newUrl);
 
+        console.log("status", status);
         fetch("/admin/orders/filter?" + params.toString())
             .then(response => {
                 if (!response.ok) throw new Error("Network response was not ok");

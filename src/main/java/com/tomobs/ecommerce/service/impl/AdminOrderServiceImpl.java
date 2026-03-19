@@ -27,9 +27,20 @@ public class AdminOrderServiceImpl implements AdminOrderService {
     }
 
     @Override
-    public Page<AdminOrderListDTO> getOrdersFiltered(String keyword, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Orders> orderPage = ordersRepository.findFilteredOrders(keyword, pageable);
+    public Page<AdminOrderListDTO> getOrdersFiltered(String keyword, String status, String sort, int page, int size) {
+
+        Sort jpaSort = Sort.by(Sort.Direction.DESC, "createdAt");
+        if ("date_asc".equalsIgnoreCase(sort)) {
+            jpaSort = Sort.by(Sort.Direction.ASC, "createdAt");
+        }
+        if ("amount_desc".equalsIgnoreCase(sort)) {
+            jpaSort = Sort.by(Sort.Direction.DESC, "totalAmount");
+        }
+        if ("amount_asc".equalsIgnoreCase(sort)) {
+            jpaSort = Sort.by(Sort.Direction.ASC, "totalAmount");
+        }
+        Pageable pageable = PageRequest.of(page, size, jpaSort);
+        Page<Orders> orderPage = ordersRepository.findFilteredOrders(keyword, status, pageable);
         return orderPage.map(this::convertToDTO);
     }
 
