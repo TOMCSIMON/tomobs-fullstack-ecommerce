@@ -4,6 +4,7 @@ import com.tomobs.ecommerce.dto.CategoryDTO;
 import com.tomobs.ecommerce.model.Category;
 import com.tomobs.ecommerce.repository.CategoryRepository;
 import com.tomobs.ecommerce.service.CategoryService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,22 +17,17 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
   private final CategoryRepository categoryRepository;
-
-  public CategoryServiceImpl(CategoryRepository categoryRepository) {
-    this.categoryRepository = categoryRepository;
-  }
 
   @Override
   public void addCategory(CategoryDTO categoryDTO) {
 
     Category category = new Category();
-
     category.setName(categoryDTO.getName());
     category.setDescription(categoryDTO.getDescription());
-
     categoryRepository.save(category);
   }
 
@@ -54,7 +50,6 @@ public class CategoryServiceImpl implements CategoryService {
       }).collect(Collectors.toList());
   }
 
-  // FOR PAGINATION
   @Override
   public Page<CategoryDTO> getAllCategoriesPaginated(
       int page, int size, String sortField, String sortDirection, String keyword) {

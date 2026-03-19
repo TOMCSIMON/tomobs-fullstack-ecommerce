@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/users")
     public String getAllUsers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "8") int size,
+            @RequestParam(defaultValue = "6") int size,
             @RequestParam(required = false) String keyword,
             Model model
     ) {

@@ -1,6 +1,5 @@
 package com.tomobs.ecommerce.repository;
 
-
 import com.tomobs.ecommerce.dto.OrderListDTO;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
@@ -9,8 +8,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
-import java.util.Optional;
 
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
