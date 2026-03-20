@@ -21,5 +21,6 @@ public class AdminOrderListDTO {
     private BigDecimal totalAmount;
     private PaymentType paymentType;
     private OrderStatus status;
+    private int totalItems;
     private LocalDateTime createdAt;
 }
