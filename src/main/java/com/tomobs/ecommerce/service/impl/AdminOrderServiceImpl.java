@@ -50,6 +50,7 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         dto.setTotalAmount(order.getTotalAmount());
         dto.setPaymentType(order.getPaymentType());
         dto.setStatus(order.getStatus());
+        dto.setTotalItems(order.getOrderItems().size());
         dto.setCreatedAt(order.getCreatedAt());
         dto.setUserName(order.getUser().getUserName());
         return dto;
