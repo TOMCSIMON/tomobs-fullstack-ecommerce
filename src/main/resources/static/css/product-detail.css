@@ -34,7 +34,14 @@ body {
   font-weight: 600;
   margin-right: 8px;
 }
-
+.feature-box ul li {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.5;
+}
+.feature-box {
+    border-left: 4px solid #198754 !important;
+}
 .option-btn {
   border: 1px solid #ccc;
   border-radius: 20px;

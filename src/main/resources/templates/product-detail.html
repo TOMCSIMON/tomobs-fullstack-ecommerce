@@ -128,12 +128,18 @@
         </div>
 
         <!-- Key Features -->
-        <h5 class="mt-5 fw-bold">Key Features</h5>
-        <div class="feature-box mt-3">
-            <p th:if="${productDetail.variants != null and !productDetail.variants.isEmpty()}"
-               th:text="${productDetail.variants[0].keyFeatures}">
+        <h5 class="mt-4 fw-bold">Key Features</h5>
+        <div class="feature-box mt-3 p-3 border rounded bg-light">
+            <ul class="list-unstyled mb-0" th:if="${productDetail.variants != null and !productDetail.variants.isEmpty()}">
+                <li th:each="feature : ${#strings.arraySplit(productDetail.variants[0].keyFeatures, ',')}"
+                    class="mb-2 d-flex align-items-start">
+                    <i class="bi bi-check2-circle text-success me-2 mt-1"></i>
+                    <span th:text="${#strings.trim(feature)}">Feature point</span>
+                </li>
+            </ul>
+            <p th:unless="${productDetail.variants != null and !productDetail.variants.isEmpty()}" class="text-muted">
                 Key features will appear here
-            </p>
+                }
         </div>
 
 

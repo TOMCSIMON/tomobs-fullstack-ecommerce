@@ -88,9 +88,10 @@ body {
 /* Payment Block */
 .payment-box {
     border: 1px solid #e0e0e0;
-    border-radius: 4px;
+    border-radius: 12px;
     box-shadow: none;
     padding: 20px 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 .payment-option span {
     font-size: 14px;

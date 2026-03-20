@@ -1,6 +1,18 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     const addToCartForm = document.getElementById('addToCartForm');
+    const thumbnails = document.querySelectorAll('.thumb-img');
+    const mainImage = document.querySelector('.main-img');
+
+        if (thumbnails.length > 0 && mainImage) {
+            thumbnails.forEach(thumb => {
+                thumb.addEventListener('click', function () {
+                    mainImage.src = this.src;
+                    thumbnails.forEach(img => img.style.border = "1px solid #ddd");
+                    this.style.border = "1px solid #010101";
+                });
+            });
+        }
 
     if (addToCartForm) {
         addToCartForm.addEventListener('submit', function (e) {
