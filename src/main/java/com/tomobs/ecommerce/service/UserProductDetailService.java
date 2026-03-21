@@ -6,4 +6,6 @@ public interface UserProductDetailService {
 
   UserProductDetailsDTO getProductDetailsById(Long productId);
 
+  UserProductDetailsDTO getProductVariant(Long variantId);
+
 }
