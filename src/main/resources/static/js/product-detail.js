@@ -1,21 +1,55 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    const addToCartForm = document.getElementById('addToCartForm');
-    const thumbnails = document.querySelectorAll('.thumb-img');
-    const mainImage = document.querySelector('.main-img');
+    initializeThumbnailLogic();
+    initializeAddToCart();
+    document.addEventListener('click', function (e) {
+        if (e.target.classList.contains('option-btn')) {
+            const variantId = e.target.getAttribute('data-variant-id');
+            if (!variantId) return;
+
+            fetch(`/products/details/${variantId}`)
+                .then(response => {
+                    if (!response.ok) throw new Error('Failed to load variant');
+                    return response.text();
+                })
+                .then(html => {
+
+                    const fragmentContainer = document.querySelector('.product-card').parentElement;
+
+                    if (fragmentContainer) {
+                        fragmentContainer.innerHTML = html;
+                        initializeThumbnailLogic();
+                        initializeAddToCart();
+                    }
+                })
+                .catch(error => console.error('Error updating variant:', error));
+        }
+    });
+
+    // --- 3. THUMBNAIL GALLERY FUNCTION ---
+    function initializeThumbnailLogic() {
+        const thumbnails = document.querySelectorAll('.thumb-img');
+        const mainImage = document.querySelector('.main-img');
 
         if (thumbnails.length > 0 && mainImage) {
             thumbnails.forEach(thumb => {
-                thumb.addEventListener('click', function () {
+                thumb.onclick = function () {
                     mainImage.src = this.src;
                     thumbnails.forEach(img => img.style.border = "1px solid #ddd");
                     this.style.border = "1px solid #010101";
-                });
+                };
             });
         }
+    }
 
-    if (addToCartForm) {
-        addToCartForm.addEventListener('submit', function (e) {
+    // --- 4. ADD TO CART FUNCTION ---
+    function initializeAddToCart() {
+        const addToCartForm = document.getElementById('addToCartForm');
+
+        if (!addToCartForm) return;
+
+        // Using onclick or reset listener to ensure only one exists per fragment swap
+        addToCartForm.onsubmit = function (e) {
             e.preventDefault();
 
             const formData = new FormData(addToCartForm);
@@ -45,7 +79,6 @@ document.addEventListener("DOMContentLoaded", function () {
             })
             .then(data => {
                 if (data && data.success) {
-
                     if (typeof Toast !== 'undefined') {
                         Toast.fire({
                             icon: 'success',
@@ -60,6 +93,6 @@ document.addEventListener("DOMContentLoaded", function () {
                     alert('Failed to add item to cart. Please try again.');
                 }
             });
-        });
+        };
     }
 });

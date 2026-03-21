@@ -1,6 +1,7 @@
 package com.tomobs.ecommerce.repository;
 
 import com.tomobs.ecommerce.model.Product;
+import com.tomobs.ecommerce.model.ProductVariant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,8 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p LEFT JOIN FETCH p.variants WHERE p.id = :productId")
     Optional<Product> findByIdWithVariantsAndImages(@Param("productId") Long productId);
+
+    Optional<Product> findByVariants(ProductVariant variant);
 
     Page<Product> findByProductNameContainingIgnoreCase(String productName, Pageable pageable);
 

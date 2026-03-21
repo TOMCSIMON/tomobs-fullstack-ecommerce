@@ -8,45 +8,54 @@ import com.tomobs.ecommerce.model.ProductVariant;
 import com.tomobs.ecommerce.model.VariantImage;
 import com.tomobs.ecommerce.repository.ProductRepository;
 import com.tomobs.ecommerce.repository.ProductVariantRepository;
-import com.tomobs.ecommerce.repository.VariantImageRepository;
 import com.tomobs.ecommerce.service.UserProductDetailService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.nio.file.Paths;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class UserProductDetailServiceImpl implements UserProductDetailService {
 
   private final ProductRepository productRepository;
+  private final ProductVariantRepository productVariantRepository;
 
-  public UserProductDetailServiceImpl(
-      ProductRepository productRepository)
-  {
-    this.productRepository = productRepository;
+  @Override
+  public UserProductDetailsDTO getProductDetailsById(Long productId) {
+    Product product = productRepository.findByIdWithVariantsAndImages(productId)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+    return convertToDetailDTO(product);
   }
 
-  public UserProductDetailsDTO getProductDetailsById(Long productId) {
-    Product product =
-        productRepository
-            .findByIdWithVariantsAndImages(productId)
+  @Override
+  public UserProductDetailsDTO getProductVariant(Long variantId) {
+
+    Product product = productRepository.findByVariants(productVariantRepository.findById(variantId)
+                    .orElseThrow(() -> new RuntimeException("Variant not found")))
             .orElseThrow(() -> new RuntimeException("Product not found"));
 
-    product.getVariants().forEach(variant -> variant.getImages().size());
-    return convertToDetailDTO(product);
+    UserProductDetailsDTO dto = convertToDetailDTO(product);
+
+    List<UserProductVariantDTO> variants = dto.getVariants();
+    UserProductVariantDTO selectedVariant = variants.stream()
+            .filter(v -> v.getId().equals(variantId))
+            .findFirst()
+            .orElse(variants.get(0));
+
+    variants.remove(selectedVariant);
+    variants.add(0, selectedVariant);
+    return dto;
   }
 
   private UserProductDetailsDTO convertToDetailDTO(Product product) {
     UserProductDetailsDTO dto = new UserProductDetailsDTO();
     dto.setId(product.getId());
     dto.setProductName(product.getProductName());
-
     List<UserProductVariantDTO> variantDTOs =
         product.getVariants().stream().map(this::convertToVariantDTO).collect(Collectors.toList());
     dto.setVariants(variantDTOs);
-
     return dto;
   }
 
@@ -59,12 +68,9 @@ public class UserProductDetailServiceImpl implements UserProductDetailService {
     dto.setRam(variant.getRam());
     dto.setStorage(variant.getStorage());
     dto.setPrice(variant.getPrice());
-
-    // Convert images
     List<VariantImageDTO> imageDTOs =
         variant.getImages().stream().map(this::convertToImageDTO).collect(Collectors.toList());
     dto.setImageUrls(imageDTOs);
-
     return dto;
   }
 

@@ -50,16 +50,6 @@ public class UserProductController {
         return "products-list";
     }
 
-    @GetMapping("/detail/{id}")
-    public String showProductDetailPage(
-            @PathVariable Long id,
-            Model model)
-    {
-        UserProductDetailsDTO productDetail = userProductDetailService.getProductDetailsById(id);
-        model.addAttribute("productDetail", productDetail);
-        return "product-detail";
-    }
-
     @GetMapping("/filter")
     public String filterProductList(
            @RequestParam(value = "search", required = false) String search,
@@ -73,12 +63,33 @@ public class UserProductController {
            Model model
            )
     {
-        log.info("products backend: ==========================================={}", search);
         Page<UserProductListDTO> products = userProductService.getFilteredProducts(search, categories, brands, rams, storages, sort, page, size);
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("currentPage", page);
-        log.info("products: ==========================================={}", products.getContent());
         return "products-list :: product-grid-fragment";
     }
+
+
+    @GetMapping("/detail/{id}")
+    public String showProductDetailPage(
+            @PathVariable Long id,
+            Model model)
+    {
+        UserProductDetailsDTO productDetail = userProductDetailService.getProductDetailsById(id);
+        model.addAttribute("productDetail", productDetail);
+        return "product-detail";
+    }
+
+    @GetMapping("/details/{id}")
+    public String changeProductDetail(
+            @PathVariable Long id,
+            Model model)
+    {
+        UserProductDetailsDTO productDetail = userProductDetailService.getProductVariant(id);
+        model.addAttribute("productDetail", productDetail);
+        log.info("new variant: {}", productDetail);
+        return "product-detail :: product-content";
+    }
+
 }

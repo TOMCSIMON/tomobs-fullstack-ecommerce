@@ -1,6 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 
 body {
-  background-color: #fff;
+    background-color: #f9f9f9;
+    font-family: "Poppins", sans-serif;
 }
 
 .product-card {
@@ -55,16 +57,19 @@ body {
   font-weight: 600;
 }
 
-.buy-btn {
-  background: #198754;
+.page-btn {
+  background: #000;
+  border: none;
   color: #fff;
-  border-radius: 25px;
-  padding: 10px 24px;
+  border-radius: 12px;
+  padding: 8px 15px;
+  transition: transform 0.2s ease-in-out;
 }
 
-.cart-btn {
-  border-radius: 25px;
-  padding: 10px 24px;
+.page-btn:hover {
+  background: #2B2B2B;
+  color: #fff;
+  transform: translateY(-3px);
 }
 
 .feature-box {
