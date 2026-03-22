@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.service.impl;
 
+import com.tomobs.ecommerce.dto.CartDTO;
 import com.tomobs.ecommerce.dto.ProductVariantAddDTO;
 import com.tomobs.ecommerce.model.Product;
 import com.tomobs.ecommerce.model.ProductVariant;
@@ -38,5 +39,22 @@ public class ProductVariantServiceImpl implements ProductVariantService {
 
     productVariantRepository.save(productVariant);
     return productVariant;
+  }
+
+  @Override
+  public CartDTO getBuyNowVariant(Long variantId) {
+
+    ProductVariant variant = productVariantRepository.findById(variantId)
+            .orElseThrow(() -> new RuntimeException("variant not found"));
+
+    CartDTO dto = new CartDTO();
+    dto.setCartItemId(variant.getId());
+    dto.setVariantName(variant.getVariantName());
+    dto.setPrice(variant.getPrice());
+    dto.setQuantity(1);
+    dto.setPricePerUnit(variant.getPrice());
+    dto.setSubtotal(variant.getPrice());
+    dto.setImageUrl("/uploads/products/" + variant.getPrimaryImage().getFileName());
+    return dto;
   }
 }

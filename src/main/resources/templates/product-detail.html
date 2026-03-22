@@ -112,7 +112,11 @@
 
                         <!-- Actions -->
                         <div class="d-flex gap-3">
-                            <button class="page-btn">Buy Now</button>
+                            <a th:href="@{/checkout(variantId=${productDetail.variants[0].id})}"
+                               class="page-btn text-decoration-none text-center"
+                               id="buyNowBtn">
+                                Buy Now
+                            </a>
                             <form id="addToCartForm" th:action="@{/cart/add}" method="post">
                                 <input type="hidden" name="variantId" th:value="${productDetail.variants[0].id}">
                                 <button type="submit" class="page-btn">Add to Cart</button>
