@@ -4,10 +4,8 @@ import com.tomobs.ecommerce.dto.CartDTO;
 import com.tomobs.ecommerce.dto.UserAddressListDTO;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
-import com.tomobs.ecommerce.service.CartService;
-import com.tomobs.ecommerce.service.OrderService;
-import com.tomobs.ecommerce.service.UserAddressService;
-import com.tomobs.ecommerce.service.UserService;
+import com.tomobs.ecommerce.repository.ProductVariantRepository;
+import com.tomobs.ecommerce.service.*;
 import com.tomobs.ecommerce.service.impl.RazorpayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,19 +35,34 @@ public class CheckoutController {
   private final UserService userService;
   private final CartService cartService;
   private final OrderService orderService;
+  private final ProductVariantService productVariantService;
 
   @GetMapping()
-  public String viewCheckoutPage(Principal principal, Model model) {
-
-    List<UserAddressListDTO> addressList = userAddressService.getAddress();
+  public String viewCheckoutPage(
+          @RequestParam(value = "variantId", required = false) Long variantId,
+          Principal principal,
+          Model model) {
 
     String email = principal.getName();
     User user = userService.findByEmail(email);
-    List<CartDTO> cartItems = cartService.findCart(user.getId());
-    Double totalAmount = cartService.calculateTotal(user.getId());
+    List<UserAddressListDTO> addressList = userAddressService.getAddress();
 
+    List<CartDTO> checkoutItems;
+    Double totalAmount;
+
+    if (variantId != null) {
+      CartDTO buyNowItem = productVariantService.getBuyNowVariant(variantId);
+      checkoutItems = List.of(buyNowItem);
+      totalAmount = buyNowItem.getPrice().doubleValue();
+      model.addAttribute("buyNowVariantId", variantId);
+    } else {
+        checkoutItems = cartService.findCart(user.getId());
+      totalAmount = cartService.calculateTotal(user.getId());
+    }
+
+    // Common attributes added once at the end
     model.addAttribute("addressList", addressList);
-    model.addAttribute("cartItems", cartItems);
+    model.addAttribute("cartItems", checkoutItems);
     model.addAttribute("totalPrice", totalAmount);
 
     return "checkout";
