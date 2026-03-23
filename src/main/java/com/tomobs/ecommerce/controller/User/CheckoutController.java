@@ -56,11 +56,10 @@ public class CheckoutController {
       totalAmount = buyNowItem.getPrice().doubleValue();
       model.addAttribute("buyNowVariantId", variantId);
     } else {
-        checkoutItems = cartService.findCart(user.getId());
+      checkoutItems = cartService.findCart(user.getId());
       totalAmount = cartService.calculateTotal(user.getId());
     }
 
-    // Common attributes added once at the end
     model.addAttribute("addressList", addressList);
     model.addAttribute("cartItems", checkoutItems);
     model.addAttribute("totalPrice", totalAmount);
@@ -73,17 +72,25 @@ public class CheckoutController {
 
   @PostMapping("/placeOrder")
   public String placeOrder(
-      @RequestParam Long addressId,
-      @RequestParam String paymentMethod,
-      Principal principal,
-      RedirectAttributes redirectAttributes,
-      Model model) {
+          @RequestParam(value = "variantId", required = false) Long variantId,
+          @RequestParam Long addressId,
+          @RequestParam String paymentMethod,
+          Principal principal,
+          RedirectAttributes redirectAttributes,
+          Model model) {
 
+    Long orderId;
     String email = principal.getName();
-    Long orderId = orderService.placeOrder(email, addressId, paymentMethod);
 
-    if ("ONLINE_PAYMENT".equals(paymentMethod)) {
-      try {
+    log.info("variant: {}", variantId);
+    try {
+      if (variantId != null) {
+        orderId = orderService.placeOrderForBuyNow(variantId, email, addressId, paymentMethod);
+      } else {
+        orderId = orderService.placeOrder(email, addressId, paymentMethod);
+      }
+
+      if ("ONLINE_PAYMENT".equals(paymentMethod)) {
         Orders order = orderService.getOrderById(orderId);
         JSONObject razorpayOrder = razorpayService.createRazorpayOrder(order);
 
@@ -93,14 +100,17 @@ public class CheckoutController {
         model.addAttribute("amount", order.getTotalAmount());
         model.addAttribute("customerName", order.getUser().getUserName());
         model.addAttribute("customerEmail", order.getUser().getEmail());
+
         return "razorpay-checkout";
-      } catch (Exception e) {
-        redirectAttributes.addFlashAttribute("error", "Payment initialization failed");
-        return "redirect:/checkout";
+      } else {
+        model.addAttribute("orderId", orderId);
+        return "order-success";
       }
-    } else {
-      model.addAttribute("orderId", orderId);
-      return "order-success";
+
+    } catch (Exception e) {
+      log.error("Order placement failed: ", e);
+      redirectAttributes.addFlashAttribute("error", "Order failed: " + e.getMessage());
+      return "redirect:/checkout" + (variantId != null ? "?variantId=" + variantId : "");
     }
   }
 
