@@ -153,15 +153,27 @@ public class OrderServiceImpl implements OrderService {
   @Override
   public Page<OrderListDTO> findOrders(int page, int size) {
 
-    User user =
-        userRepository
-            .findById(getCurrentUserId())
+    User user = userRepository.findById(getCurrentUserId())
+            .orElseThrow(() -> new RuntimeException("User not found!"));
+
+    Pageable pageable = PageRequest.of(page, size);
+    return ordersRepository.findByUser(user, pageable);
+  }
+  @Override
+  public Page<OrderListDTO> findOrdersWithSearch(int page, int size, String search) {
+    User user = userRepository.findById(getCurrentUserId())
             .orElseThrow(() -> new RuntimeException("User not found!"));
 
     Pageable pageable = PageRequest.of(page, size);
 
-    return ordersRepository.findByUser(user, pageable);
+    // If search is empty or null, just return regular orders
+    if (search == null || search.trim().isEmpty()) {
+      return ordersRepository.findByUser(user, pageable);
+    }
+
+    return ordersRepository.findByUserAndSearch(user, search.trim(), pageable);
   }
+
 
   @Override
   public Orders getOrderById(Long orderId) {

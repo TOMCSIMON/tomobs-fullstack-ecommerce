@@ -10,6 +10,8 @@ public interface OrderService {
 
     Page<OrderListDTO> findOrders(int page, int size);
 
+    Page<OrderListDTO> findOrdersWithSearch(int page, int size, String search);
+
     Orders  getOrderById(Long orderId);
 
     void confirmPayment(Long orderId, String paymentId);
