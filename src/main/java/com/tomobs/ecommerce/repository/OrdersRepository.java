@@ -12,25 +12,47 @@ import org.springframework.data.repository.query.Param;
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
   @Query("""
-        SELECT new com.tomobs.ecommerce.dto.OrderListDTO(
-                o.id,
-                pv.variantName,
-                SUM(oi.quantity),
-                o.totalAmount,
-                o.status,
-                vi.fileName
-                )
-                FROM Orders o
-                JOIN o.user u
-                JOIN o.orderItems oi
-                JOIN oi.productVariant pv
-                LEFT JOIN pv.images vi ON vi.isPrimary = true
-                WHERE u = :user
-                GROUP BY o.id, pv.variantName, o.totalAmount, o.status, vi.fileName
-                ORDER BY o.createdAt DESC
-        """)
+      SELECT new com.tomobs.ecommerce.dto.OrderListDTO(
+              o.id, 
+              MIN(pv.variantName), 
+              SUM(oi.quantity), 
+              o.totalAmount, 
+              o.status, 
+              MIN(vi.fileName)
+              )
+              FROM Orders o
+              JOIN o.user u
+              JOIN o.orderItems oi
+              JOIN oi.productVariant pv
+              LEFT JOIN pv.images vi ON vi.isPrimary = true
+              WHERE u = :user
+              GROUP BY o.id, o.totalAmount, o.status, o.createdAt
+              ORDER BY o.createdAt DESC
+      """)
   Page<OrderListDTO> findByUser(@Param("user") User user, Pageable pageable);
 
+  @Query("""
+      SELECT new com.tomobs.ecommerce.dto.OrderListDTO(
+              o.id,
+              MIN(pv.variantName), 
+              SUM(oi.quantity), 
+              o.totalAmount, 
+              o.status, 
+              MIN(vi.fileName)
+              )
+              FROM Orders o
+              JOIN o.user u
+              JOIN o.orderItems oi
+              JOIN oi.productVariant pv
+              LEFT JOIN pv.images vi ON vi.isPrimary = true
+              WHERE u = :user 
+              AND (LOWER(pv.variantName) LIKE LOWER(CONCAT('%', :search, '%')))
+              GROUP BY o.id, o.totalAmount, o.status, o.createdAt
+              ORDER BY o.createdAt DESC
+      """)
+  Page<OrderListDTO> findByUserAndSearch(@Param("user") User user,
+                                         @Param("search") String search,
+                                         Pageable pageable);
 
   @Query("""
         SELECT o FROM Orders o
