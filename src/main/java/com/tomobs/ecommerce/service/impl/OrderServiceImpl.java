@@ -51,6 +51,48 @@ public class OrderServiceImpl implements OrderService {
 
   @Override
   @Transactional
+  public Long placeOrderForBuyNow(Long variantId,String email,Long addressId,String paymentMethod) {
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("email not found"));
+
+    Address address = userAddressRepository.findById(addressId)
+            .orElseThrow(() -> new RuntimeException("address not found"));
+
+    ProductVariant variant = productVariantRepository.findById(variantId)
+            .orElseThrow(() -> new RuntimeException("variant not found"));
+
+    Orders orders = new Orders();
+    orders.setUser(user);
+    orders.setAddress(address);
+    orders.setTotalAmount(variant.getPrice());
+    PaymentType paymentType;
+    try {
+      paymentType = PaymentType.valueOf(paymentMethod.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new RuntimeException("Invalid Payment method:" + paymentMethod);
+    }
+    orders.setPaymentType(paymentType);
+    orders.setPaymentStatus(paymentType == PaymentType.CASH_ON_DELIVERY ? PaymentStatus.PENDING : PaymentStatus.INITIATED);
+    orders.setStatus(OrderStatus.PLACED);
+    Orders savedOrder = ordersRepository.save(orders);
+
+    OrderItems orderItem = new OrderItems();
+    orderItem.setOrders(savedOrder);
+    orderItem.setProductVariant(variant);
+    orderItem.setQuantity(1);
+    orderItem.setPriceAtPurchase(variant.getPrice());
+
+    orderItemsRepository.save(orderItem);
+
+    if (paymentType == PaymentType.CASH_ON_DELIVERY) {
+      variant.setStock(variant.getStock() - 1);
+      productVariantRepository.save(variant);
+    }
+    return savedOrder.getId();
+  }
+
+  @Override
+  @Transactional
   public Long placeOrder(String email, Long addressId, String paymentMethod) {
 
     User user = userRepository.findByEmail(email)

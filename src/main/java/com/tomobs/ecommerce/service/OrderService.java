@@ -13,4 +13,6 @@ public interface OrderService {
     Orders  getOrderById(Long orderId);
 
     void confirmPayment(Long orderId, String paymentId);
+
+    Long placeOrderForBuyNow(Long variantId,String email,Long addressId,String paymentMethod);
 }
