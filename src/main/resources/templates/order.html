@@ -35,7 +35,16 @@
         </div>
 
         <div id="orders-fragment-container" th:fragment="order-fragment">
-            <div class="orders-list">
+            <div th:if="${orderItems.isEmpty()}" class="text-center py-5 my-4 bg-white rounded-4 shadow-sm border">
+                <div class="mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="#dee2e6" class="bi bi-search" viewBox="0 0 16 16">
+                        <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                    </svg>
+                </div>
+                <h4 class="text-dark fw-bold">No orders found</h4>
+                <p class="text-muted small">We couldn't find any orders matching your search.</p>
+            </div>
+            <div class="orders-list" th:if="${!orderItems.isEmpty()}">
                 <div class="order-card" th:each="order : ${orderItems}">
                     <div class="row align-items-center g-3">
                         <div class="col-md-6 d-flex align-items-center gap-3">
@@ -70,14 +79,23 @@
             <nav th:if="${totalPages > 1}" class="mt-5">
                 <ul class="pagination justify-content-center gap-2">
                     <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                        <a class="page-link" th:href="@{/orders(page=${currentPage - 1})}">Previous</a>
+                        <a class="page-link ajax-page-link"
+                           href="javascript:void(0)"
+                           th:data-page="${currentPage - 1}">Previous</a>
                     </li>
+
                     <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                         th:classappend="${i == currentPage} ? 'active'">
-                        <a class="page-link" th:text="${i + 1}" th:href="@{/orders(page=${i})}">1</a>
+                        <a class="page-link ajax-page-link"
+                           href="javascript:void(0)"
+                           th:text="${i + 1}"
+                           th:data-page="${i}">1</a>
                     </li>
+
                     <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                        <a class="page-link" th:href="@{/orders(page=${currentPage + 1})}">Next</a>
+                        <a class="page-link ajax-page-link"
+                           href="javascript:void(0)"
+                           th:data-page="${currentPage + 1}">Next</a>
                     </li>
                 </ul>
             </nav>
