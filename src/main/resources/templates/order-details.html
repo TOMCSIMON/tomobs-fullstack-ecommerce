@@ -40,7 +40,7 @@
                  th:classappend="${order.status.name() == 'PLACED' || order.status.name() == 'SHIPPED' || order.status.name() == 'DELIVERED'} ? 'completed' : ''">
                 <div class="step-circle"
                      th:text="${order.status.name() == 'PLACED' || order.status.name() == 'SHIPPED' || order.status.name() == 'DELIVERED'} ? '✓' : ''"></div>
-                <div class="step-label">Order Confirmed</div>
+                <div class="step-label">Confirmed</div>
             </div>
 
             <div class="step"
@@ -142,7 +142,7 @@
                     <button class="btn-invoice w-100">Download Invoice</button>
                 </div>
             </div>
-            <button th:if="${order.status.name() == 'PLACED'}" class="btn-cancel-order mt-4">Cancel Order</button>
+            <button th:if="${order.status.name() == 'PLACED'}" class="btn-cancel-order mt-4 ">Cancel Order</button>
         </div>
     </div>
 </main>
