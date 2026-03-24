@@ -93,24 +93,36 @@
     <div class="row g-4 mb-5">
         <div class="col-lg-6">
             <p class="section-label">Delivery Details</p>
-            <div class="info-card p-4">
+            <div class="info-card p-4 mb-4">
                 <h6 class="fw-bold mb-3" th:text="${order.address.fullName}">User Name</h6>
-                <p class="address-text text-muted mb-0">
+                <p class="address-text text-muted mb-3">
                     <span th:text="${order.address.addressLine1}"></span>,
                     <span th:text="${order.address.city}"></span>, <br>
                     <span th:text="${order.address.state}"></span>,
-                    <span th:text="${order.address.postalCode}"></span>, <br>
-                    India
+                    <span th:text="${order.address.postalCode}"></span>
                 </p>
             </div>
-            <button th:if="${order.status.name() == 'PLACED'}" class="btn-cancel-order mt-4">Cancel Order</button>
+
+            <p class="section-label">Payment Information</p>
+            <div class="info-card p-4">
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted">Method:</span>
+                    <span class="fw-bold" th:text="${order.paymentType.name() == 'CASH_ON_DELIVERY' ? 'COD' : 'ONLINE PAYMENT'}"></span>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span class="text-muted">Status:</span>
+                    <span class="badge"
+                          th:classappend="${order.paymentStatus.name() == 'PAID' ? 'bg-success' : 'bg-warning'}"
+                          th:text="${order.paymentStatus}">Pending</span>
+                </div>
+            </div>
         </div>
 
         <div class="col-lg-6">
             <p class="section-label">Price Details</p>
-            <div class="info-card p-4">
+            <div class="info-card p-4  mb-2">
                 <div class="price-row mb-2">
-                    <span>Items Count :</span>
+                    <span>Price (<span th:text="${order.orderItems.size()}"></span> items)</span>
                     <span th:text="'₹' + ${order.totalAmount}">₹0.00</span>
                 </div>
                 <div class="price-row mb-2">
@@ -118,19 +130,19 @@
                     <span class="text-success">- ₹0.00</span>
                 </div>
                 <div class="price-row mb-3">
-                    <span>Coupon :</span>
-                    <span class="text-success">- ₹0.00</span>
+                    <span>Delivery Charges :</span>
+                    <span class="text-success">FREE</span>
                 </div>
                 <hr>
                 <div class="price-row total-row mb-3">
                     <span class="fw-bold">Total Amount :</span>
-                    <span class="fw-bold" th:text="'₹' + ${order.totalAmount}">₹0.00</span>
+                    <span class="fw-bold text-dark" th:text="'₹' + ${order.totalAmount}">₹0.00</span>
                 </div>
-                <p class="text-success small text-center mb-3">You will save ₹0 on this order</p>
                 <div class="text-center">
-                    <button class="btn-invoice">Download Invoice</button>
+                    <button class="btn-invoice w-100">Download Invoice</button>
                 </div>
             </div>
+            <button th:if="${order.status.name() == 'PLACED'}" class="btn-cancel-order mt-4">Cancel Order</button>
         </div>
     </div>
 </main>
