@@ -1,7 +1,6 @@
 package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.config.CustomUserDetails;
-import com.tomobs.ecommerce.dto.OrderDetailsDTO;
 import com.tomobs.ecommerce.dto.OrderListDTO;
 import com.tomobs.ecommerce.enums.OrderStatus;
 import com.tomobs.ecommerce.exception.CartNotFoundException;
@@ -11,7 +10,6 @@ import com.tomobs.ecommerce.repository.*;
 import com.tomobs.ecommerce.service.CartService;
 import com.tomobs.ecommerce.service.OrderService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -166,7 +164,6 @@ public class OrderServiceImpl implements OrderService {
 
     Pageable pageable = PageRequest.of(page, size);
 
-    // If search is empty or null, just return regular orders
     if (search == null || search.trim().isEmpty()) {
       return ordersRepository.findByUser(user, pageable);
     }
@@ -207,10 +204,26 @@ public class OrderServiceImpl implements OrderService {
     order.setRazorpayPaymentId(paymentId);
     ordersRepository.save(order);
 
-    Cart cart =
-            cartRepository
-                    .findByUserId(order.getUser().getId())
+    Cart cart = cartRepository.findByUserId(order.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("Cart not found"));
     cartItemsRepository.deleteByCart(cart);
+  }
+
+  @Override
+  @Transactional
+  public void saveCancelRequest(String email, Long orderId, String cancelReason) {
+
+    Orders orders = ordersRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+    if (!orders.getUser().getEmail().equals(email)) {
+      throw new RuntimeException("You are not authorized to cancel this order");
+    }
+
+    if (orders.getStatus() != OrderStatus.PLACED) {
+      throw new RuntimeException("Order cannot be cancelled at this stage: " + orders.getStatus());
+    }
+    orders.setCancellationReason(cancelReason);
+    ordersRepository.save(orders);
   }
 }

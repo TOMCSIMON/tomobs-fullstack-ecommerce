@@ -64,5 +64,4 @@ public class Orders {
   @UpdateTimestamp
   @Column(name = "updated_at")
   private LocalDateTime updatedAt;
-
 }

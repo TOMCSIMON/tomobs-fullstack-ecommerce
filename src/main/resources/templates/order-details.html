@@ -25,8 +25,30 @@
             <li class="breadcrumb-current">Order Details</li>
         </ol>
     </nav>
-    <h2 class="page-title mb-4">Order Details</h2>
+    <div class="d-flex justify-content-between">
+        <h2 class="page-title">Order Details</h2>
+        <div th:if="${order.status.name() == 'PLACED' && order.cancelReason == null}">
+            <button type="button"
+                    class="btn-cancel-order mt-4"
+                    data-bs-toggle="modal"
+                    data-bs-target="#cancelOrderModal">
+                Cancel Order
+            </button>
+        </div>
+    </div>
+    <div th:if="${order.status.name() == 'PLACED' && order.cancelReason != null}"
+         class="alert alert-warning mt-4 rounded-4 p-3 border-0 shadow-sm">
+        <div class="d-flex align-items-center gap-2">
+            <span class="spinner-grow spinner-grow-sm text-warning" role="status"></span>
+            <strong class="text-dark">Cancellation Requested</strong>
+        </div>
+        <p class="small text-muted mb-0 mt-1">Your request is pending for admin approval. We will update you soon.</p>
+    </div>
 
+    <div th:if="${order.status.name() == 'CANCELLED'}"
+         class="alert alert-danger mt-4 rounded-4 p-3 border-0 shadow-sm text-center">
+        <h6 class="mb-0 fw-bold">This order has been Canceled</h6>
+    </div>
     <div class="status-section mb-5 px-4">
         <p class="section-label">Order Status</p>
 
@@ -107,7 +129,8 @@
             <div class="info-card p-4">
                 <div class="d-flex justify-content-between mb-2">
                     <span class="text-muted">Method:</span>
-                    <span class="fw-bold" th:text="${order.paymentType.name() == 'CASH_ON_DELIVERY' ? 'COD' : 'ONLINE PAYMENT'}"></span>
+                    <span class="fw-bold"
+                          th:text="${order.paymentType.name() == 'CASH_ON_DELIVERY' ? 'COD' : 'ONLINE PAYMENT'}"></span>
                 </div>
                 <div class="d-flex justify-content-between">
                     <span class="text-muted">Status:</span>
@@ -142,13 +165,6 @@
                     <button class="btn-invoice w-100">Download Invoice</button>
                 </div>
             </div>
-            <button th:if="${order.status.name() == 'PLACED'}"
-                    type="button"
-                    class="btn-cancel-order mt-4"
-                    data-bs-toggle="modal"
-                    data-bs-target="#cancelOrderModal">
-                Cancel Order
-            </button>
         </div>
     </div>
 </main>
