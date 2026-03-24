@@ -54,6 +54,9 @@ public class Orders {
   @Column(name = "razorpay_payment_id")
   private String razorpayPaymentId;
 
+  @Column(name = "cancellation_reason", length = 500)
+  private String cancellationReason;
+
   @CreationTimestamp
   @Column(name = "created_at", updatable = false)
   private LocalDateTime createdAt;
