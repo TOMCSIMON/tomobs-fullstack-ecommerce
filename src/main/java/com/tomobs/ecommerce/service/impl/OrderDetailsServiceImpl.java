@@ -36,6 +36,7 @@ public class OrderDetailsServiceImpl implements OrderDetailService {
         detailsDTO.setTotalAmount(orders.getTotalAmount());
         detailsDTO.setStatus(orders.getStatus());
         detailsDTO.setPaymentType(orders.getPaymentType());
+        detailsDTO.setCancelReason(orders.getCancellationReason());
         detailsDTO.setPaymentStatus(orders.getPaymentStatus());
         return detailsDTO;
     }

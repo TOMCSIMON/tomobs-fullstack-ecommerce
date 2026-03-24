@@ -24,4 +24,5 @@ public class OrderDetailsDTO {
     private OrderStatus status;
     private PaymentType paymentType;
     private PaymentStatus paymentStatus;
+    private String cancelReason;
 }

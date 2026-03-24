@@ -18,4 +18,6 @@ public interface OrderService {
 
     Long placeOrderForBuyNow(Long variantId,String email,Long addressId,String paymentMethod);
 
+    void saveCancelRequest(String email, Long orderId, String cancelReason);
+
 }
