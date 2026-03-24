@@ -4,7 +4,6 @@ import com.tomobs.ecommerce.dto.CartDTO;
 import com.tomobs.ecommerce.dto.UserAddressListDTO;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
-import com.tomobs.ecommerce.repository.ProductVariantRepository;
 import com.tomobs.ecommerce.service.*;
 import com.tomobs.ecommerce.service.impl.RazorpayService;
 import lombok.RequiredArgsConstructor;

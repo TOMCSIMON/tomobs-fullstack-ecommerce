@@ -1,9 +1,7 @@
 package com.tomobs.ecommerce.controller.User;
 
 import com.tomobs.ecommerce.dto.OrderListDTO;
-import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.service.OrderService;
-import com.tomobs.ecommerce.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

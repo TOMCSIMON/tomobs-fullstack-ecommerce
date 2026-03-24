@@ -11,7 +11,7 @@
     <link rel="stylesheet" th:href="@{/css/order.css}">
 </head>
 
-<body class="bg-light">
+<body>
 
 <div th:insert="~{fragments/navbar :: navbar}"></div>
 
@@ -45,35 +45,39 @@
                 <p class="text-muted small">We couldn't find any orders matching your search.</p>
             </div>
             <div class="orders-list" th:if="${!orderItems.isEmpty()}">
-                <div class="order-card" th:each="order : ${orderItems}">
-                    <div class="row align-items-center g-3">
-                        <div class="col-md-6 d-flex align-items-center gap-3">
-                            <div class="img-box">
-                                <img th:src="${order.imageUrl}" alt="product" class="img-fluid">
-                            </div>
-                            <div>
-                                <div class="order-name" th:text="${order.variantName}">Product Name</div>
-                                <div class="order-extras" th:if="${order.totalItems > 1}"
-                                     th:text="'+' + (${order.totalItems} - 1) + ' more items'"></div>
-                            </div>
-                        </div>
+                <a th:href="@{/orders/details/{id}(id=${order.id})}"
+                   th:each="order : ${orderItems}"
+                   class="order-card-link text-decoration-none">
 
-                        <div class="col-md-2 text-md-center">
-                            <span class="order-amount" th:text="'₹' + ${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')}">₹0</span>
-                        </div>
-
-                        <div class="col-md-4 text-md-end">
-                            <div class="status-container mb-2">
-                                <span class="status-label">Status: </span>
-                                <span th:text="${order.status}"
-                                      th:classappend="${order.status.name() == 'CANCELLED'} ? 'status-cancelled' : 'status-delivered'">
-                                      Status
-                                </span>
+                    <div class="order-card mb-3">
+                        <div class="row align-items-center g-3">
+                            <div class="col-md-6 d-flex align-items-center gap-3">
+                                <div class="img-box">
+                                    <img th:src="${order.imageUrl}" alt="product" class="img-fluid">
+                                </div>
+                                <div>
+                                    <div class="order-name text-dark fw-bold" th:text="${order.variantName}">Product Name</div>
+                                    <div class="order-extras text-muted small" th:if="${order.totalItems > 1}"
+                                         th:text="'+' + (${order.totalItems} - 1) + ' more items'"></div>
+                                </div>
                             </div>
-                            <a th:href="@{/orders/{id}(id=${order.id})}" class="btn-view-details">View Details</a>
+
+                            <div class="col-md-2 text-md-center">
+                                <span class="order-amount text-dark" th:text="'₹' + ${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT')}">₹0</span>
+                            </div>
+
+                            <div class="col-md-4 text-md-end">
+                                <div class="status-container">
+                                    <span class="status-label text-muted small">Status: </span>
+                                    <span th:text="${order.status}"
+                                          th:classappend="${order.status.name() == 'CANCELLED'} ? 'status-cancelled' : 'status-delivered'">
+                              Status
+                        </span>
+                                    <span class="ms-2 text-muted">›</span> </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <nav th:if="${totalPages > 1}" class="mt-5">

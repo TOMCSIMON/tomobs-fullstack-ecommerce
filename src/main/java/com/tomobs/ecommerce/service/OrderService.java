@@ -12,9 +12,10 @@ public interface OrderService {
 
     Page<OrderListDTO> findOrdersWithSearch(int page, int size, String search);
 
-    Orders  getOrderById(Long orderId);
+    Orders getOrderById(Long orderId);
 
     void confirmPayment(Long orderId, String paymentId);
 
     Long placeOrderForBuyNow(Long variantId,String email,Long addressId,String paymentMethod);
+
 }
