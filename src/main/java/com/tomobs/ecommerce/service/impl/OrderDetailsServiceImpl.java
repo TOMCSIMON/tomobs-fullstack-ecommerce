@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.dto.AdminOrderDetailsDTO;
 import com.tomobs.ecommerce.dto.OrderDetailsDTO;
+import com.tomobs.ecommerce.enums.OrderStatus;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
 import com.tomobs.ecommerce.repository.OrdersRepository;
@@ -62,5 +63,15 @@ public class OrderDetailsServiceImpl implements OrderDetailService {
     detailsDTO.setCreatedTime(orders.getCreatedAt());
     detailsDTO.setUser(orders.getUser());
     return detailsDTO;
+  }
+
+  @Override
+  public void updateStatus(Long id, OrderStatus status) {
+
+    Orders orders = ordersRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Order not found!"));
+
+    orders.setStatus(status);
+    ordersRepository.save(orders);
   }
 }
