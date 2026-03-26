@@ -1,13 +1,16 @@
 package com.tomobs.ecommerce.controller.Admin;
 
+import com.tomobs.ecommerce.dto.AdminOrderDetailsDTO;
 import com.tomobs.ecommerce.dto.AdminOrderListDTO;
 import com.tomobs.ecommerce.service.AdminOrderService;
+import com.tomobs.ecommerce.service.OrderDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class AdminOrderController {
 
     private final AdminOrderService adminOrderService;
+    private final OrderDetailService orderDetailService;
 
     @GetMapping()
     public String getOrders(
@@ -50,5 +54,15 @@ public class AdminOrderController {
         model.addAttribute("keyword", keyword);
 
         return "admin/order-list :: order-grid-fragment";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String viewOrderDetails(
+            @PathVariable("id") Long orderId,
+            Model model) {
+
+        AdminOrderDetailsDTO orderDetails = orderDetailService.findOrderDetailsForAdmin(orderId);
+        model.addAttribute("order", orderDetails);
+        return "admin/admin-order-details";
     }
 }

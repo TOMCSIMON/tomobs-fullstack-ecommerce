@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.service.impl;
 
+import com.tomobs.ecommerce.dto.AdminOrderDetailsDTO;
 import com.tomobs.ecommerce.dto.OrderDetailsDTO;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
@@ -16,28 +17,50 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class OrderDetailsServiceImpl implements OrderDetailService {
 
-    private final UserRepository userRepository;
-    private final OrdersRepository ordersRepository;
+  private final UserRepository userRepository;
+  private final OrdersRepository ordersRepository;
 
-    @Override
-    @Transactional
-    public OrderDetailsDTO findOrderDetails(String email, Long orderId) {
+  @Override
+  @Transactional
+  public OrderDetailsDTO findOrderDetails(String email, Long orderId) {
 
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(()-> new RuntimeException("User not found!"));
+    User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found!"));
 
-        Orders orders = ordersRepository.findById(orderId)
-                .orElseThrow(()-> new RuntimeException("Order not found!"));
+    Orders orders =
+        ordersRepository
+            .findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found!"));
 
-        OrderDetailsDTO detailsDTO = new OrderDetailsDTO();
-        detailsDTO.setId(orders.getId());
-        detailsDTO.setOrderItems(orders.getOrderItems());
-        detailsDTO.setAddress(orders.getAddress());
-        detailsDTO.setTotalAmount(orders.getTotalAmount());
-        detailsDTO.setStatus(orders.getStatus());
-        detailsDTO.setPaymentType(orders.getPaymentType());
-        detailsDTO.setCancelReason(orders.getCancellationReason());
-        detailsDTO.setPaymentStatus(orders.getPaymentStatus());
-        return detailsDTO;
-    }
+    OrderDetailsDTO detailsDTO = new OrderDetailsDTO();
+    detailsDTO.setId(orders.getId());
+    detailsDTO.setOrderItems(orders.getOrderItems());
+    detailsDTO.setAddress(orders.getAddress());
+    detailsDTO.setTotalAmount(orders.getTotalAmount());
+    detailsDTO.setStatus(orders.getStatus());
+    detailsDTO.setPaymentType(orders.getPaymentType());
+    detailsDTO.setCancelReason(orders.getCancellationReason());
+    detailsDTO.setPaymentStatus(orders.getPaymentStatus());
+    return detailsDTO;
+  }
+
+  @Override
+  public AdminOrderDetailsDTO findOrderDetailsForAdmin(Long orderId) {
+
+    Orders orders = ordersRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found!"));
+
+    AdminOrderDetailsDTO detailsDTO = new AdminOrderDetailsDTO();
+    detailsDTO.setId(orders.getId());
+    detailsDTO.setOrderItems(orders.getOrderItems());
+    detailsDTO.setAddress(orders.getAddress());
+    detailsDTO.setTotalAmount(orders.getTotalAmount());
+    detailsDTO.setStatus(orders.getStatus());
+    detailsDTO.setPaymentType(orders.getPaymentType());
+    detailsDTO.setCancelReason(orders.getCancellationReason());
+    detailsDTO.setPaymentStatus(orders.getPaymentStatus());
+    detailsDTO.setCreatedTime(orders.getCreatedAt());
+    detailsDTO.setUser(orders.getUser());
+    return detailsDTO;
+  }
 }
