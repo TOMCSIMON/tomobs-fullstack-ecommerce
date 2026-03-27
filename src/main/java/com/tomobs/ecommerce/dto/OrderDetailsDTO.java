@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -25,4 +26,7 @@ public class OrderDetailsDTO {
     private PaymentType paymentType;
     private PaymentStatus paymentStatus;
     private String cancelReason;
+    private String returnReason;
+    private LocalDateTime createdTime;
+    private LocalDateTime updatedTime;
 }

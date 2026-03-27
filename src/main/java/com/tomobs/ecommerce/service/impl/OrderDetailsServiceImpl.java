@@ -28,9 +28,7 @@ public class OrderDetailsServiceImpl implements OrderDetailService {
     User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new RuntimeException("User not found!"));
 
-    Orders orders =
-        ordersRepository
-            .findById(orderId)
+    Orders orders = ordersRepository.findById(orderId)
             .orElseThrow(() -> new RuntimeException("Order not found!"));
 
     OrderDetailsDTO detailsDTO = new OrderDetailsDTO();
@@ -41,7 +39,10 @@ public class OrderDetailsServiceImpl implements OrderDetailService {
     detailsDTO.setStatus(orders.getStatus());
     detailsDTO.setPaymentType(orders.getPaymentType());
     detailsDTO.setCancelReason(orders.getCancellationReason());
+    detailsDTO.setReturnReason(orders.getReturnReason());
     detailsDTO.setPaymentStatus(orders.getPaymentStatus());
+    detailsDTO.setCreatedTime(orders.getCreatedAt());
+    detailsDTO.setUpdatedTime(orders.getUpdatedAt());
     return detailsDTO;
   }
 
@@ -59,6 +60,7 @@ public class OrderDetailsServiceImpl implements OrderDetailService {
     detailsDTO.setStatus(orders.getStatus());
     detailsDTO.setPaymentType(orders.getPaymentType());
     detailsDTO.setCancelReason(orders.getCancellationReason());
+    detailsDTO.setReturnReason(orders.getReturnReason());
     detailsDTO.setPaymentStatus(orders.getPaymentStatus());
     detailsDTO.setCreatedTime(orders.getCreatedAt());
     detailsDTO.setUser(orders.getUser());
@@ -66,6 +68,7 @@ public class OrderDetailsServiceImpl implements OrderDetailService {
   }
 
   @Override
+  @Transactional
   public void updateStatus(Long id, OrderStatus status) {
 
     Orders orders = ordersRepository.findById(id)

@@ -29,6 +29,7 @@ public class AdminOrderDetailsDTO {
     private PaymentType paymentType;
     private PaymentStatus paymentStatus;
     private String cancelReason;
+    private String returnReason;
     private LocalDateTime createdTime;
     private User user;
 }
