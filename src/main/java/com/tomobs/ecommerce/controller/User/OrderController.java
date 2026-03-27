@@ -62,4 +62,15 @@ public class OrderController {
         orderService.saveCancelRequest(principal.getName(), orderId, cancelReason);
         return ResponseEntity.ok(Map.of("success", true));
     }
+
+    @ResponseBody
+    @PostMapping("/return/{id}")
+    public ResponseEntity<Map<String, Boolean>> returnOrder(
+            @PathVariable("id") Long orderId,
+            @RequestParam(value = "returnReason") String returnReason,
+            Principal principal) {
+
+        orderService.saveReturnRequest(principal.getName(), orderId, returnReason);
+        return ResponseEntity.ok(Map.of("success", true));
+    }
 }

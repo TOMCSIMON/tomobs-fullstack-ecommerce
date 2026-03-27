@@ -26,43 +26,72 @@
         </ol>
     </nav>
     <div class="d-flex justify-content-between">
-        <h2 class="page-title">Order Details</h2>
+        <h2 class="page-title mb-4">Order Details</h2>
         <div th:if="${order.status.name() == 'PLACED' && order.cancelReason == null}">
-            <button type="button"
+            <button th:if="${order.status.name() == 'PLACED' && order.cancelReason == null}"
+                    type="button"
                     class="btn-cancel-order mt-4"
                     data-bs-toggle="modal"
-                    data-bs-target="#cancelOrderModal">
+                    data-bs-target="#orderActionModal"
+                    data-action="CANCEL"
+                    th:attr="data-id=${order.id}">
                 Cancel Order
             </button>
         </div>
+        <div th:if="${order.status.name() == 'DELIVERED'}">
+            <button th:if="${order.status.name() == 'DELIVERED'}"
+                    type="button"
+                    class="btn-cancel-order mt-4"
+                    data-bs-toggle="modal"
+                    data-bs-target="#orderActionModal"
+                    data-action="RETURN"
+                    th:attr="data-id=${order.id}">
+                Return Order
+            </button>
+        </div>
     </div>
-    <div th:if="${order.status.name() == 'PLACED' && order.cancelReason != null}"
+    <p class="section-label">Order Status</p>
+    <div th:if="${order.status.name() == 'PENDING' && order.cancelReason != null}"
          class="alert alert-warning mt-4 rounded-4 p-3 border-0 shadow-sm">
         <div class="d-flex align-items-center gap-2">
             <span class="spinner-grow spinner-grow-sm text-warning" role="status"></span>
             <strong class="text-dark">Cancellation Requested</strong>
         </div>
-        <p class="small text-muted mb-0 mt-1">Your request is pending for admin approval. We will update you soon.</p>
+        <p class="small text-muted mb-0 mt-1">Your request is pending for approval. We will update you soon.</p>
+    </div>
+    <div th:if="${order.status.name() == 'PENDING' && order.returnReason != null}"
+         class="alert alert-warning mt-4 rounded-4 p-3 border-0 shadow-sm">
+        <div class="d-flex align-items-center gap-2">
+            <span class="spinner-grow spinner-grow-sm text-warning" role="status"></span>
+            <strong class="text-dark">Return Order Requested</strong>
+        </div>
+        <p class="small text-muted mb-0 mt-1">Your request is pending for  approval. We will update you soon.</p>
     </div>
 
-    <div th:if="${order.status.name() == 'CANCELLED'}"
-         class="alert alert-danger mt-4 rounded-4 p-3 border-0 shadow-sm text-center">
-        <h6 class="mb-0 fw-bold">This order has been Canceled</h6>
-    </div>
     <div class="status-section mb-5 px-4">
-        <p class="section-label">Order Status</p>
 
-        <div th:if="${order.status.name() == 'CANCELLED'}" class="alert alert-danger rounded-4 p-3 text-center">
-            <h5 class="mb-0 fw-bold">This order has been Canceled</h5>
+        <div th:if="${order.status.name() == 'CANCELLED'}"
+             class="alert alert-danger mt-4 rounded-3 p-4 border-0 shadow-sm text-center">
+            <h5 class="mb-0 fw-bold"
+                th:text=" 'This order has been Canceled at ' + ${#temporals.format(order.updatedTime, 'dd MMM, hh:mm a')}">
+                This order has been Canceled</h5>
         </div>
 
-        <div th:if="${order.status.name() != 'CANCELLED'}" class="stepper-wrapper">
+        <div th:if="${order.status.name() == 'RETURNED'}"
+             class="alert alert-danger mt-4 rounded-3 p-4 border-0 shadow-sm text-center">
+            <h5 class="mb-0 fw-bold"
+                th:text=" 'This order has been Returned at ' + ${#temporals.format(order.updatedTime, 'dd MMM, hh:mm a')}">
+                This order has been Returned</h5>
+        </div>
+        <div th:if="${order.status.name() != 'CANCELLED' && order.status.name() != 'PENDING' && order.status.name() != 'RETURNED'}" class="stepper-wrapper">
 
             <div class="step"
                  th:classappend="${order.status.name() == 'PLACED' || order.status.name() == 'SHIPPED' || order.status.name() == 'DELIVERED'} ? 'completed' : ''">
                 <div class="step-circle"
                      th:text="${order.status.name() == 'PLACED' || order.status.name() == 'SHIPPED' || order.status.name() == 'DELIVERED'} ? '✓' : ''"></div>
                 <div class="step-label">Confirmed</div>
+                <div class="step-time text-muted mt-1" style="font-size: 0.75rem;"
+                     th:text="${#temporals.format(order.createdTime, 'dd MMM, hh:mm a')}"></div>
             </div>
 
             <div class="step"
@@ -70,6 +99,9 @@
                 <div class="step-circle"
                      th:text="${order.status.name() == 'SHIPPED' || order.status.name() == 'DELIVERED'} ? '✓' : ''"></div>
                 <div class="step-label">Shipped</div>
+                <div class="step-time text-muted mt-1" style="font-size: 0.75rem;"
+                     th:if="${order.status.name() == 'SHIPPED' || order.status.name() == 'DELIVERED'}"
+                     th:text="${#temporals.format(order.updatedTime, 'dd MMM, hh:mm a')}"></div>
             </div>
 
             <div class="step" th:classappend="${order.status.name() == 'DELIVERED'} ? 'completed' : ''">
@@ -80,6 +112,9 @@
             <div class="step" th:classappend="${order.status.name() == 'DELIVERED'} ? 'completed' : ''">
                 <div class="step-circle" th:text="${order.status.name() == 'DELIVERED'} ? '✓' : ''"></div>
                 <div class="step-label">Delivered</div>
+                <div class="step-time text-muted mt-1" style="font-size: 0.75rem;"
+                     th:if="${order.status.name() == 'DELIVERED'}"
+                     th:text="${#temporals.format(order.updatedTime, 'dd MMM, hh:mm a')}"></div>
             </div>
         </div>
     </div>
@@ -168,21 +203,19 @@
         </div>
     </div>
 </main>
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+
+<div class="modal fade" id="orderActionModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
             <div class="modal-header border-0 pb-0">
-                <h5 class="modal-title w-100 text-center fw-bold mt-3" id="cancelOrderModalLabel">ARE YOU SURE?</h5>
-                <button type="button" class="btn-close me-2 mt-1" data-bs-dismiss="modal" aria-label="Close"></button>
+                <h5 class="modal-title w-100 text-center fw-bold mt-3" id="modalTitle">ARE YOU SURE?</h5>
+                <button type="button" class="btn-close me-2 mt-1" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body px-4">
-                <h4 class="fw-normal mb-3">Enter your Reason</h4>
-                <form id="cancelOrderForm">
-                    <textarea class="form-control" name="reason" id="cancelReason" rows="6" required></textarea>
-
-                    <button type="button" th:onclick="'submitCancelOrder(' + ${order.id} + ')'" class="btn btn-danger">
-                        Cancel Order
-                    </button>
+                <h4 class="fw-normal mb-3" id="reasonLabel">Enter your Reason</h4>
+                <form id="orderActionForm">
+                    <textarea class="form-control" name="reason" id="actionReason" rows="6" required></textarea>
+                    <button type="button" id="submitActionBtn" class="btn btn-danger w-100 mt-3">Confirm</button>
                 </form>
             </div>
         </div>

@@ -223,7 +223,27 @@ public class OrderServiceImpl implements OrderService {
     if (orders.getStatus() != OrderStatus.PLACED) {
       throw new RuntimeException("Order cannot be cancelled at this stage: " + orders.getStatus());
     }
+    orders.setStatus(OrderStatus.PENDING);
     orders.setCancellationReason(cancelReason);
+    ordersRepository.save(orders);
+  }
+
+  @Override
+  @Transactional
+  public void saveReturnRequest(String email, Long orderId, String returnReason) {
+
+    Orders orders = ordersRepository.findById(orderId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+    if (!orders.getUser().getEmail().equals(email)) {
+      throw new RuntimeException("You are not authorized to return this order");
+    }
+
+    if (orders.getStatus() != OrderStatus.DELIVERED) {
+      throw new RuntimeException("Order cannot be returned at this stage: " + orders.getStatus());
+    }
+    orders.setStatus(OrderStatus.PENDING);
+    orders.setReturnReason(returnReason);
     ordersRepository.save(orders);
   }
 }

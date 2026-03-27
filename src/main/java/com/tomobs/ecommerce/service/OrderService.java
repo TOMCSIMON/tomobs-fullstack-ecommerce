@@ -20,4 +20,5 @@ public interface OrderService {
 
     void saveCancelRequest(String email, Long orderId, String cancelReason);
 
+    void saveReturnRequest(String email,Long orderId, String returnReason);
 }

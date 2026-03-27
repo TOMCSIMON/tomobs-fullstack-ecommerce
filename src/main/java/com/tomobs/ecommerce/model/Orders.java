@@ -57,6 +57,9 @@ public class Orders {
   @Column(name = "cancellation_reason", length = 500)
   private String cancellationReason;
 
+  @Column(name = "return_reason", length = 500)
+  private String returnReason;
+
   @CreationTimestamp
   @Column(name = "created_at", updatable = false)
   private LocalDateTime createdAt;
