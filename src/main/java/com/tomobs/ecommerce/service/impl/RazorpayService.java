@@ -3,63 +3,43 @@ package com.tomobs.ecommerce.service.impl;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
-import com.tomobs.ecommerce.model.Orders;
-import com.tomobs.ecommerce.repository.OrdersRepository;
+import com.razorpay.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import java.math.BigDecimal;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class RazorpayService {
 
-    @Autowired
-    private RazorpayClient razorpayClient;
-    private final OrdersRepository ordersRepository;
+    private final RazorpayClient razorpayClient;
 
-    public JSONObject createRazorpayOrder(Orders order) throws RazorpayException {
-
-        JSONObject orderRequest = new JSONObject();
-        orderRequest.put("amount", order.getTotalAmount().multiply(new java.math.BigDecimal("100")).intValue());
-        orderRequest.put("currency", "INR");
-        orderRequest.put("receipt", "order_" + order.getId());
-        Order razorpayOrder = razorpayClient.orders.create(orderRequest);
-        order.setRazorpayOrderId(razorpayOrder.get("id"));
-        ordersRepository.save(order);
-        return razorpayOrder.toJson();
-    }
-
-    // VERIFY PAYMENT
     @Value("${razorpay.key.secret}")
     private String razorpayKeySecret;
 
-    public boolean verifySignature(String orderId, String paymentId, String signature) {
+    public JSONObject createRazorpayOrder(BigDecimal totalAmount) throws RazorpayException {
+        JSONObject orderRequest = new JSONObject();
+        orderRequest.put("amount", totalAmount.multiply(new java.math.BigDecimal("100")).intValue());
+        orderRequest.put("currency", "INR");
+        orderRequest.put("receipt", "txn_" + System.currentTimeMillis());
+        Order razorpayOrder = razorpayClient.orders.create(orderRequest);
+        return razorpayOrder.toJson();
+    }
+
+    public boolean verifySignature(String razorpay_order_id, String razorpay_payment_id, String razorpay_signature) {
         try {
-            String data = orderId + "|" + paymentId;
+            JSONObject options = new JSONObject();
+            options.put("razorpay_order_id", razorpay_order_id);
+            options.put("razorpay_payment_id", razorpay_payment_id);
+            options.put("razorpay_signature", razorpay_signature);
+            return Utils.verifyPaymentSignature(options, razorpayKeySecret);
 
-            log.info("orderId: {}" ,orderId);
-            log.info("paymentId: {}", paymentId);
-            log.info("signature: {}", signature);
-
-            javax.crypto.Mac mac = javax.crypto.Mac.getInstance("HmacSHA256");
-            javax.crypto.spec.SecretKeySpec secretKeySpec = new javax.crypto.spec.SecretKeySpec(razorpayKeySecret.getBytes(), "HmacSHA256");
-            mac.init(secretKeySpec);
-
-            byte[] hash = mac.doFinal(data.getBytes());
-
-            StringBuilder hexString = new StringBuilder();
-            for (byte b : hash) {
-                String hex = Integer.toHexString(0xff & b);
-                if(hex.length() == 1) hexString.append('0');
-                hexString.append(hex);
-            }
-
-            return hexString.toString().equals(signature);
-        } catch(Exception e) {
+        } catch (Exception e) {
+            log.error("Signature verification failed due to exception: ", e);
             return false;
         }
     }

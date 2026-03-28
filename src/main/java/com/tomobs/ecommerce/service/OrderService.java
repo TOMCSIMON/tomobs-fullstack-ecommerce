@@ -16,6 +16,8 @@ public interface OrderService {
 
     void confirmPayment(Long orderId, String paymentId);
 
+    Double calculateBuyNowTotal(Long variantId);
+
     Long placeOrderForBuyNow(Long variantId,String email,Long addressId,String paymentMethod);
 
     void saveCancelRequest(String email, Long orderId, String cancelReason);

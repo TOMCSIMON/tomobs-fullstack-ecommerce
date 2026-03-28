@@ -1,36 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Processing Payment...</title>
+    <meta charset="UTF-8">
+    <title>Processing Payment | ToMobs</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script th:src="@{/js/toast.js}"></script>
+
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f8f9fa; margin: 0; }
+        .loader-container { text-align: center; }
+        .spinner { border: 4px solid rgba(0, 0, 0, 0.1); width: 36px; height: 36px; border-radius: 50%; border-left-color: #3399cc; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
 <body>
-<h3>Redirecting to payment gateway...</h3>
+
+<div class="loader-container">
+    <div class="spinner"></div>
+    <h3>Redirecting to Secure Payment Gateway...</h3>
+    <p>Please do not refresh or press back button.</p>
+</div>
 
 <form id="paymentForm" th:action="@{/checkout/payment/verify}" method="post">
     <input type="hidden" id="razorpay_payment_id" name="razorpay_payment_id">
     <input type="hidden" id="razorpay_order_id" name="razorpay_order_id">
     <input type="hidden" id="razorpay_signature" name="razorpay_signature">
-    <input type="hidden" name="orderId" th:value="${orderId}">
+
+    <input type="hidden" name="addressId" th:value="${addressId}">
+    <input type="hidden" name="variantId" th:value="${variantId}">
 </form>
 
 <script th:inline="javascript">
+    /* Thymeleaf variables */
     var options = {
-        "key": /*[[${razorpayKey}]]*/,
-        "amount": /*[[${amount * 100}]]*/,
+        "key": [[${razorpayKey}]],
+        "amount": [[${amount * 100}]], // Amount in paise
         "currency": "INR",
         "name": "ToMobs",
         "description": "Order Payment",
-        "order_id": /*[[${razorpayOrderId}]]*/,
-        "handler": function (response){
+        "order_id": [[${razorpayOrderId}]],
+        "handler": function (response) {
+            // Success Logic
             document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
             document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
             document.getElementById('razorpay_signature').value = response.razorpay_signature;
             document.getElementById('paymentForm').submit();
         },
         "prefill": {
-            "name": /*[[${customerName}]]*/,
-            "email": /*[[${customerEmail}]]*/
+            "name": [[${customerName}]],
+            "email": [[${customerEmail}]]
         },
         "theme": {
             "color": "#3399cc"
@@ -38,12 +57,34 @@
     };
 
     var rzp = new Razorpay(options);
-    rzp.open();
 
-    rzp.on('payment.failed', function (response){
-        alert('Payment failed. Please try again.');
-        window.location.href = '/checkout';
+    // Initial Open
+    window.onload = function() {
+        rzp.open();
+    };
+
+    // Retry Logic without Page Reload
+    rzp.on('payment.failed', function (response) {
+        Swal.fire({
+            title: 'Payment Failed!',
+            text: response.error.description || 'Something went wrong during payment.',
+            icon: 'error',
+            showCancelButton: true,
+            confirmButtonText: 'Retry Payment',
+            cancelButtonText: 'Go to Checkout',
+            confirmButtonColor: '#3399cc',
+            cancelButtonColor: '#d33',
+            allowOutsideClick: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Here we reuse the same rzp instance and same order_id
+                rzp.open();
+            } else {
+                window.location.href = '/checkout';
+            }
+        });
     });
 </script>
+
 </body>
 </html>

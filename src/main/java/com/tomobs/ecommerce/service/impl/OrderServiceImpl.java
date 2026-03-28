@@ -171,7 +171,6 @@ public class OrderServiceImpl implements OrderService {
     return ordersRepository.findByUserAndSearch(user, search.trim(), pageable);
   }
 
-
   @Override
   public Orders getOrderById(Long orderId) {
 
@@ -207,6 +206,15 @@ public class OrderServiceImpl implements OrderService {
     Cart cart = cartRepository.findByUserId(order.getUser().getId())
                     .orElseThrow(() -> new RuntimeException("Cart not found"));
     cartItemsRepository.deleteByCart(cart);
+  }
+
+  @Override
+  public Double calculateBuyNowTotal(Long variantId) {
+
+    ProductVariant variant = productVariantRepository.findById(variantId)
+            .orElseThrow(() -> new RuntimeException("Order not found"));
+
+    return variant.getPrice().doubleValue();
   }
 
   @Override
