@@ -170,8 +170,8 @@
                 <div class="d-flex justify-content-between">
                     <span class="text-muted">Status:</span>
                     <span class="badge"
-                          th:classappend="${order.paymentStatus.name() == 'PAID' ? 'bg-success' : 'bg-warning'}"
-                          th:text="${order.paymentStatus}">Pending</span>
+                          th:classappend="${order.paymentStatus.name() == 'SUCCESS' ? 'bg-success' : 'bg-warning'}"
+                          th:text="${order.paymentStatus}">pay-status</span>
                 </div>
             </div>
         </div>
@@ -197,7 +197,10 @@
                     <span class="fw-bold text-dark" th:text="'₹' + ${order.totalAmount}">₹0.00</span>
                 </div>
                 <div class="text-center">
-                    <button class="btn-invoice w-100">Download Invoice</button>
+                    <a th:href="@{/orders/download-invoice/{id}(id=${order.id})}"
+                       class="btn btn-dark">
+                        <i class="fas fa-file-download"></i> Download Invoice
+                    </a>
                 </div>
             </div>
         </div>
