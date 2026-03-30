@@ -13,11 +13,11 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
   @Query("""
       SELECT new com.tomobs.ecommerce.dto.OrderListDTO(
-              o.id, 
-              MIN(pv.variantName), 
-              SUM(oi.quantity), 
-              o.totalAmount, 
-              o.status, 
+              o.id,
+              MIN(pv.variantName),
+              SUM(oi.quantity),
+              o.totalAmount,
+              o.status,
               MIN(vi.fileName)
               )
               FROM Orders o
@@ -34,10 +34,10 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
   @Query("""
       SELECT new com.tomobs.ecommerce.dto.OrderListDTO(
               o.id,
-              MIN(pv.variantName), 
-              SUM(oi.quantity), 
-              o.totalAmount, 
-              o.status, 
+              MIN(pv.variantName),
+              SUM(oi.quantity),
+              o.totalAmount,
+              o.status,
               MIN(vi.fileName)
               )
               FROM Orders o
@@ -45,7 +45,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
               JOIN o.orderItems oi
               JOIN oi.productVariant pv
               LEFT JOIN pv.images vi ON vi.isPrimary = true
-              WHERE u = :user 
+              WHERE u = :user
               AND (LOWER(pv.variantName) LIKE LOWER(CONCAT('%', :search, '%')))
               GROUP BY o.id, o.totalAmount, o.status, o.createdAt
               ORDER BY o.createdAt DESC

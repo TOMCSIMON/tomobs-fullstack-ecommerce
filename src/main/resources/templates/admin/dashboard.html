@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Overview - ToMobs Admin</title>
+    <title>Sales Report Dashboard - ToMobs Admin</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
@@ -17,28 +17,31 @@
 <div th:replace="~{fragments/admin-sidebar :: adminSidebar}"></div>
 
 <div class="main-content">
-    <div class="container-fluid">
-
+    <div class="container">
         <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-            <h1 class="mb-0 fw-bold" style="font-size: 24px;">Dashboard Overview</h1>
-            <button id="exportDataBtn" class="btn btn-dark-custom d-flex align-items-center gap-2">
-                <i class="bi bi-download"></i> Export Data
-            </button>
+            <h1 class="mb-2 fw-bold dashboard-title">Dashboard</h1>
+            <div class="d-flex gap-2">
+                <button id="exportPdfBtn" class="btn btn-dark-custom d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-pdf"></i> Export PDF
+                </button>
+                <button id="exportExcelBtn" class="btn btn-success d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-excel"></i> Export Excel
+                </button>
+            </div>
         </div>
-
         <div class="row mb-4 g-3">
             <div class="col-md-4">
                 <div class="stats-card">
-                    <h6 class="text-muted mb-2">Total Revenue</h6>
+                    <h6 class="text-muted mb-2">Overall Total Sales (Revenue)</h6>
                     <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="mb-0 fw-bold">₹1,24,500</h3>
+                        <h3 class="mb-0 fw-bold">₹1,24,500.00</h3>
                         <span class="trend-indicator"><i class="bi bi-arrow-up-right"></i> +5.2%</span>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stats-card">
-                    <h6 class="text-muted mb-2">Total Orders</h6>
+                    <h6 class="text-muted mb-2">Overall Total Orders</h6>
                     <div class="d-flex align-items-end justify-content-between">
                         <h3 class="mb-0 fw-bold">342</h3>
                         <span class="trend-indicator"><i class="bi bi-arrow-up-right"></i> +12%</span>
@@ -47,21 +50,41 @@
             </div>
             <div class="col-md-4">
                 <div class="stats-card">
-                    <h6 class="text-muted mb-2">Avg. Order Value</h6>
+                    <h6 class="text-muted mb-2">Reg. users</h6>
                     <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="mb-0 fw-bold">₹12,450</h3>
-                        <span class="trend-indicator text-muted" style="background-color: #f1f1f1;"><i class="bi bi-dash"></i> 0.0%</span>
+                        <h3 class="mb-0 fw-bold" th:text="${dashboard.totalUsers}">0</h3>
+                        <span class="trend-indicator"><i class="bi bi-arrow-up-right"></i> +12%</span>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="filter-card mb-4 p-4">
+            <h6 class="fw-bold mb-3">Filter Sales by Date Range</h6>
+            <form class="row g-3 align-items-end" id="filterForm">
+                <div class="col-md-4">
+                    <label for="startDate" class="form-label text-muted">Start Date</label>
+                    <input type="date" class="form-control" id="startDate" name="startDate" value="2026-02-10">
+                </div>
+                <div class="col-md-4">
+                    <label for="endDate" class="form-label text-muted">End Date</label>
+                    <input type="date" class="form-control" id="endDate" name="endDate" value="2026-02-16">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-dark w-100">Apply Filter</button>
+                </div>
+                <div class="col-md-2">
+                    <a th:href="@{/admin/sales-report}" class="btn btn-outline-secondary w-100">Reset</a>
+                </div>
+            </form>
+        </div>
+
         <div class="row mb-4">
             <div class="col-12">
                 <div class="chart-card">
-                    <h6 class="fw-bold mb-4">Revenue (Last 7 Days)</h6>
+                    <h6 class="fw-bold mb-4">Sales Trend (Revenue)</h6>
                     <div class="chart-container">
-                        <canvas id="revenueChart"></canvas>
+                        <canvas id="salesChart"></canvas>
                     </div>
                 </div>
             </div>
@@ -70,14 +93,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="table-card">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h6 class="fw-bold mb-0">Recent Orders</h6>
-                        <select class="form-select form-select-sm" style="width: 150px; box-shadow: none; border-color: #eaeaea;">
-                            <option value="newest">Newest First</option>
-                            <option value="highest">Highest Amount</option>
-                        </select>
-                    </div>
-
+                    <h6 class="fw-bold mb-4">Sales Report Details</h6>
                     <div class="table-responsive">
                         <table class="table table-borderless mb-0">
                             <thead>
@@ -93,30 +109,30 @@
                             <tr>
                                 <td>#1042</td>
                                 <td>Rahul M.</td>
-                                <td class="fw-bold">₹45,000</td>
+                                <td class="fw-bold">₹45,000.00</td>
                                 <td><span class="status-badge status-delivered">Delivered</span></td>
                                 <td class="text-muted">14/02/2026</td>
                             </tr>
                             <tr>
                                 <td>#1043</td>
                                 <td>Priya S.</td>
-                                <td class="fw-bold">₹12,999</td>
-                                <td><span class="status-badge status-processing">Processing</span></td>
+                                <td class="fw-bold">₹12,999.00</td>
+                                <td><span class="status-badge status-delivered">Delivered</span></td>
                                 <td class="text-muted">15/02/2026</td>
                             </tr>
                             <tr>
-                                <td>#1044</td>
-                                <td>Arjun K.</td>
-                                <td class="fw-bold">₹85,500</td>
-                                <td><span class="status-badge status-processing">Processing</span></td>
-                                <td class="text-muted">16/02/2026</td>
+                                <td>#1042</td>
+                                <td>Rahul M.</td>
+                                <td class="fw-bold">₹45,000.00</td>
+                                <td><span class="status-badge status-delivered">Delivered</span></td>
+                                <td class="text-muted">14/02/2026</td>
                             </tr>
                             <tr>
-                                <td>#1045</td>
-                                <td>Neha V.</td>
-                                <td class="fw-bold">₹8,499</td>
-                                <td><span class="status-badge status-delivered">Delivered</span></td>
-                                <td class="text-muted">16/02/2026</td>
+                                <td>#1043</td>
+                                <td>Priya S.</td>
+                                <td class="fw-bold">₹12,999.00</td>
+                                <td><span class="status-badge status-delivered">Cancelled</span></td>
+                                <td class="text-muted">15/02/2026</td>
                             </tr>
                             </tbody>
                         </table>
@@ -132,77 +148,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
+<script th:src="@{/js/admin-dashboard.js}"></script>
 
-        // 1. Export Button Toast Notification
-        const exportBtn = document.getElementById('exportDataBtn');
-        if(exportBtn) {
-            exportBtn.addEventListener('click', function() {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Export Started',
-                    text: 'Your data is being exported successfully!',
-                    timer: 2000,
-                    showConfirmButton: false,
-                    toast: true,
-                    position: 'top-end'
-                });
-            });
-        }
-
-        // 2. Initialize the Chart.js Graph
-        const ctx = document.getElementById('revenueChart').getContext('2d');
-
-        // Create a subtle gradient for the line chart fill
-        let gradient = ctx.createLinearGradient(0, 0, 0, 300);
-        gradient.addColorStop(0, 'rgba(0, 0, 0, 0.1)'); // Very light black/grey at top
-        gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');   // Transparent at bottom
-
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-                datasets: [{
-                    label: 'Revenue (₹)',
-                    data: [12000, 19000, 15000, 25000, 22000, 30000, 28000], // Dummy Data
-                    borderColor: '#000000',
-                    backgroundColor: gradient,
-                    borderWidth: 2,
-                    pointBackgroundColor: '#ffffff',
-                    pointBorderColor: '#000000',
-                    pointBorderWidth: 2,
-                    pointRadius: 4,
-                    pointHoverRadius: 6,
-                    fill: true,
-                    tension: 0.4 // Makes the line smooth and curvy
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false // Hide the legend to keep it minimalist
-                    },
-                    tooltip: {
-                        backgroundColor: '#212121',
-                        titleFont: { family: 'Poppins' },
-                        bodyFont: { family: 'Poppins' },
-                        padding: 12,
-                        cornerRadius: 8,
-                        displayColors: false
-                    }
-                },
-                scales: {
-                    x: {
-                        grid: {
-                            display: false, // Hide vertical grid lines
-                            drawBorder: false
-                        },
-                        ticks: {
-                            font: { family: 'Poppins', size: 12 },
-                            color: '#6c757d'
-                        }
-                    },
-                    y: {
+</body>
+</html>

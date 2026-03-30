@@ -26,40 +26,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
-//    private final RoleRepository roleRepository;
-//    private final PasswordEncoder passwordEncoder;
-//
-//    @Override
-//    @Transactional
-//    public void registerUser(UserRegistrationDTO userRegistrationDTO) {
-//
-//        // CONFIRMS BOTH PASSWORD ENTRIES ARE SAME
-//        if(!userRegistrationDTO.getPassword().equals(userRegistrationDTO.getConfirmPassword())) {
-//            throw new RuntimeException("Passwords do not match!");
-//        }
-//
-//        // CHECKING IF USER EMAIL ALREADY EXISTS IN DB
-//        if(userRepository.existsByEmail(userRegistrationDTO.getEmail())) {
-//            throw new RuntimeException("Email is Already Registered!");
-//        }
-//
-//        // CHANGING USER_DTO TO USER ENTITY
-//        User user = new User();
-//        user.setUserName(userRegistrationDTO.getUserName().trim());
-//        user.setEmail(userRegistrationDTO.getEmail().trim());
-//        user.setPhoneNumber(userRegistrationDTO.getPhoneNumber().trim());
-//
-//        // ENCODING THfindByUserNameContainsIgnoreCaseOrEmailContainsIgnoreCaseE PASSWORD FROM THE DTO AND SAVES TO THE USER ENTITY
-//        String encodedPassword = passwordEncoder.encode(userRegistrationDTO.getPassword().trim());
-//        user.setPassword(encodedPassword);
-//
-//        // SETTING THE DEFAULT ROLE AS ROLE_USER
-//        Role defaultRole = roleRepository.findByRoleName(RoleEnum.ROLE_USER)
-//                .orElseThrow(() -> new RuntimeException("Default role not found!"));
-//        user.setRole(defaultRole);
-//
-//        userRepository.save(user);
-//    }
 
     @Override
     public Page<UserListDTO> listUsers(String keyword, int page, int size) {
@@ -158,5 +124,11 @@ public class UserServiceImpl implements UserService {
 
         user.setPassword(passwordEncoder.encode(password));
         userRepository.save(user);
+    }
+
+    @Override
+    public long findTotalUsers() {
+
+        return userRepository.countByIsBlockedFalse();
     }
 }

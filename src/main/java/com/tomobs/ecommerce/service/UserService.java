@@ -6,8 +6,6 @@ import org.springframework.data.domain.Page;
 
 public interface UserService {
 
-//    void registerUser(UserRegistrationDTO userDTO);
-
     boolean isEmailExists(String email);
 
     User findByEmail(String email);
@@ -23,4 +21,6 @@ public interface UserService {
     void updatePassword(String email, ChangePasswordDTO dto);
 
     void saveNewPassword(String email, String password);
+
+    long findTotalUsers();
 }
