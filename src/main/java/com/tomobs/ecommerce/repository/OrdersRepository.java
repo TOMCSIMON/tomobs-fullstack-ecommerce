@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.repository;
 
+import com.tomobs.ecommerce.dto.DailyEarningMapping;
 import com.tomobs.ecommerce.dto.OrderListDTO;
 import com.tomobs.ecommerce.enums.PaymentStatus;
 import com.tomobs.ecommerce.model.Orders;
@@ -9,8 +10,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
@@ -68,4 +70,16 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
   @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Orders o WHERE o.paymentStatus = :status")
   BigDecimal sumTotalRevenueByStatus(@Param("status")PaymentStatus status);
+
+  @Query(value = "SELECT TO_CHAR(DATE(created_at), 'YYYY-MM-DD') as date, SUM(total_amount) as amount " +
+          "FROM orders " +
+          "WHERE created_at >= :startDate AND created_at <= :endDate " +
+          "AND payment_status = :status " +
+          "GROUP BY DATE(created_at) " +
+          "ORDER BY DATE(created_at)", nativeQuery = true)
+  List<DailyEarningMapping> getDailyEarnings(
+          @Param("startDate") LocalDateTime startDate,
+          @Param("endDate") LocalDateTime endDate,
+          @Param("status") String status
+  );
 }

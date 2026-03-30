@@ -9,21 +9,19 @@ body {
 .main-content {
     margin-left: 250px;
     padding: 24px;
-    margin-top: 60px;
+    margin-top: 30px;
 }
 
 /* Dashboard Title */
 .dashboard-title {
-    font-size: 28px;
-    letter-spacing: -0.5px;
+    font-weight: 500;
 }
 
 /* NEW: Filter Card */
 .filter-card {
     background-color: #ffffff;
-    border: 1px solid #eaeaea;
     border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .filter-card .form-control {
@@ -35,15 +33,20 @@ body {
 /* Stats Cards */
 .stats-card {
     background-color: #ffffff;
-    border: 1px solid #eaeaea;
     border-radius: 12px;
     padding: 24px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     transition: transform 0.2s ease;
 }
 
 .stats-card:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
+
+.stats-card a {
+    text-decoration:none;
+    color: inherit;
 }
 
 .stats-card h6 {
@@ -71,16 +74,15 @@ body {
 /* Chart & Table Cards */
 .chart-card, .table-card {
     background-color: #ffffff;
-    border: 1px solid #eaeaea;
     border-radius: 12px;
     padding: 24px;
     margin-bottom: 24px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
 .chart-container {
     position: relative;
-    height: 350px; /* Increased height for better graph */
+    height: 350px;
     width: 100%;
 }
 
