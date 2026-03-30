@@ -12,4 +12,5 @@ import lombok.Setter;
 public class AdminDashboardDTO {
 
     private long totalUsers;
+    private long totalOrders;
 }

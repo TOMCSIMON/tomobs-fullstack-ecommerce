@@ -18,8 +18,10 @@ public class AdminDashboardServiceImpl implements AdminDashboardService {
     public AdminDashboardDTO getDashboardSummary() {
 
         long users = userService.findTotalUsers();
+        long orders = orderService.findOrders();
         AdminDashboardDTO dto = new AdminDashboardDTO();
         dto.setTotalUsers(users);
+        dto.setTotalOrders(orders);
         return dto;
     }
 }

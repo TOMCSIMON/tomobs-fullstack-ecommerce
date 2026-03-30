@@ -15,5 +15,4 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
     Page<User> findByUserNameContainingIgnoreCaseOrEmailContainingIgnoreCase(String name, String email, Pageable pageable);
 
-    long countByIsBlockedFalse();
 }

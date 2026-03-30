@@ -128,7 +128,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long findTotalUsers() {
-
-        return userRepository.countByIsBlockedFalse();
+        return userRepository.count();
     }
 }

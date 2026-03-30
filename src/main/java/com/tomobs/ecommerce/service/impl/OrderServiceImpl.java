@@ -254,4 +254,9 @@ public class OrderServiceImpl implements OrderService {
     orders.setReturnReason(returnReason);
     ordersRepository.save(orders);
   }
+
+  @Override
+  public long findOrders() {
+    return ordersRepository.count();
+  }
 }
