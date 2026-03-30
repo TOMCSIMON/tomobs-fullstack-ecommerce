@@ -1,6 +1,7 @@
 package com.tomobs.ecommerce.repository;
 
 import com.tomobs.ecommerce.dto.OrderListDTO;
+import com.tomobs.ecommerce.enums.PaymentStatus;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import java.math.BigDecimal;
 
 public interface OrdersRepository extends JpaRepository<Orders, Long> {
 
@@ -62,4 +65,7 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
         AND (:status IS NULL OR UPPER(CAST(o.status AS string)) = UPPER(CAST(:status AS string)))
         """)
   Page<Orders> findFilteredOrders(@Param("keyword") String keyword, @Param("status") String status, Pageable pageable);
+
+  @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Orders o WHERE o.paymentStatus = :status")
+  BigDecimal sumTotalRevenueByStatus(@Param("status")PaymentStatus status);
 }

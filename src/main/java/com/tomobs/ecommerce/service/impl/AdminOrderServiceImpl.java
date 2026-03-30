@@ -1,6 +1,7 @@
 package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.dto.AdminOrderListDTO;
+import com.tomobs.ecommerce.dto.AdminSalesDTO;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.repository.OrdersRepository;
 import com.tomobs.ecommerce.service.AdminOrderService;
@@ -11,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -42,6 +45,22 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         Pageable pageable = PageRequest.of(page, size, jpaSort);
         Page<Orders> orderPage = ordersRepository.findFilteredOrders(keyword, status, pageable);
         return orderPage.map(this::convertToDTO);
+    }
+
+    @Override
+    public Page<AdminSalesDTO> getSalesSummary() {
+
+        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
+        Page<Orders> orderPage = ordersRepository.findAll(pageable);
+        return orderPage.map(order -> {
+            AdminSalesDTO dto = new AdminSalesDTO();
+            dto.setId(order.getId());
+            dto.setUserName(order.getUser().getUserName());
+            dto.setTotalAmount(order.getTotalAmount());
+            dto.setStatus(order.getStatus());
+            dto.setCreatedAt(order.getCreatedAt());
+            return dto;
+        });
     }
 
     private AdminOrderListDTO convertToDTO(Orders order) {

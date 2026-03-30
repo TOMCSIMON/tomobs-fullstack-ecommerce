@@ -34,7 +34,7 @@
                 <div class="stats-card">
                     <h6 class="text-muted mb-2">Overall Total Sales (Revenue)</h6>
                     <div class="d-flex align-items-end justify-content-between">
-                        <h3 class="mb-0 fw-bold">₹1,24,500.00</h3>
+                        <h3 class="mb-0 fw-bold" th:text="'₹ ' + ${dashboard.totalSale}">0</h3>
                         <span class="trend-indicator"><i class="bi bi-arrow-up-right"></i> +5.2%</span>
                     </div>
                 </div>
@@ -97,43 +97,42 @@
                     <div class="table-responsive">
                         <table class="table table-borderless mb-0">
                             <thead>
-                            <tr>
-                                <th>ORDER ID</th>
-                                <th>CUSTOMER</th>
-                                <th>AMOUNT</th>
-                                <th>STATUS</th>
-                                <th>DATE</th>
-                            </tr>
+                                <tr>
+                                    <th>ORDER ID</th>
+                                    <th>CUSTOMER</th>
+                                    <th>AMOUNT</th>
+                                    <th>STATUS</th>
+                                    <th>DATE</th>
+                                </tr>
                             </thead>
                             <tbody>
-                            <tr>
-                                <td>#1042</td>
-                                <td>Rahul M.</td>
-                                <td class="fw-bold">₹45,000.00</td>
-                                <td><span class="status-badge status-delivered">Delivered</span></td>
-                                <td class="text-muted">14/02/2026</td>
-                            </tr>
-                            <tr>
-                                <td>#1043</td>
-                                <td>Priya S.</td>
-                                <td class="fw-bold">₹12,999.00</td>
-                                <td><span class="status-badge status-delivered">Delivered</span></td>
-                                <td class="text-muted">15/02/2026</td>
-                            </tr>
-                            <tr>
-                                <td>#1042</td>
-                                <td>Rahul M.</td>
-                                <td class="fw-bold">₹45,000.00</td>
-                                <td><span class="status-badge status-delivered">Delivered</span></td>
-                                <td class="text-muted">14/02/2026</td>
-                            </tr>
-                            <tr>
-                                <td>#1043</td>
-                                <td>Priya S.</td>
-                                <td class="fw-bold">₹12,999.00</td>
-                                <td><span class="status-badge status-delivered">Cancelled</span></td>
-                                <td class="text-muted">15/02/2026</td>
-                            </tr>
+                                <tr th:each="sale : ${salesDetails.content}">
+                                    <td th:text="'#' + ${sale.id}">#1042</td>
+
+                                    <td th:text="${sale.userName}">Customer</td>
+
+                                    <td class="fw-bold"
+                                        th:text="'₹ ' + ${#numbers.formatDecimal(sale.totalAmount, 1, 'COMMA', 2, 'POINT')}">
+                                        ₹0.00
+                                    </td>
+
+                                    <td>
+                                        <span class="status-badge"
+                                              th:classappend="'status-' + ${#strings.toLowerCase(sale.status)}"
+                                              th:text="${sale.status}">
+                                            Status
+                                        </span>
+                                    </td>
+
+                                    <td class="text-muted"
+                                        th:text="${#temporals.format(sale.createdAt, 'dd/MM/yyyy')}">
+                                        Date
+                                    </td>
+                                </tr>
+
+                                <tr th:if="${#lists.isEmpty(salesDetails.content)}">
+                                    <td colspan="5" class="text-center text-muted py-4">No sales records found for this period.</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

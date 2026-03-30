@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -13,4 +16,6 @@ public class AdminDashboardDTO {
 
     private long totalUsers;
     private long totalOrders;
+    private BigDecimal totalSale;
+    private List<AdminSalesDTO> salesTable;
 }
