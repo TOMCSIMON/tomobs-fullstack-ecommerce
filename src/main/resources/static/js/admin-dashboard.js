@@ -1,17 +1,26 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    const canvasElement = document.getElementById('salesChart');
+    const exportPdfBtn = document.getElementById('exportPdfBtn');
+    if (exportPdfBtn) {
+        exportPdfBtn.addEventListener('click', function() {
+            let startDate = document.getElementById('startDate').value;
+            let endDate = document.getElementById('endDate').value;
+            let downloadUrl = `/admin/dashboard/export-pdf?startDate=${startDate}&endDate=${endDate}`;
+            window.location.href = downloadUrl;
+        });
+    }
 
+    const canvasElement = document.getElementById('salesChart');
     if (canvasElement) {
         const ctx = canvasElement.getContext('2d');
 
         new Chart(ctx, {
             type: 'line',
             data: {
-                labels: chartLabels,
+                labels: typeof chartLabels !== 'undefined' ? chartLabels : [],
                 datasets: [{
                     label: 'Daily Revenue (₹)',
-                    data: chartData,
+                    data: typeof chartData !== 'undefined' ? chartData : [],
                     borderColor: '#212121',
                     backgroundColor: 'rgba(33, 33, 33, 0.05)',
                     borderWidth: 3,

@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.dto.AdminOrderListDTO;
 import com.tomobs.ecommerce.dto.AdminSalesDTO;
+import com.tomobs.ecommerce.enums.PaymentStatus;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.repository.OrdersRepository;
 import com.tomobs.ecommerce.service.AdminOrderService;
@@ -12,8 +13,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -61,6 +65,26 @@ public class AdminOrderServiceImpl implements AdminOrderService {
             dto.setCreatedAt(order.getCreatedAt());
             return dto;
         });
+    }
+
+    @Override
+    public List<AdminSalesDTO> getAllSalesForReport(LocalDate startDate, LocalDate endDate) {
+
+        LocalDateTime start = startDate.atStartOfDay();
+        LocalDateTime end = endDate.atTime(LocalTime.MAX);
+
+        List<Orders> ordersList = ordersRepository.findByCreatedAtBetweenAndPaymentStatusOrderByCreatedAtDesc(
+                start, end, PaymentStatus.SUCCESS
+        );
+        return ordersList.stream().map(order -> {
+            AdminSalesDTO dto = new AdminSalesDTO();
+            dto.setId(order.getId());
+            dto.setUserName(order.getUser().getUserName());
+            dto.setTotalAmount(order.getTotalAmount());
+            dto.setStatus(order.getStatus());
+            dto.setCreatedAt(order.getCreatedAt());
+            return dto;
+        }).collect(Collectors.toList());
     }
 
     private AdminOrderListDTO convertToDTO(Orders order) {

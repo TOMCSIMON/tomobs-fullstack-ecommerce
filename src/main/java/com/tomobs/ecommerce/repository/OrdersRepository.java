@@ -82,4 +82,10 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
           @Param("endDate") LocalDateTime endDate,
           @Param("status") String status
   );
+
+  List<Orders> findByCreatedAtBetweenAndPaymentStatusOrderByCreatedAtDesc(
+          LocalDateTime startDate,
+          LocalDateTime endDate,
+          PaymentStatus status
+  );
 }
