@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.dto.AdminOrderListDTO;
 import com.tomobs.ecommerce.dto.AdminSalesDTO;
+import com.tomobs.ecommerce.enums.OrderStatus;
 import com.tomobs.ecommerce.enums.PaymentStatus;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.repository.OrdersRepository;
@@ -31,6 +32,11 @@ public class AdminOrderServiceImpl implements AdminOrderService {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
         Page<Orders> orderPage = ordersRepository.findAll(pageable);
         return orderPage.map(this::convertToDTO);
+    }
+
+    @Override
+    public long getOrderCountByStatus(OrderStatus status) {
+       return ordersRepository.countByStatus(status);
     }
 
     @Override

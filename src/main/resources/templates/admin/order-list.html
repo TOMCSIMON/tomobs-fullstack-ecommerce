@@ -33,13 +33,13 @@
             <div class="col-md-4">
                 <div class="stats-card">
                     <h6 class="text-muted mb-2">Pending Orders</h6>
-                    <h3 class="mb-0 fw-bold">0</h3>
+                    <h3 class="mb-0 fw-bold" th:text="${pendingCount}">0</h3>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="stats-card">
                     <h6 class="text-muted mb-2">Canceled Orders</h6>
-                    <h3 class="mb-0 fw-bold">0</h3>
+                    <h3 class="mb-0 fw-bold" th:text="${cancelCount}">0</h3>
                 </div>
             </div>
         </div>

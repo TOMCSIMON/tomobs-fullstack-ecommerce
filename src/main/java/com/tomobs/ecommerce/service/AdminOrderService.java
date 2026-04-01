@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.service;
 
 import com.tomobs.ecommerce.dto.AdminOrderListDTO;
 import com.tomobs.ecommerce.dto.AdminSalesDTO;
+import com.tomobs.ecommerce.enums.OrderStatus;
 import org.springframework.data.domain.Page;
 import java.time.LocalDate;
 import java.util.List;
@@ -16,4 +17,6 @@ public interface AdminOrderService {
     Page<AdminSalesDTO> getSalesSummary();
 
     List<AdminSalesDTO> getAllSalesForReport(LocalDate startDate, LocalDate endDate);
+
+    long getOrderCountByStatus(OrderStatus status);
 }

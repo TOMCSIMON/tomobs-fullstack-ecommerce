@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.controller.Admin;
 
 import com.tomobs.ecommerce.dto.AdminOrderDetailsDTO;
 import com.tomobs.ecommerce.dto.AdminOrderListDTO;
+import com.tomobs.ecommerce.enums.OrderStatus;
 import com.tomobs.ecommerce.service.AdminOrderService;
 import com.tomobs.ecommerce.service.OrderDetailService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,11 @@ public class AdminOrderController {
         Model model) {
 
         Page<AdminOrderListDTO> orderListPage = adminOrderService.getAllOrdersPaginated(page, size);
+        long pendingCount = adminOrderService.getOrderCountByStatus(OrderStatus.PENDING);
+        long cancelCount = adminOrderService.getOrderCountByStatus(OrderStatus.CANCELLED);
         model.addAttribute("orders", orderListPage.getContent());
+        model.addAttribute("pendingCount", pendingCount);
+        model.addAttribute("cancelCount", cancelCount);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalOrders", orderListPage.getTotalElements());
         model.addAttribute("totalPage", orderListPage.getTotalPages());

@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.repository;
 
 import com.tomobs.ecommerce.dto.DailyEarningMapping;
 import com.tomobs.ecommerce.dto.OrderListDTO;
+import com.tomobs.ecommerce.enums.OrderStatus;
 import com.tomobs.ecommerce.enums.PaymentStatus;
 import com.tomobs.ecommerce.model.Orders;
 import com.tomobs.ecommerce.model.User;
@@ -58,6 +59,8 @@ public interface OrdersRepository extends JpaRepository<Orders, Long> {
   Page<OrderListDTO> findByUserAndSearch(@Param("user") User user,
                                          @Param("search") String search,
                                          Pageable pageable);
+
+  long countByStatus(OrderStatus status);
 
   @Query("""
         SELECT o FROM Orders o
