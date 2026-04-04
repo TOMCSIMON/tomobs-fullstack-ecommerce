@@ -1,4 +1,4 @@
-/* Layout consistency for ToMobs Sticky Footer */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
 html, body {
     height: 100%;
     margin: 0;
@@ -21,11 +21,11 @@ body {
 /* Card Container */
 .verification-container {
     width: 100%;
-    max-width: 500px;
-    border: 1.5px solid #000;
+    max-width: 600px;
     border-radius: 12px;
     padding: 40px;
     background: #fff;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
 }
 
 .title {
@@ -87,7 +87,7 @@ body {
 .resend-link.disabled {
     color: #999;
     cursor: not-allowed;
-    pointer-events: none; /* Prevents clicking */
+    pointer-events: none;
     text-decoration: none;
 }
 .error-msg {
@@ -106,4 +106,10 @@ body {
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+}
+.submit-btn:hover {
+    background-color: #2B2A29;
+    color: #fff;
+    transform: translateY(-3px);
 }

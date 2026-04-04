@@ -78,7 +78,10 @@ function executeToggleBlock(button) {
             modal.hide();
 
         } else {
-            alert("Something went wrong on the server!");
+            Toast.fire({
+                icon: 'error',
+                title: 'something went wrong'
+            });
         }
     })
     .catch(error => console.error('Error:', error));

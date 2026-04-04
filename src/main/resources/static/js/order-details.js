@@ -5,17 +5,23 @@ document.addEventListener('DOMContentLoaded', function () {
     const submitBtn = document.getElementById('submitActionBtn');
     const modalTitle = document.getElementById('modalTitle');
     const reasonLabel = document.getElementById('reasonLabel');
+    const reasonError = document.getElementById('reasonError'); // പുതിയ എറർ ഫീൽഡ്
 
     let currentOrderId = null;
     let currentAction = null;
 
-    // 🔹 When modal opens
+    actionReasonInput.addEventListener('input', function() {
+        if (this.value.trim() !== '') {
+            this.classList.remove('is-invalid');
+            reasonError.classList.add('d-none');
+        }
+    });
+
     actionModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         currentOrderId = button.getAttribute('data-id');
         currentAction = button.getAttribute('data-action');
 
-        // UI changes
         if (currentAction === 'RETURN') {
             modalTitle.innerText = "RETURN ORDER?";
             reasonLabel.innerText = "Reason for Return";
@@ -29,9 +35,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         actionReasonInput.value = "";
+        actionReasonInput.classList.remove('is-invalid');
+        reasonError.classList.add('d-none');
     });
 
-    // 🔹 Submit button click
     submitBtn.addEventListener('click', function () {
         submitAction(currentOrderId, currentAction);
     });
@@ -40,21 +47,27 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function submitAction(orderId, actionType) {
 
-    const reason = document.getElementById('actionReason').value;
+    const actionReasonInput = document.getElementById('actionReason');
+    const reasonError = document.getElementById('reasonError');
+    const reason = actionReasonInput.value;
 
     if (!reason.trim()) {
-        alert("Please enter a reason");
+        actionReasonInput.classList.add('is-invalid');
+        reasonError.classList.remove('d-none');
         return;
     }
 
     const isReturn = actionType === 'RETURN';
-
-    const endpoint = isReturn
-        ? `/orders/return/${orderId}`
-        : `/orders/cancel/${orderId}`;
+    const endpoint = isReturn ? `/orders/return/${orderId}` : `/orders/cancel/${orderId}`;
 
     const params = new URLSearchParams();
     params.append(isReturn ? 'returnReason' : 'cancelReason', reason);
+
+    const modalElement = document.getElementById('orderActionModal');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+    if(modalInstance) {
+        modalInstance.hide();
+    }
 
     fetch(endpoint, {
         method: 'POST',
@@ -64,11 +77,24 @@ function submitAction(orderId, actionType) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            alert(isReturn ? "Return request submitted!" : "Order cancelled!");
-            location.reload();
+            Toast.fire({
+                icon: 'success',
+                title: isReturn ? 'Return request submitted successfully!' : 'Order cancelled successfully!'
+            }).then(() => {
+                location.reload();
+            });
         } else {
-            alert("Error: " + data.message);
+            Toast.fire({
+                icon: 'error',
+                title: data.message || 'Something went wrong!'
+            });
         }
     })
-    .catch(error => console.error('Error:', error));
+    .catch(error => {
+        console.error('Error:', error);
+        Toast.fire({
+            icon: 'error',
+            title: 'An unexpected error occurred. Please try again.'
+        });
+    });
 }

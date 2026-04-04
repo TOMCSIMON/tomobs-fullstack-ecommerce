@@ -48,7 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (!addToCartForm) return;
 
-        // Using onclick or reset listener to ensure only one exists per fragment swap
         addToCartForm.onsubmit = function (e) {
             e.preventDefault();
 
@@ -88,9 +87,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             })
             .catch(error => {
-                console.error('Error adding to cart:', error);
                 if (error.message !== 'User not logged in') {
-                    alert('Failed to add item to cart. Please try again.');
+                    Toast.fire({
+                        icon: 'error',
+                        title: 'something went wrong'
+                    });
                 }
             });
         };
