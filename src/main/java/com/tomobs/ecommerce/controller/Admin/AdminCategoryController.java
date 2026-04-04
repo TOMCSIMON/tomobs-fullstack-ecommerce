@@ -21,14 +21,15 @@ public class AdminCategoryController {
 
   @GetMapping
   public String showCategories(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "5") int size,
-      @RequestParam(defaultValue = "createdAt") String sortField,
-      @RequestParam(defaultValue = "desc") String sortDir,
-      @RequestParam(value = "keyword", required = false) String keyword,
-      Model model) {
-    Page<CategoryDTO> categoryPage =
-        categoryService.getAllCategoriesPaginated(page, size, sortField, sortDir, keyword);
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "5") int size,
+          @RequestParam(defaultValue = "createdAt") String sortField,
+          @RequestParam(defaultValue = "desc") String sortDir,
+          @RequestParam(value = "keyword", required = false) String keyword,
+          @RequestHeader(value = "X-Requested-With", required = false) String requestedWith,
+          Model model) {
+
+    Page<CategoryDTO> categoryPage = categoryService.getAllCategoriesPaginated(page, size, sortField, sortDir, keyword);
 
     model.addAttribute("categories", categoryPage.getContent());
     model.addAttribute("currentPage", page);
@@ -36,7 +37,11 @@ public class AdminCategoryController {
     model.addAttribute("sortField", sortField);
     model.addAttribute("sortDir", sortDir);
     model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+    model.addAttribute("keyword", keyword);
 
+    if ("XMLHttpRequest".equals(requestedWith)) {
+      return "admin/category :: categoryTableFragment";
+    }
     return "admin/category";
   }
 
