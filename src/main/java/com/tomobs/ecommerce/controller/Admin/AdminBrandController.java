@@ -2,7 +2,6 @@ package com.tomobs.ecommerce.controller.Admin;
 
 import com.tomobs.ecommerce.dto.BrandDTO;
 import com.tomobs.ecommerce.dto.BrandListDTO;
-import com.tomobs.ecommerce.dto.CategoryDTO;
 import com.tomobs.ecommerce.service.BrandService;
 import com.tomobs.ecommerce.service.CategoryService;
 import jakarta.validation.Valid;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/admin/brands")
@@ -31,6 +29,7 @@ public class AdminBrandController {
             @RequestParam(defaultValue = "createdAt") String sortField,
             @RequestParam(defaultValue = "desc") String sortDir,
             @RequestParam(value = "keyword", required = false) String keyword,
+            @RequestHeader(value = "X-Requested-With", required = false) String requestedWith,
             Model model) {
 
         model.addAttribute("categories", categoryService.getAllCategories());
@@ -45,6 +44,11 @@ public class AdminBrandController {
         model.addAttribute("sortField", sortField);
         model.addAttribute("sortDir", sortDir);
         model.addAttribute("reverseSortDir", sortDir.equals("asc") ? "desc" : "asc");
+        model.addAttribute("keyword", keyword);
+
+        if ("XMLHttpRequest".equals(requestedWith)) {
+            return "admin/brand :: brandTableFragment";
+        }
 
         return "admin/brand";
     }

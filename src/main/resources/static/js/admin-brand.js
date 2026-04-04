@@ -1,22 +1,95 @@
 document.addEventListener("DOMContentLoaded", function() {
     const searchInput = document.getElementById('searchInput');
     const clearBtn = document.getElementById('clearSearch');
-    const searchForm = document.getElementById('searchForm');
+
+    let currentPage = 0;
+
+    function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
 
     function toggleClearButton() {
-        if (searchInput.value.length > 0) {
-            clearBtn.style.display = 'block';
-        } else {
-            clearBtn.style.display = 'none';
+        if (searchInput && clearBtn) {
+            clearBtn.style.display = searchInput.value.trim() !== "" ? "block" : "none";
         }
     }
+
     toggleClearButton();
-    searchInput.addEventListener('input', toggleClearButton);
-    clearBtn.addEventListener('click', function() {
-        searchInput.value = '';
-        toggleClearButton();
-        searchForm.submit();
+
+    const debouncedSearch = debounce(() => {
+        currentPage = 0;
+        fetchBrands();
+    }, 500);
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            toggleClearButton();
+            debouncedSearch();
+        });
+
+        searchInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") e.preventDefault();
+        });
+    }
+
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            toggleClearButton();
+            currentPage = 0;
+            fetchBrands();
+        });
+    }
+
+    document.addEventListener("click", function (e) {
+        const targetLink = e.target.closest("a.page-box");
+
+        if (targetLink) {
+            e.preventDefault();
+            if (targetLink.classList.contains("disabled")) return;
+
+            const urlParams = new URLSearchParams(targetLink.search);
+            const pageStr = urlParams.get('page');
+
+            if (pageStr !== null) {
+                currentPage = parseInt(pageStr, 10);
+                fetchBrands();
+            }
+        }
     });
+
+    function fetchBrands() {
+        const keyword = searchInput ? searchInput.value.trim() : "";
+        const params = new URLSearchParams();
+
+        if (keyword) params.append("keyword", keyword);
+        params.append("page", currentPage);
+        params.append("size", 5);
+
+        const newUrl = window.location.pathname + "?" + params.toString();
+        window.history.pushState({ path: newUrl }, '', newUrl);
+
+        fetch(`/admin/brands?${params.toString()}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.text();
+        })
+        .then(html => {
+            const tableContainer = document.getElementById("brandTableContainer");
+            if (tableContainer) {
+                tableContainer.outerHTML = html;
+            }
+        })
+        .catch(err => console.error("Error fetching brands:", err));
+    }
 });
 
 const editModal = document.getElementById('editBrandModal');
