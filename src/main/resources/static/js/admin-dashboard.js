@@ -6,7 +6,38 @@ document.addEventListener("DOMContentLoaded", function() {
             let startDate = document.getElementById('startDate').value;
             let endDate = document.getElementById('endDate').value;
             let downloadUrl = `/admin/dashboard/export-pdf?startDate=${startDate}&endDate=${endDate}`;
-            window.location.href = downloadUrl;
+
+            fetch(downloadUrl, {
+                method: 'GET'
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to download PDF');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `ToMobs_Sales_Report_${startDate}_to_${endDate}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'PDF Report downloaded successfully!'
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Toast.fire({
+                    icon: 'error',
+                    title: 'Could not download PDF. Please try again.'
+                });
+            });
         });
     }
 

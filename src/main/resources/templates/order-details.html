@@ -197,10 +197,9 @@
                     <span class="fw-bold text-dark" th:text="'₹' + ${order.totalAmount}">₹0.00</span>
                 </div>
                 <div class="text-center">
-                    <a th:href="@{/orders/download-invoice/{id}(id=${order.id})}"
-                       class="btn btn-dark">
+                    <button type="button" id="downloadInvoiceBtn" th:data-id="${order.id}" class="btn btn-dark">
                         <i class="fas fa-file-download"></i> Download Invoice
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
