@@ -1,48 +1,128 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    // --- 1. SEARCH BAR LOGIC (Your existing code) ---
     const searchInput = document.getElementById('searchInput');
     const clearBtn = document.getElementById('clearSearch');
-    const searchForm = document.getElementById('searchForm');
+    let currentPage = 0;
+
+    function debounce(func, delay) {
+        let timeoutId;
+        return function (...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
 
     function toggleClearButton() {
-        if (searchInput && searchInput.value.length > 0) {
-            clearBtn.style.display = 'block';
-        } else if(clearBtn) {
-            clearBtn.style.display = 'none';
+        if (searchInput && clearBtn) {
+            clearBtn.style.display = searchInput.value.trim() !== "" ? "block" : "none";
         }
     }
 
-    if (searchInput && clearBtn) {
-        toggleClearButton();
-        searchInput.addEventListener('input', toggleClearButton);
-        clearBtn.addEventListener('click', function() {
-            searchInput.value = '';
+    toggleClearButton();
+
+    const debouncedSearch = debounce(() => {
+        currentPage = 0;
+        fetchProducts();
+    }, 500);
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
             toggleClearButton();
-            searchForm.submit();
+            debouncedSearch();
+        });
+
+        searchInput.addEventListener("keypress", function (e) {
+            if (e.key === "Enter") e.preventDefault();
         });
     }
 
-    // --- 2. DELETE MODAL LOGIC (New code) ---
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            toggleClearButton();
+            currentPage = 0;
+            fetchProducts();
+        });
+    }
+
+    document.addEventListener("click", function (e) {
+        const targetLink = e.target.closest("a.page-box");
+
+        if (targetLink) {
+            e.preventDefault();
+            if (targetLink.classList.contains("disabled")) return;
+
+            const urlParams = new URLSearchParams(targetLink.search);
+            const pageStr = urlParams.get('page');
+
+            if (pageStr !== null) {
+                currentPage = parseInt(pageStr, 10);
+                fetchProducts();
+            }
+        }
+    });
+
+    function fetchProducts() {
+        const keyword = searchInput ? searchInput.value.trim() : "";
+        const params = new URLSearchParams();
+
+        if (keyword) params.append("keyword", keyword);
+        params.append("page", currentPage);
+        params.append("size", 5);
+
+        const newUrl = window.location.pathname + "?" + params.toString();
+        window.history.pushState({ path: newUrl }, '', newUrl);
+
+        fetch(`/admin/products?${params.toString()}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" }
+        })
+        .then(response => {
+            if (!response.ok) throw new Error("Network response was not ok");
+            return response.text();
+        })
+        .then(html => {
+            const tableContainer = document.getElementById("productTableContainer");
+            if (tableContainer) {
+                tableContainer.outerHTML = html;
+            }
+        })
+        .catch(err => console.error("Error fetching products:", err));
+    }
+
+
     const deleteProductModal = document.getElementById('deleteProductModal');
+    let deleteProductId = null;
 
     if (deleteProductModal) {
         deleteProductModal.addEventListener('show.bs.modal', function (event) {
-
-            // Button that triggered the modal
             const button = event.relatedTarget;
-
-            // Extract info from data-* attributes
-            const productId = button.getAttribute('data-id');
+            deleteProductId = button.getAttribute('data-id');
             const productName = button.getAttribute('data-name');
 
-            // Update the modal's text content
-            const modalProductName = document.getElementById('deleteProductName');
-            modalProductName.textContent = productName;
+            document.getElementById('deleteProductName').textContent = productName;
+        });
+    }
 
-            // Update the 'Yes, Delete' button's href to route to your Spring Boot controller
-            const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-            confirmDeleteBtn.href = '/admin/products/delete/' + productId;
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    if (confirmDeleteBtn) {
+        confirmDeleteBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (!deleteProductId) return;
+
+            fetch(`/admin/products/delete/${deleteProductId}`, {
+                method: 'POST'
+            })
+            .then(response => {
+                if (response.ok) {
+                    const modalElement = document.getElementById('deleteProductModal');
+                    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                    modalInstance.hide();
+                    window.location.reload();
+                }
+            })
+            .catch(err => console.error("Error deleting product:", err));
         });
     }
 });

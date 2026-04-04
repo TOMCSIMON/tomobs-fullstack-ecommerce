@@ -36,6 +36,7 @@ public class AdminProductController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "5") int size,
             @RequestParam(required = false) String keyword,
+            @RequestHeader(value = "X-Requested-With", required = false) String requestedWith,
             Model model) {
         Page<ProductListDTO> productPage = productService.getPaginatedProducts(keyword, page, size);
 
@@ -44,7 +45,11 @@ public class AdminProductController {
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("totalElements", productPage.getTotalElements());
         model.addAttribute("pageSize", size);
+        model.addAttribute("keyword", keyword);
 
+        if ("XMLHttpRequest".equals(requestedWith)) {
+            return "admin/product :: productTableFragment";
+        }
         return "admin/product";
     }
 
@@ -93,9 +98,10 @@ public class AdminProductController {
     }
 
     @PostMapping("/update")
-    public String updateProduct(@ModelAttribute("product") ProductEditDTO productDTO,
-                                BindingResult result,
-                                RedirectAttributes redirectAttributes) {
+    public String updateProduct(
+            @ModelAttribute("product") ProductEditDTO productDTO,
+            BindingResult result,
+            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             return "admin/edit-product";
@@ -112,11 +118,10 @@ public class AdminProductController {
         return "redirect:/admin/products";
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(
-            @PathVariable("id") Long id) {
-
+    @PostMapping("/delete/{id}")
+    @ResponseBody
+    public String deleteProduct(@PathVariable("id") Long id) {
         productService.deleteProduct(id);
-        return "redirect:/admin/products";
+        return "success";
     }
 }

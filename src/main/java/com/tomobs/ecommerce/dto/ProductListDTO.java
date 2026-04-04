@@ -1,11 +1,9 @@
 package com.tomobs.ecommerce.dto;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -14,12 +12,9 @@ import lombok.Setter;
 public class ProductListDTO {
 
     private Long productId;
-
+    private String imageUrl;
     private String productName;
-
     private String categoryName;
-
     private String brandName;
-
 }
 

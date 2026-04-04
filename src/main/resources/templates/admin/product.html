@@ -27,7 +27,7 @@
 
         <form th:action="@{/admin/products}" method="get" id="searchForm">
             <div class="search-wrapper">
-                <input type="text" id="searchInput" name="keyword" th:value="${param.keyword}" placeholder="Search products by name....">
+                <input type="text" id="searchInput" name="keyword" th:value="${param.keyword}" placeholder="Search products by name...">
                 <button type="button" id="clearSearch" class="clear-btn" style="display: none;">
                     <i class="bi bi-x"></i>
                 </button>
@@ -35,12 +35,13 @@
             </div>
         </form>
 
-        <div class="table-card">
+        <div class="table-card" id="productTableContainer" th:fragment="productTableFragment">
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                     <tr>
                         <th>ID</th>
+                        <th>IMAGE</th>
                         <th>PRODUCT NAME</th>
                         <th>CATEGORY</th>
                         <th>BRAND</th>
@@ -50,7 +51,12 @@
 
                     <tbody>
                     <tr th:each="product, stat : ${products}">
-                        <td th:text="${stat.count}"></td>
+                        <td th:text="${product.productId}"></td>
+                        <td>
+                            <a th:href="@{/admin/products/edit/{id}(id=${product.productId})}" >
+                                <img th:src="@{'/uploads/products/' + ${product.imageUrl}}" alt="Product" class="image">
+                            </a>
+                        </td>
                         <td th:text="${product.productName}" style="font-weight: 600; color: #212529;"></td>
                         <td th:text="${product.categoryName}"></td>
                         <td th:text="${product.brandName}"></td>

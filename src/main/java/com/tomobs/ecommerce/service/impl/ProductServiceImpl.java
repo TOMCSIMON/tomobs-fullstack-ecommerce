@@ -14,7 +14,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -82,6 +81,7 @@ public class ProductServiceImpl implements ProductService {
         product ->
             new ProductListDTO(
                 product.getId(),
+                product.getVariants().get(0).getImages().get(0).getFileName(),
                 product.getProductName(),
                 product.getCategory().getName(),
                 product.getBrand().getName()));

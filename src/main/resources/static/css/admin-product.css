@@ -84,6 +84,17 @@ h1 {
     color: #fff;
 }
 
+.image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: opacity 0.2s;
+}
+.image:hover {
+    opacity: 0.8;
+    transform: translateY(-3px);
+}
 /* ===== Pagination Styling ===== */
 .pagination-container {
     display: flex;
