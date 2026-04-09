@@ -42,7 +42,7 @@ public class AdminDashboardController {
         model.addAttribute("endDate", endDate);
         model.addAttribute("dashboard", dashboard);
         model.addAttribute("salesDetails", salesDetails);
-        return "/admin/dashboard";
+        return "admin/dashboard";
     }
 
     @GetMapping("/export-pdf")
