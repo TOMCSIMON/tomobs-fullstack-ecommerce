@@ -25,7 +25,7 @@ public class OrderController {
     @GetMapping()
     public String viewOrders(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "6") int size,
+            @RequestParam(defaultValue = "2") int size,
             Model model){
 
         Page<OrderListDTO> orderPage = orderService.findOrders(page, size);
