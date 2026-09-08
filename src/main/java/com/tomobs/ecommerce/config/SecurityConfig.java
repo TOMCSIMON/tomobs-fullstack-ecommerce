@@ -42,7 +42,7 @@ public class    SecurityConfig {
                         .requestMatchers(
                                 "/", "/signup", "/blocked-page", "/verify-otp", "/resend-otp", "/forgot-password/**","/login",
                                 "/css/**", "/js/**", "/ajax/**",
-                                "/icons/**", "/images/**"
+                                "/icons/**", "/images/**","/api/user/ai/**"
                         ).permitAll()
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
