@@ -1,0 +1,87 @@
+<div th:fragment="chatbot">
+
+    <!-- Floating Button -->
+    <button id="chatbot-button"
+            class="chatbot-button"
+            type="button"
+            aria-label="Open ToMobs AI">
+        💬
+    </button>
+
+
+    <!-- Chat Window -->
+    <div id="chatbot-window"
+         class="chatbot-window">
+
+        <!-- Header -->
+        <div class="chatbot-header">
+
+            <div class="chatbot-header-info">
+
+                <div class="chatbot-avatar">
+                    🤖
+                </div>
+
+                <div>
+                    <h3>ToMobs AI</h3>
+
+                    <span class="online-status">
+                        <span class="online-dot"></span>
+                        Online
+                    </span>
+                </div>
+
+            </div>
+
+
+            <button id="chatbot-close"
+                    class="chatbot-close"
+                    type="button"
+                    aria-label="Close chatbot">
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- Messages -->
+        <div id="chatbot-messages"
+             class="chatbot-messages">
+
+            <!-- Initial AI message -->
+            <div class="message ai-message">
+
+                <div class="message-avatar">
+                    🤖
+                </div>
+
+                <div class="message-content">
+                    Hi! 👋 How can I help you today?
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Input -->
+        <div class="chatbot-input-area">
+
+            <input
+                    id="chatbot-input"
+                    type="text"
+                    placeholder="Ask me anything..."
+                    autocomplete="off"
+            >
+
+            <button id="chatbot-send"
+                    type="button"
+                    aria-label="Send message">
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
