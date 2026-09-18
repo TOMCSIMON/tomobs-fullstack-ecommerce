@@ -15,11 +15,6 @@ public class UserAiController {
 
     private final AiService aiService;
 
-    @GetMapping("/test")
-    public String test() {
-        return "AI endpoint is working";
-    }
-
     @PostMapping("/chat")
     public ResponseEntity<String> getAiResponse(@RequestBody AiRequestDTO userRequest) {
 

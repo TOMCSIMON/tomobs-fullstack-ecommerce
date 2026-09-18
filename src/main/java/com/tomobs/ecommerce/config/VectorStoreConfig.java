@@ -1,9 +1,8 @@
 package com.tomobs.ecommerce.config;
 
-import com.google.api.client.util.Value;
-import jakarta.annotation.PostConstruct;
+import com.tomobs.ecommerce.model.Product;
+import com.tomobs.ecommerce.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -14,6 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -21,25 +21,33 @@ import java.util.List;
 public class VectorStoreConfig {
 
     private final EmbeddingModel embeddingModel;
+    private final ProductRepository productRepository;
 
     @Bean
     public VectorStore vectorStore() {
 
         VectorStore vectorStore = SimpleVectorStore.builder(embeddingModel).build();
 
-        Document doc = new Document("""
-        Items can be returned within 30 days of purchase with original receipt.
-        Electronics have a 15-day return window due to warranty terms.
-        Refunds are processed within 5-7 business days after we receive the item.
-        Sale items are final and cannot be returned.
-        """);
+        List<Product> products = productRepository.findAll();
 
+        List<Document> documents = products.stream()
+                .map(product -> new Document(
+                        """
+                        Product: %s
+                        CreateAt: %s
+                        """.formatted(
+                                product.getProductName(),
+                                product.getCreatedAt()
+                        ),
+                        Map.of("productId", product.getId().toString())
+                ))
+                .toList();
 
         TokenTextSplitter splitter = TokenTextSplitter.builder()
                 .withChunkSize(500)
                 .build();
 
-        List<Document> chunks = splitter.apply(List.of(doc));
+        List<Document> chunks = splitter.apply(documents);
 
         vectorStore.add(chunks);
 
