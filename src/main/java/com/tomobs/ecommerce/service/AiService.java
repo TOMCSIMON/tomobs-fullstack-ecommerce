@@ -4,5 +4,5 @@ import com.tomobs.ecommerce.dto.AiRequestDTO;
 
 public interface AiService {
 
-    String getAiResponse(AiRequestDTO userRequest);
+    String getAiResponse(AiRequestDTO userRequest, String conversationId);
 }

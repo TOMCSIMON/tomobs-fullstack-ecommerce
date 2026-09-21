@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.controller.User;
 
 import com.tomobs.ecommerce.dto.AiRequestDTO;
 import com.tomobs.ecommerce.service.AiService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +17,11 @@ public class UserAiController {
     private final AiService aiService;
 
     @PostMapping("/chat")
-    public ResponseEntity<String> getAiResponse(@RequestBody AiRequestDTO userRequest) {
+    public ResponseEntity<String> getAiResponse(
+            @RequestBody AiRequestDTO userRequest,
+            HttpSession session) {
 
-        log.info("AI request received: {}", userRequest);
-
-        String response = aiService.getAiResponse(userRequest);
+        String response = aiService.getAiResponse(userRequest, session.getId());
 
         return ResponseEntity.ok(response);
     }

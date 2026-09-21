@@ -1,32 +1,33 @@
 package com.tomobs.ecommerce.config;
 
+
 import com.tomobs.ecommerce.model.Product;
 import com.tomobs.ecommerce.repository.ProductRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.document.Document;
-import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
-import org.springframework.ai.vectorstore.SimpleVectorStore;
 import org.springframework.ai.vectorstore.VectorStore;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
 
-@Configuration
+@Component
 @RequiredArgsConstructor
 @Slf4j
-public class VectorStoreConfig {
+public class ProductIndexer {
 
-    private final EmbeddingModel embeddingModel;
+    private final VectorStore vectorStore;
+    private final JdbcTemplate jdbcTemplate;
     private final ProductRepository productRepository;
 
-    @Bean
-    public VectorStore vectorStore() {
+    @PostConstruct
+    public void indexProducts() {
 
-        VectorStore vectorStore = SimpleVectorStore.builder(embeddingModel).build();
+        jdbcTemplate.execute("DELETE FROM vector_store");
 
         List<Product> products = productRepository.findAll();
 
@@ -47,10 +48,8 @@ public class VectorStoreConfig {
                 .withChunkSize(500)
                 .build();
 
-        List<Document> chunks = splitter.apply(documents);
+        vectorStore.add(splitter.apply(documents));
 
-        vectorStore.add(chunks);
-
-        return vectorStore;
+        log.info("Indexed {} products into PGVector", products.size());
     }
 }
