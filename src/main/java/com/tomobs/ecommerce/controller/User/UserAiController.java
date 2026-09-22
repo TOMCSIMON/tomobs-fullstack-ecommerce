@@ -1,5 +1,6 @@
 package com.tomobs.ecommerce.controller.User;
 
+import com.tomobs.ecommerce.config.OrderReply;
 import com.tomobs.ecommerce.dto.AiRequestDTO;
 import com.tomobs.ecommerce.service.AiService;
 import jakarta.servlet.http.HttpSession;
@@ -17,12 +18,11 @@ public class UserAiController {
     private final AiService aiService;
 
     @PostMapping("/chat")
-    public ResponseEntity<String> getAiResponse(
+    public ResponseEntity<OrderReply> getAiResponse(
             @RequestBody AiRequestDTO userRequest,
             HttpSession session) {
 
-        String response = aiService.getAiResponse(userRequest, session.getId());
-
-        return ResponseEntity.ok(response);
+        OrderReply reply = aiService.getStructuredAiResponse(userRequest, session.getId());
+        return ResponseEntity.ok(reply);
     }
 }

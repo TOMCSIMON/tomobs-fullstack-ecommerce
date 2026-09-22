@@ -1,5 +1,7 @@
 package com.tomobs.ecommerce.service.impl;
 
+import com.tomobs.ecommerce.config.OrderReply;
+import com.tomobs.ecommerce.config.OrderTools;
 import com.tomobs.ecommerce.dto.AiRequestDTO;
 import com.tomobs.ecommerce.service.AiService;
 import lombok.RequiredArgsConstructor;
@@ -33,28 +35,36 @@ public class AiServiceImpl implements AiService {
   private final ChatClient chatClient;
   private final VectorStore vectorStore;
   private final ChatMemory chatMemory;
+  private final OrderTools orderTools;
 
   @Override
-  public String getAiResponse(AiRequestDTO userRequest, String conversationId) {
+  public OrderReply getStructuredAiResponse(AiRequestDTO userRequest, String conversationId) {
 
-    SearchRequest searchRequest = SearchRequest.builder()
-            .query(userRequest.getRequest())
-            .topK(3)
-            .build();
+    try {
+      SearchRequest searchRequest = SearchRequest.builder()
+              .query(userRequest.getRequest())
+              .topK(3)
+              .build();
 
-    List<Document> relevantChunks = vectorStore.similaritySearch(searchRequest);
+      List<Document> relevantChunks = vectorStore.similaritySearch(searchRequest);
 
-    String context = relevantChunks.stream()
-            .map(Document::getText)
-            .collect(Collectors.joining("\n"));
+      String context = relevantChunks.stream()
+              .map(Document::getText)
+              .collect(Collectors.joining("\n"));
 
-    return chatClient.prompt()
-            .system(SYSTEM_PROMPT.replace("{context}", context))
-            .user(userRequest.getRequest())
-            .advisors(a -> a
-                    .advisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
-                    .param(ChatMemory.CONVERSATION_ID, conversationId))
-            .call()
-            .content();
+      return chatClient.prompt()
+              .system(SYSTEM_PROMPT.replace("{context}", context))
+              .user(userRequest.getRequest())
+              .tools(orderTools)
+              .advisors(a -> a
+                      .advisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                      .param(ChatMemory.CONVERSATION_ID, conversationId))
+              .call()
+              .entity(OrderReply.class);
+
+    } catch (Exception e) {
+      log.error("AI request failed", e);
+      return new OrderReply("The assistant is temporarily unavailable.", null, null);
+    }
   }
 }

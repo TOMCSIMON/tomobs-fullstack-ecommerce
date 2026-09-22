@@ -98,20 +98,11 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
 
-            // Read backend response
-
-            const aiResponse =
-                await response.text();
-
-
-            // Remove typing indicator
+            const aiData = await response.json();
 
             removeTypingIndicator();
 
-
-            // Show AI response
-
-            addAiMessage(aiResponse);
+            addAiMessage(aiData.answer);
 
 
         } catch (error) {

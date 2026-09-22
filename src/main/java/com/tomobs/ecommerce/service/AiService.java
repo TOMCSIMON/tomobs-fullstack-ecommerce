@@ -1,8 +1,9 @@
 package com.tomobs.ecommerce.service;
 
+import com.tomobs.ecommerce.config.OrderReply;
 import com.tomobs.ecommerce.dto.AiRequestDTO;
 
 public interface AiService {
 
-    String getAiResponse(AiRequestDTO userRequest, String conversationId);
+    OrderReply getStructuredAiResponse(AiRequestDTO userRequest, String conversationId);
 }
