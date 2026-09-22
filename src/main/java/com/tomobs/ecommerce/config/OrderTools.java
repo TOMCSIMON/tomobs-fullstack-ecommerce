@@ -21,15 +21,15 @@ public class OrderTools {
         return "Order %s is currently: %s".formatted(orderId, order.getStatus());
     }
 
-    @Tool(description = "Cancel a customer's order. Requires the order ID and a reason for cancellation.")
+    @Tool(description = "Submit a cancellation request for a customer's order. This does not immediately cancel the order.")
     public String cancelOrder(Long orderId, String cancelReason) {
-        String email = Objects.requireNonNull(SecurityContextHolder.getContext().getAuthentication()).getName();
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         try {
             orderService.saveCancelRequest(email, orderId, cancelReason);
-            return "Cancellation request submitted for order %d.".formatted(orderId);
+            return "Cancellation request for order %d has been submitted.".formatted(orderId);
         } catch (RuntimeException e) {
-            return "Could not cancel order %d: %s".formatted(orderId, e.getMessage());
+            return "Could not submit cancellation for order %d: %s".formatted(orderId, e.getMessage());
         }
     }
 }

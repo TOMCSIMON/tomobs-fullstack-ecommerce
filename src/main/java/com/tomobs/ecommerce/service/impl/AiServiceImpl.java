@@ -2,6 +2,7 @@ package com.tomobs.ecommerce.service.impl;
 
 import com.tomobs.ecommerce.config.OrderReply;
 import com.tomobs.ecommerce.config.OrderTools;
+import com.tomobs.ecommerce.config.RateLimiter;
 import com.tomobs.ecommerce.dto.AiRequestDTO;
 import com.tomobs.ecommerce.service.AiService;
 import lombok.RequiredArgsConstructor;
@@ -23,23 +24,40 @@ import java.util.stream.Collectors;
 public class AiServiceImpl implements AiService {
 
   private static final String SYSTEM_PROMPT =
-      """
-      You are a customer support assistant for an e-commerce store.
-      Only answer questions related to shopping, orders, products, and store policies.
-      Use ONLY the provided context below to answer. If the context doesn't
-      contain the answer, say you don't have that information.
-
-      Context:{context}
-      """;
+          """
+          You are a customer support assistant for an e-commerce store.
+          Only answer questions related to shopping, orders, products, and store policies.
+          Use ONLY the provided context below to answer. If the context doesn't
+          contain the answer, say you don't have that information.
+      
+          IMPORTANT: To cancel an order, follow these steps in order:
+          1. If the user hasn't given a cancellation reason yet, ask for one.
+             Do not invent, assume, or guess a reason on their behalf.
+          2. Once you have both the order ID and a real reason from the user,
+             ask them to confirm (e.g. "You'd like to cancel order 44 due to
+             [reason] — should I submit this cancellation request?").
+          3. Only call the cancelOrder tool after the user has explicitly
+             confirmed (e.g. replied "yes", "confirm", "go ahead").
+          4. Note: cancelling submits a request for review — it does not
+             instantly cancel the order, so don't tell the user it's final
+             or irreversible.
+      
+          Context:
+          {context}
+          """;
 
   private final ChatClient chatClient;
   private final VectorStore vectorStore;
   private final ChatMemory chatMemory;
   private final OrderTools orderTools;
+  private final RateLimiter rateLimiter;
 
   @Override
   public OrderReply getStructuredAiResponse(AiRequestDTO userRequest, String conversationId) {
 
+    if (!rateLimiter.isAllowed(conversationId)) {
+      return new OrderReply("You're sending messages too quickly. Please wait a moment and try again.", null, null);
+    }
     try {
       SearchRequest searchRequest = SearchRequest.builder()
               .query(userRequest.getRequest())
@@ -64,7 +82,7 @@ public class AiServiceImpl implements AiService {
 
     } catch (Exception e) {
       log.error("AI request failed", e);
-      return new OrderReply("The assistant is temporarily unavailable.", null, null);
+      return new OrderReply("The assistant is temporarily unavailable. Please try again in a moment", null, null);
     }
   }
 }
