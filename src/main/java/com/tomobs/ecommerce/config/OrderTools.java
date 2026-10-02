@@ -7,8 +7,6 @@ import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-
 @Component
 @RequiredArgsConstructor
 public class OrderTools {
@@ -23,11 +21,16 @@ public class OrderTools {
 
     @Tool(description = "Submit a cancellation request for a customer's order. This does not immediately cancel the order.")
     public String cancelOrder(Long orderId, String cancelReason) {
+
+        if (cancelReason == null || cancelReason.isBlank() || cancelReason.length() < 10) {
+            return "A valid cancellation reason is required before this order can be cancelled. Please ask the user for one.";
+        }
+
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
 
         try {
             orderService.saveCancelRequest(email, orderId, cancelReason);
-            return "Cancellation request for order %d has been submitted.".formatted(orderId);
+            return "Cancellation request for order %d has been submitted and is now PENDING review.".formatted(orderId);
         } catch (RuntimeException e) {
             return "Could not submit cancellation for order %d: %s".formatted(orderId, e.getMessage());
         }

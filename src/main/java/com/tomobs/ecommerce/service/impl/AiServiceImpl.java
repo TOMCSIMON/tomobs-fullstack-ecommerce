@@ -62,6 +62,7 @@ public class AiServiceImpl implements AiService {
       SearchRequest searchRequest = SearchRequest.builder()
               .query(userRequest.getRequest())
               .topK(3)
+              .similarityThreshold(0.75)
               .build();
 
       List<Document> relevantChunks = vectorStore.similaritySearch(searchRequest);
